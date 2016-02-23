@@ -1,0 +1,65 @@
+<ion-side-menus enable-menu-with-back-views="true">
+
+    <!--********************* content **********************-->
+    <ion-side-menu-content>
+        <ion-nav-bar class="bar-positive" style="background-color: #03AF78 !important">
+
+            <!-- left button -->
+            <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+            </button>
+            </ion-nav-buttons>
+
+            <!-- right button -->
+            <ion-nav-buttons side="right">
+             <div class="dropdown">
+
+                <button class="btn s-dropdown-btn dropdown-toggle" type="button" data-toggle="dropdown">
+                     <span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+                </button>
+
+                <ul class=" s-dropdown-menu dropdown-menu">
+                     <li><a href="#" >Compte</a></li>
+                     <li><a href="#">Paramètre</a></li>
+                    <li><a href="#" >Déconnexion</a></li>
+                </ul>
+
+             </div>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+
+        <!-- menuContent -->
+        <ion-nav-view name="menuContent"></ion-nav-view>
+
+    </ion-side-menu-content>
+
+    <!--********************* left **********************-->
+    <ion-side-menu side="left" class="side-menu" slide-along offset="-15">
+        <ion-header-bar class="bar-assertive">
+            <h1 class="title">Menu</h1>
+        </ion-header-bar>
+        <ion-content>
+            <ul class="list">
+                <!-- Note each link has the 'menu-close' attribute so the menu auto closes when clicking on one of these links -->
+                
+                <a ui-sref="appMenu.listConsultation" class="item" menu-close>
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>  Liste des consultations</a>
+
+                <a ui-sref="appMenu.rdv" class="item" menu-close>
+                     <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>  Mes rendez-vous</a>
+
+                <a ui-sref="appMenu.doctorLocator" class="item" menu-close>
+                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>  Localisation de médecin</a>
+
+                <a ui-sref="appMenu.pharmacyLocator" class="item" menu-close>
+                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>  Localisation de pharmacie</a>
+                <a href="" class="item  " menu-close>
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>  Compte</a>
+            </ul>
+        </ion-content>
+    </ion-side-menu>
+
+   
+
+
+</ion-side-menus>

@@ -1,0 +1,42 @@
+/**
+* side-menu
+*/
+.menu-animated {
+  -webkit-transition: 500ms !important;
+  transition: 500ms !important;
+}
+
+.side-menu {
+  width: 300px !important;
+}
+
+.side-menu h1,
+.side-menu h2,
+.side-menu h3 {
+  width: 250px;
+}
+
+.side-menu[side="right"] {
+  text-align: right;
+}
+
+.side-menu[side="right"] .item-complex .item-content,
+.side-menu[side="right"] .item-radio .item-content {
+  padding: 16px 16px 16px 49px;
+}
+
+.side-menu[side="right"] h1.title {
+  left: auto;
+}
+
+/**
+* header
+*/
+.s-dropdown-btn{
+  background-color: #387EF5;
+}
+.s-dropdown-menu{
+  position: absolute; 
+  right: 2% !important;
+  left: inherit;
+}
