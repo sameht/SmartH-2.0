@@ -33,10 +33,151 @@
 * header
 */
 .s-dropdown-btn{
-  background-color: #387EF5;
+  background-color: #F8F8F8;
 }
 .s-dropdown-menu{
   position: absolute; 
   right: 2% !important;
-  left: inherit;
+  left: inherit !important;
+}
+
+/** 
+* home
+*/
+.s-centred-row{
+  margin-left: 0 !important;
+}
+.s-button-color{
+  color: #46106B; 
+  background-color: #EFEBEB; 
+}
+
+
+/* doctor locator*/
+.s-margin-top{
+   margin-top: 15px !important;
+}
+
+.s-no-margin-hor{
+   margin-left: 0 !important;
+   margin-right: 0 !important;
+}
+.s-float-left{
+  float:left;
+}
+.s-float-right{
+  float:rigth;
+}
+
+.s-text-center{
+   text-align: center;
+}
+
+/**
+* input
+*/
+
+
+.textfield {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding-top: 12px;
+  width: 300px;
+  max-width: 100%;
+  color: #212121;
+}
+
+.textfield__input,
+.textfield__label {
+  font-size: 16px;
+  text-align: left;
+  width: 100%;
+}
+
+.textfield__input {
+  display: block;
+  margin: 0;
+  outline: 0;
+  border: none !important;
+  border-bottom: 1px solid #aaa !important;
+  background: transparent;
+  padding: 8px 0;
+}
+
+.textfield__label {
+  display: block;
+  position: absolute;
+  top: 20px;
+  bottom: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  color: #666;
+}
+
+.textfield__label:after {
+  visibility: hidden;
+  position: absolute;
+  left: 45%;
+  bottom: 0;
+  background-color: #03A9F4;
+  width: 10px;
+  height: 2px;
+  content: '';
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.textfield--floatingLabel .textfield__label {
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.textfield--floatingLabel .textfield__input:focus + .textfield__label,
+.textfield--floatingLabel .textfield__input:valid + .textfield__label {
+  visibility: visible;
+  top: 0;
+  font-size: 12px;
+}
+
+.textfield--floatingLabel .textfield__input:focus + .textfield__label {
+  color: #03A9F4;
+}
+
+.textfield--floatingLabel .textfield__input:focus + .textfield__label:after {
+  visibility: visible;
+  left: 0;
+  width: 100%;
+}
+/**********************************************/
+
+/**
+* Map
+*/
+.scroll {
+    height: 100%;
+}
+ 
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/**
+* drop down
+*/
+fieldset {
+  overflow:hidden;
+  border: 0;
+}
+
+input[type='radio'] {
+  -webkit-appearance:none;
+  width:16px;
+  height:16px;
+  border:1px solid darkgray;
+  border-radius:50%;
 }

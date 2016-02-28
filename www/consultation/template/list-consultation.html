@@ -1,0 +1,15 @@
+<ion-view view-title="Liste des consultations">
+	<ion-content>
+		<ion-list>
+
+		    <ion-item class="item-remove-animate item-avatar item-icon-right " ui-sref="menu.consultation" ng-repeat="consultation in consultationArray" type="item-text-wrap">      
+
+     		  <img src="img/doctor.jpg" >
+		      <h2>Dr : {{consultation.doctor}}</h2>
+		      <p>maladie : {{consultation.maladie}}</p>
+		      <p>Date: {{consultation.date}}</p>
+		      <i class="icon ion-chevron-right icon-accessory"></i>
+		    </ion-item>
+		</ion-list>
+	</ion-content>
+</ion-view>

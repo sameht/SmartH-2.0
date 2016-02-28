@@ -1,0 +1,82 @@
+<ion-view view-title="Localisation">
+<ion-tabs class="tabs-top tabs-icon-top">
+    <!-- filtre basique -->
+    <ion-tab title="Filtre basique" icon="ion-search">
+        <i></i>
+        <ion-content class="s-text-center">
+            
+
+                <!-- adresse -->
+            <div class="textfield textfield--floatingLabel">
+                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+            <label class="textfield__label" >Adresse :</label>
+            </div>
+
+            <div class="textfield textfield--floatingLabel">
+                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+            <label class="textfield__label" >Distance en Km :</label>
+            </div>
+
+            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
+                <button class="button button-block " style="background-color: #29E8EF;" ui-sref="menu.resultDoctor">
+                  chercher
+                </button>
+            </div>
+
+
+        </ion-content>
+
+    </ion-tab>
+
+
+    <!-- filtre par localisation -->
+    <ion-tab title="Filtre" icon="ion-android-funnel">
+        <i></i>
+        <ion-content class="s-text-center">
+            
+
+                <!-- adresse -->
+            <div class="textfield textfield--floatingLabel">
+                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+            <label class="textfield__label" >Nom :</label>
+            </div>
+
+            <div class="textfield textfield--floatingLabel">
+                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+            <label class="textfield__label" >Prénom:</label>
+            </div>
+
+            <div class="dropdown">
+              <a href="#" class="button button-calm dropdown-toggle" data-toggle="dropdown">CSS <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#headings">Headings</a></li>
+                <li><a href="#content-formatting">Content</a></li>
+              </ul>
+            </div>
+
+
+
+            <!-- RadioBox : gender -->
+           <form class="s-form">
+                <input class="s-gender-input" type="radio" name="size" id="small" value="small" checked="checked" /> 
+                <label class="s-gender-label" for="small">Homme</label>
+
+                <input class="s-gender-input" type="radio" name="size" id="medium" value="medium" />     
+                <label class="s-gender-label" for="medium">Femme</label>
+               
+            </form>
+
+
+            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
+                <button class="button button-block " style="background-color: #29E8EF;" ui-sref="menu.resultDoctor">
+                  chercher
+                </button>
+            </div>
+
+        </ion-content>
+        <ion-footer-bar>
+        </ion-footer-bar>
+    </ion-tab>
+
+</ion-tabs>
+</ion-view>

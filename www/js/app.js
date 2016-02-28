@@ -42,7 +42,84 @@ var appContext=angular.module('starter', ['ionic','ngCordova'])
           controller : 'HomeController'
         }
       }
-    });
+    })
+
+    .state('menu.listConsultation',{
+      url : '/listConsultation',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "consultation/template/list-consultation.html",
+          controller : 'ListConsultationController'
+        }
+      }
+    })
+
+    .state('menu.consultation',{
+      url : '/consultation',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "consultation/template/consultation.html",
+          controller : 'ConsultationController'
+        }
+      }
+    })
+
+    .state('menu.listRdv',{
+      url : '/listRdv',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "rdv/template/list-rdv.html",
+          controller : 'ListRdvController'
+        }
+      }
+    })
+
+    .state('menu.rdv',{
+      url : '/rdv',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "rdv/template/rdv.html",
+          controller : 'RdvController'
+        }
+      }
+    })
+
+    .state('menu.searchDoctor',{
+      url : '/searchDoctor',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "doctor/template/search-doctor.html",
+          controller : 'DoctorLocatorController'
+        }
+      }
+    })
+
+    .state('menu.resultDoctor',{
+      url : '/resultDoctor',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "doctor/template/result-doctor.html",
+          controller : 'ResultDoctorController'
+        }
+      }
+    })
+    .state('menu.doctor',{
+      url : '/doctor',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "doctor/template/doctor.html",
+          controller : 'DoctorController'
+        }
+      }
+    })
+    ;
 
   $urlRouterProvider.otherwise('/menu/home')
 })

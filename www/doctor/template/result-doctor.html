@@ -1,0 +1,30 @@
+<ion-view view-title="Localisation">
+	<ion-content>
+		<div ng-show="click">
+			<ion-list>
+
+			    <ion-item class="item-remove-animate item-avatar item-icon-right " ui-sref="menu.doctor" ng-repeat="doctor in doctorArray" type="item-text-wrap">      
+
+	     		  <img src="img/doctor.jpg" >
+			      <h2>Dr : {{doctor.doctor}}</h2>
+			      <p>Specialité : {{doctor.specialty}}</p>
+			      <p>Adresse: {{doctor.address}}</p>
+			      <i class="icon ion-chevron-right icon-accessory"></i>
+			    </ion-item>
+
+			</ion-list>
+		</div>
+
+		<div id="map" data-tap-disabled="true" ng-hide="click"></div>
+		
+	</ion-content>
+
+	<div class="tabs tabs-icon-only">
+	  <a class="tab-item" ng-click="click=false">
+	    Map
+	  </a>
+	  <a class="tab-item" ng-click="click=true">
+	    Liste
+	  </a>
+	</div>
+</ion-view>
