@@ -19,8 +19,8 @@
                 </button>
 
                 <ul class=" s-dropdown-menu dropdown-menu">
-                     <li><a href="#" >Compte</a></li>
-                     <li><a href="#">Paramètre</a></li>
+                     <li><a ui-sref="menu.compte" >Compte</a></li>
+                     <li><a ui-sref="menu.setting">Paramètre</a></li>
                     <li><a href="#" >Déconnexion</a></li>
                 </ul>
 
@@ -51,9 +51,9 @@
                 <a ui-sref="menu.searchDoctor" class="item" menu-close>
                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>  Localisation de médecin</a>
 
-                <a ui-sref="menu.pharmacyLocator" class="item" menu-close>
+                <a ui-sref="menu.searchPharmacy" class="item" menu-close>
                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>  Localisation de pharmacie</a>
-                <a href="" class="item  " menu-close>
+                <a ui-sref="menu.compte" class="item  " menu-close>
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>  Compte</a>
             </ul>
         </ion-content>

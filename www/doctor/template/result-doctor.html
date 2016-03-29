@@ -6,9 +6,9 @@
 			    <ion-item class="item-remove-animate item-avatar item-icon-right " ui-sref="menu.doctor" ng-repeat="doctor in doctorArray" type="item-text-wrap">      
 
 	     		  <img src="img/doctor.jpg" >
-			      <h2>Dr : {{doctor.doctor}}</h2>
-			      <p>Specialité : {{doctor.specialty}}</p>
+			      <h2>Nom : {{doctor.name}}</h2>
 			      <p>Adresse: {{doctor.address}}</p>
+			      <p>Distance: {{doctor.distance}}</p>
 			      <i class="icon ion-chevron-right icon-accessory"></i>
 			    </ion-item>
 
@@ -18,7 +18,7 @@
 		<div id="map" data-tap-disabled="true" ng-hide="click"></div>
 		
 	</ion-content>
-
+<!-- ***************** Map ***********************-->
 	<div class="tabs tabs-icon-only">
 	  <a class="tab-item" ng-click="click=false">
 	    Map

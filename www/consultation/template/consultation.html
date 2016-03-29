@@ -1,36 +1,38 @@
 <ion-view view-title="Consultations">
 	<ion-content>
-		<div class="container" >
-			<div class="row">
-                <div class="col-xs-3 col-sm-2" >
-                    <img src="img/doctor.jpg" width="100" alt="" />
-                </div>
-                <div class="col-xs-9" style="padding-left:30px; padding-top:10px" >
-                    <h4 align="left">medécin : nom de docteur</h4>
-                    <p>spécialité : généraliste </p>
-                    <p>date : date</p>
-                </div>
-			
-			</div>
-			<table>
-				<tr>
-					<td>nature :</td>
-					<td>  <p>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy </p></td>
-				</tr>
+		<div class="list card">
+			<ion-list >
+			  <ion-item class="item item-thumbnail-left" ui-sref="menu.doctor">
+			     <img style="background-image:url(img/doctor.jpg); border-radius:50%; background-position:center center; background-size:cover; width:100%; height:100%;"> 
+			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>Marty McFly</B></h2>
+			    <p> généraliste</p>
+			  </ion-item>
+			</ion-list>
 
-				<tr>
-					<td style="padding-right:5px;">description: </td>
-					<td>  <p> Une consultation médicale peut être générale, gynécologique, pédiatrique, ophtalmologique...</p> </td>
-				</tr>
+  			<ion-list >
+			    <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
+			    	November 05, 2015
+			     </ion-item>
+			    <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Maladie :</B></h3>
+			    	Allergies alimentaires
+			     </ion-item>
+			     <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Médicament:</B></h3>
+			    	 INTRINSA, IXENSE
+			     </ion-item>
+			    <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Prix :</B></h3>
+			    	80 Dt
+			     </ion-item>
+			</ion-list>
+ 		 </div>
 
-				<tr>
-					<td>prix :</td>
-					<td> <p>100Dt </p> </td>
-				</tr>
-			</table>
-			
-			
+  		<div class="list card">          
+		    	<h3 style="color: #2970E8; font-size: initial;">  <B>Déscription :</B></h3>
+		    	<p> Une consultation médicale peut être générale, gynécologique, pédiatrique, ophtalmologique...</p> 
+		     
 		</div>
-		
 	</ion-content>
 </ion-view>

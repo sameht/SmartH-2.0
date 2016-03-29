@@ -1,3 +1,5 @@
-appContext.controller('RdvController', function($scope){
+appContext.controller('RdvController', function(NotificationFactory){
+		
+	
 
 })

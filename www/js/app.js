@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var appContext=angular.module('starter', ['ionic','ngCordova'])
+var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -116,6 +116,60 @@ var appContext=angular.module('starter', ['ionic','ngCordova'])
         'menuContent': {
           templateUrl: "doctor/template/doctor.html",
           controller : 'DoctorController'
+        }
+      }
+    })
+
+    .state('menu.searchPharmacy',{
+      url : '/searchPharmacy',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "pharmacy/template/search-pharmacy.html",
+          controller : 'PharmacyLocatorController'
+        }
+      }
+    })
+
+    .state('menu.resultPharmacy',{
+      url : '/resultPharmacy',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "pharmacy/template/result-pharmacy.html",
+          controller : 'ResultPharmacyController'
+        }
+      }
+    })
+    .state('menu.pharmacy',{
+      url : '/pharmacy',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "pharmacy/template/pharmacy.html",
+          controller : 'PharmacyController'
+        }
+      }
+    })
+
+    .state('menu.compte',{
+      url : '/compte',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "compte/compte.html",
+          controller : 'CompteController'
+        }
+      }
+    })
+
+    .state('menu.setting',{
+      url : '/setting',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "setting/setting.html",
+          controller : 'SettingController'
         }
       }
     })

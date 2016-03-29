@@ -18,7 +18,7 @@
             </div>
 
             <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="background-color: #29E8EF;" ui-sref="menu.resultDoctor">
+                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultDoctor">
                   chercher
                 </button>
             </div>
@@ -46,29 +46,42 @@
             <label class="textfield__label" >Prénom:</label>
             </div>
 
-            <div class="dropdown">
-              <a href="#" class="button button-calm dropdown-toggle" data-toggle="dropdown">CSS <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#headings">Headings</a></li>
-                <li><a href="#content-formatting">Content</a></li>
-              </ul>
+           
+           <div class="subject">
+              <label class="dropdown-label" for="subject"></label>
+              <select class="dropdown-select" placeholder="Spécialité" name="subject" id="subject_input" required>
+                <option disabled hidden selected>Spécialité</option>
+                <option>généraliste</option>
+                <option>Gynécologue</option>
+                <option>Ophtalmologue</option>
+                <option>Stomatologue</option><option>généraliste</option>
+                <option>Gynécologue</option>
+                <option>Ophtalmologue</option>
+                <option>Stomatologue</option><option>généraliste</option>
+                <option>Gynécologue</option>
+                <option>Ophtalmologue</option>
+                <option>Stomatologue</option>
+              </select>
             </div>
 
 
 
             <!-- RadioBox : gender -->
-           <form class="s-form">
-                <input class="s-gender-input" type="radio" name="size" id="small" value="small" checked="checked" /> 
-                <label class="s-gender-label" for="small">Homme</label>
+      <!--************************************ -->
 
-                <input class="s-gender-input" type="radio" name="size" id="medium" value="medium" />     
-                <label class="s-gender-label" for="medium">Femme</label>
-               
-            </form>
+<div >
+ 
+        <input type="radio" name="sexe" id="homme" class="css-checkbox2" />
+        <label for="homme" class="css-label2">Homme</label>
+   
+        <input type="radio" name="sexe" id="femme" class="css-checkbox2" checked="checked"/>
+        <label for="femme" class="css-label2" style="margin-left: 20px;">Femme</label>
+      
+</div>
 
 
             <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="background-color: #29E8EF;" ui-sref="menu.resultDoctor">
+                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultDoctor">
                   chercher
                 </button>
             </div>

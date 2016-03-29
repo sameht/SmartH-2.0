@@ -1,38 +1,34 @@
 <ion-view view-title="rendez-vous">
 	<ion-content>
-		<div class="container" >
-			<div class="row">
-                <div class="col-xs-3 col-sm-2" >
-                    <img src="img/doctor.jpg" width="100" alt="" />
-                </div>
-                <div class="col-xs-9" style="padding-left:30px; padding-top:10px" >
-                    <h4 align="left">medécin : nom de docteur</h4>
-                    <p>spécialité : généraliste </p>
+		<div class="list card">
+			<ion-list >
+			  <ion-item class="item item-thumbnail-left" ui-sref="menu.doctor">
+			     <img style="background-image:url(img/doctor.jpg); border-radius:50%; background-position:center center; background-size:cover; width:100%; height:100%;"> 
+			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>Marty McFly</B></h2>
+			    <p> généraliste</p>
+			  </ion-item>
+			</ion-list>
 
-                </div>
-			
-			</div>
-			<table>
-				<tr>
-					<td>date :</td>
-					<td> <p>lundi 12 janvier 2016</p></td>
-				</tr>
-
-				<tr>
-					<td>heure:</td>
-					<td> <p>10:30 </p> </td>
-				</tr>
-
-				<tr>
-					<td style="padding-right:5px;">local: </td>
-					<td>  <p> teboulba rue de ...</p> </td>
-				</tr>
-
-				
-			</table>
-			
-			
-		</div>
-		
+  			<ion-list >
+			    <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
+			    	November 05, 2016
+			     </ion-item>
+			    <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Heure :</B></h3>
+			    	10:30
+			     </ion-item>
+			     <ion-item >      
+			    	<h3 style="font-size: initial;">  <B>Cabinet :</B></h3>
+			    	  5000 MONASTIR, Av.Habib BOURGUIBA
+			     </ion-item>
+			</ion-list>
+ 		 </div>
+<!--
+  		<div class="list card">          
+		    	<h3 style="color: #2970E8; font-size: initial;">  <B>Analyse :</B></h3>
+		    	<p> ....</p>  
+		</div> 
+-->		
 	</ion-content>
 </ion-view>

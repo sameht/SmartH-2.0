@@ -1,0 +1,110 @@
+
+/************************************ FONTS ************************************/
+
+/************************************* END FONTS *************************************/
+  .scnd-font-color {
+    color: #9099b7;
+  }
+
+.horizontal-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.clear {
+  clear: both;
+}
+
+.profile-picture { /************** photo de profile*********************/
+  border-radius: 100%;
+  overflow: hidden;
+  -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;  
+}
+  .big-profile-picture {
+    margin: 0 auto;   
+    border: 5px solid #50597b;
+    width: 150px;
+    height: 150px;
+  }
+  .small-profile-picture {  /*** n'est pas utilisé**/
+    border: 2px solid #50597b;
+    width: 40px;
+    height: 40px;
+  }
+
+    /************************************************** MIDDLE CONTAINER **********************************/
+    .middle-container {
+      margin: 0 25px;     
+    }
+    
+        .add-button .icon {
+          float: right;
+          line-height: 18px;
+          width: 23px;          
+          border: 2px solid;
+          border-radius: 100%;
+          font-size: 18px;
+          text-align: center;
+          margin: 10px;         
+        }
+          .add-button .icon:hover {
+            color: #e64c65;
+            border-color: #e64c65;
+          }
+        .user-name {
+          margin: 25px 0 16px;
+          text-align: center;
+        }
+        .profile-description {
+          width: 210px;
+          margin: 0 auto;
+          text-align: center;
+        }
+        .profile-options {
+          padding-top: 23px;
+        }
+          .profile-options li {
+            border-left: 1px solid #1f253d;
+          }
+            .profile-options p {
+              margin: 0;
+            }
+            .profile-options a {
+              display: block;         
+              width: 99px;
+              line-height: 60px;
+              text-align: center;
+              -webkit-transition: background .3s;
+              transition: background .3s;       
+            }
+              .profile-options a:hover {
+                text-decoration: none;
+                background: #50597b;
+              }
+              .profile-options a:hover.comments .icon {
+                color: #fcb150;
+              }
+              .profile-options a:hover.views .icon {
+                color: #11a8ab;
+              }
+              .profile-options a:hover.likes .icon {
+                color: #e64c65;
+              }
+              .profile-options .icon {
+                padding-right: 10px;
+              }
+              .profile-options .comments {
+                border-top: 4px solid #fcb150;
+              }
+              .profile-options .views {
+                border-top: 4px solid #11a8ab;
+              }
+              .profile-options .likes {
+                border-top: 4px solid #e64c65;
+              }
+    
+     
+     
