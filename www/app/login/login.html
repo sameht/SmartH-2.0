@@ -1,0 +1,37 @@
+ <ion-view view-title="login">
+
+
+<div class="login">
+  <h2 class="active login-h2"> sign in </h2>
+
+  <h2 class="nonactive login-h2"> sign up </h2>
+  <form class="login-form">
+   
+    
+
+    <input type="text" class="text login-input" name="username" required autofocus ng-model="user.email">
+     <span class="login-span">username</span>
+
+    <br>
+    
+    <br>
+
+    <input type="password" class="text login-input" name="password" required autofocus ng-model="user.password">
+    <span class="login-span">password</span>
+    <br>
+
+    <input type="checkbox" id="checkbox-1-1" class="custom-checkbox" />
+    <label class="login-label"for="checkbox-1-1">Keep me Signed in</label>
+    
+    <button class="signin"  ng-click="signin(user)">
+      Sign In
+    </button>
+
+
+    <hr class="login-hr">
+
+    <a class="login-a"href="#">Forgot Password?</a>
+  </form>
+
+</div>
+</ion-view>

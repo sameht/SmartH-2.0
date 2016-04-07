@@ -25,11 +25,18 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
 
 .config(function($stateProvider, $urlRouterProvider){
   $stateProvider
+   .state('startup',{
+      url : '/startup',
+      cache : false,
+      templateUrl : 'app/startup/startup.html',
+      controller : 'StartupController'
+    })
+
     .state('menu',{
       url : '/menu',
       cache : false,
       abstract: true,
-      templateUrl : 'menu/app-menu.html',
+      templateUrl : 'app/menu/app-menu.html',
       controller : 'MenuController'
     })
 
@@ -38,7 +45,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "home/home.html",
+          templateUrl: "app/home/home.html",
           controller : 'HomeController'
         }
       }
@@ -49,7 +56,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "consultation/template/list-consultation.html",
+          templateUrl: "app/consultation/template/list-consultation.html",
           controller : 'ListConsultationController'
         }
       }
@@ -60,7 +67,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "consultation/template/consultation.html",
+          templateUrl: "app/consultation/template/consultation.html",
           controller : 'ConsultationController'
         }
       }
@@ -71,7 +78,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "rdv/template/list-rdv.html",
+          templateUrl: "app/rdv/template/list-rdv.html",
           controller : 'ListRdvController'
         }
       }
@@ -82,7 +89,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "rdv/template/rdv.html",
+          templateUrl: "app/rdv/template/rdv.html",
           controller : 'RdvController'
         }
       }
@@ -93,7 +100,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "doctor/template/search-doctor.html",
+          templateUrl: "app/doctor/template/search-doctor.html",
           controller : 'DoctorLocatorController'
         }
       }
@@ -104,7 +111,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "doctor/template/result-doctor.html",
+          templateUrl: "app/doctor/template/result-doctor.html",
           controller : 'ResultDoctorController'
         }
       }
@@ -114,7 +121,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "doctor/template/doctor.html",
+          templateUrl: "app/doctor/template/doctor.html",
           controller : 'DoctorController'
         }
       }
@@ -125,7 +132,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "pharmacy/template/search-pharmacy.html",
+          templateUrl: "app/pharmacy/template/search-pharmacy.html",
           controller : 'PharmacyLocatorController'
         }
       }
@@ -136,7 +143,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "pharmacy/template/result-pharmacy.html",
+          templateUrl: "app/pharmacy/template/result-pharmacy.html",
           controller : 'ResultPharmacyController'
         }
       }
@@ -146,7 +153,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "pharmacy/template/pharmacy.html",
+          templateUrl: "app/pharmacy/template/pharmacy.html",
           controller : 'PharmacyController'
         }
       }
@@ -157,7 +164,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "compte/compte.html",
+          templateUrl: "app/compte/compte.html",
           controller : 'CompteController'
         }
       }
@@ -168,12 +175,20 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "setting/setting.html",
+          templateUrl: "app/setting/setting.html",
           controller : 'SettingController'
         }
       }
     })
-    ;
 
-  $urlRouterProvider.otherwise('/menu/home')
+    .state('login',{
+      url : '/login', 
+      cache : false,
+      templateUrl: "app/login/login.html",
+      controller : 'LoginController'
+
+
+    }) ;
+
+  $urlRouterProvider.otherwise('/startup')
 })

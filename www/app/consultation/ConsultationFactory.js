@@ -1,0 +1,3 @@
+appContext.factory('ConsultationFactory', function(){
+
+})
