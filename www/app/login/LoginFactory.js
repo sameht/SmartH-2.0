@@ -1,4 +1,4 @@
-appContext.factory('LoginFactory', function($http, $cordovaSQLite){
+appContext.factory('LoginFactory', function($http, $cordovaSQLite, $q){
 	
 	var login = function (user){
 		user.email = "edouard.nilsson@gmail.com";
@@ -37,43 +37,36 @@ appContext.factory('LoginFactory', function($http, $cordovaSQLite){
     /**
      * create identifiant table
      */
-    var createIdentifiantTable = function(db, callBack) {
-
+    var createIdentifiantTable = function(db) {
+        var deferred=$q.defer();
         var CreateQuery = 'CREATE TABLE IF NOT EXISTS identifiant (' +
             'id INTEGER PRIMARY KEY, ' +
             'email text, password text,userId text)';
         $cordovaSQLite.execute(db, CreateQuery).then(
-            function(value) {
-                return callBack();
+            function(result) {
+               deferred.resolve();
             },
             function(reason) {
-                console.log(reason);
-            },
-            function(value) {
-
+               deferred.reject();
             });
-        } 
+        return deferred.promise;    
+    } 
 
-        /**
-         * save the user credentials into the identifiant Table
-         */
-        var setCredentials = function(db, email, password,userId, callBack) {
-            try {
-                $cordovaSQLite.execute(db, " INSERT INTO identifiant (id, email, password,userId) VALUES (?,?,?,?) ", [1, email, password,userId]).then(function(value) {
-                    return callBack();
+    /**
+     * save the user credentials into the identifiant Table
+     */
+    var setCredentials = function(db, email, password,userId) {
+        var deferred=$q.defer();
+        $cordovaSQLite.execute(db, " INSERT INTO identifiant (id, email, password,userId) VALUES (?,?,?,?) ", [1, email, password,userId]).then(function(result) {
+            deferred.resolve();
 
-                }, function(reason) {
-                    console.log(reason);
-                }, function(value) {
+        }, function(reason) {
+            deferred.reject();
+        });
 
-                });
-
-                return 0;
-            } catch (e) {
-                console.log(e);
-                return 1;
-            }
-        }
+        return deferred.promise;
+ 
+    }
 
       /**
        * the login server call
@@ -85,23 +78,51 @@ appContext.factory('LoginFactory', function($http, $cordovaSQLite){
     /**
      * delete all records from identifiant table
      */
-    var emptyIdentifiantTable = function(db, callBack) {
+    var emptyIdentifiantTable = function(db) {
 
+        var deferred=$q.defer();
         var query = "DELETE FROM identifiant where id = 1";
-        $cordovaSQLite.execute(db, query).then(function(value) {
-            return callBack();
+        $cordovaSQLite.execute(db, query).then(function(result) {
+            deferred.resolve(result);
         }, function(reason) {
-            console.log(reason);
-        }, function(value) {
-
+            deferred.reject(reason);
         });
+         return deferred.promise;
+
     };
 
+    /**
+     * GET the user credentials into the USER Table
+     */
+    var selectCredentials = function(db) {
+        var deferred=$q.defer();
+        $cordovaSQLite.execute(db, "SELECT name FROM sqlite_master WHERE type='table' AND name='identifiant';").then(function(results) {
+            if (results.rows.length > 0) {
+                $cordovaSQLite.execute(db, "SELECT * FROM identifiant WHERE id=1").then(function(res) {
+                    deferred.resolve(res);
+                }, function(error) {
+                    deferred.reject(error);
+                });
+            } else {
+                console.log('table nexiste pas');
+                deferred.resolve(0);
+            }
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+    };
+
+    
+    /**
+     * the factory returns
+     */
 	return {
 		doLogin : login,
 		createIdentifiantTable : createIdentifiantTable,
 		setCredentials : setCredentials,
 		logout : logout,
-		emptyIdentifiantTable : emptyIdentifiantTable
+		emptyIdentifiantTable : emptyIdentifiantTable,
+        selectCredentials : selectCredentials
 	}
 })

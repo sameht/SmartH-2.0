@@ -1,8 +1,9 @@
-appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
-  /**
-   * get rdv list from server
+appContext.factory('CompteFactory', function($q, $http,$cordovaSQLite){
+
+	/**
+   * get user list from server
    */
-	var getRdvList=function(){
+	var getUser=function(){
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
 			method :"Post",
@@ -30,24 +31,22 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 		}; 
 
 		//return $http(request)
-		var array =[{id : 10, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 112,doctor: "Marty twwwwwo",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 11,doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-					{id : 12, doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-		] //+ spécialité de médecin
+		var array =[{id : 10, name: "Anne",lastname :"Hathaway",city :"Tunis, TN",sexe:"femme",BD:"10/11/1982",address :"Tunis, TN",couv:"CNAM"}
+					
+		]
 
 		return array
 	};
 
 
-	/**
+	  /**
      * create Rdv table
      */
-    var createRdvTable = function(db) {
+    var createUserTable = function(db) {
       var deferred= $q.defer();
-      var CreateQuery = 'CREATE TABLE IF NOT EXISTS rdv (' +
+      var CreateQuery = 'CREATE TABLE IF NOT EXISTS user (' +
             'id INTEGER PRIMARY KEY, ' +
-            'doctor text, date text,heure text, adresse text, etat text)';
+            'name text, lastname text,city text, sexe text,BD text, address text, couv text)';
       $cordovaSQLite.execute(db, CreateQuery).then(
           function(result) {
               deferred.resolve(result);
@@ -60,15 +59,14 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 
 
     /**
-     * save the rdv into the rdv Table
+     * save the user into the user Table
      */
-    var setRdv = function(db,rdv) {
+    var setUser = function(db,user) {
        var deferred= $q.defer();
 
-      var query=" INSERT INTO rdv (id, doctor, date,heure,adresse,etat) VALUES (?,?,?,?,?,?) "
-      $cordovaSQLite.execute(db, query, [rdv.id,rdv.doctor, rdv.date,rdv.heure,rdv.adresse,rdv.etat]).then(function(result) {
+      var query=" INSERT INTO user (id, name, lastname,city,sexe,BD,address,couv) VALUES (?,?,?,?,?,?,?,?) "
+      $cordovaSQLite.execute(db, query, [user.id,user.name, user.lastname,user.city,user.sexe,user.BD,user.address,user.couv]).then(function(result) {
          deferred.resolve(result)
-
       }, function(reason) {
          deferred.reject(reason)
       });
@@ -76,19 +74,19 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
       return deferred.promise; 
     } 
 		/**
-		* select rdv details by id
+		* select user details by id
 		*/
-    var getRdvById = function(db,id){
+    var getUserById = function(db,id){
 
 	      var deferred = $q.defer();
-	      var query = 'SELECT * FROM rdv where id='+id;
+	      var query = 'SELECT * FROM user where id='+id;
 	      //console.warn(query);
 	      $cordovaSQLite.execute(db, query).then(function(result) {
 	          //zone 2
 	          deferred.resolve(result);
 	        }, function(reason) {
 	        	//TODO FIXME 
-	          console.log("error " + reason);
+	          console.log("error select" + reason);
 	          deferred.reject(reason);
 	        });
 		     
@@ -97,13 +95,12 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 
 
  /**
-   * get rdv list from local db
+   * get user list from local db
    */
-  var getRdvLocalList=function(db){ 
+  var getLocaluser=function(db){ 
      var deferred = $q.defer();
-     var query="select * from rdv where etat='true'";
+     var query="select * from user";
      $cordovaSQLite.execute(db,query).then(function(result){
-
         
       deferred.resolve(result);
     },function(reason){
@@ -115,47 +112,52 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
   }
 
  /**
-	* update rdv 
+	* update user 
 	*/
-  	var updateRdv = function (db,rdv){
-  	//	console.log("to update"+rdv.doctor)
+  	var updateUser = function (db,user){
       var deferred = $q.defer();
-	  		var  query="update rdv set doctor='"+rdv.doctor+"', "+
-  					"date='"+rdv.date+"', "+
-  					"heure='"+rdv.heure +"', "+
-            "adresse='"+rdv.adresse+"', "+
-  					"etat='"+rdv.etat+"'"+
-  					"where id="+rdv.id+"";
-           // console.warn(query);
+	  		var  query="update user set name='"+user.name+"', "+
+  					"lastname='"+user.lastname+"', "+
+  					"city='"+user.city +"', "+
+  					"sexe='"+user.sexe+"', "+
+  					"BD='"+user.BD+"', "+
+  					"address='"+user.address+"', "+
+  					"couv='"+user.couv+"' "+
+  					"where id="+user.id+"";
+          //  console.warn(query);
 	  		$cordovaSQLite.execute(db, query).then(function(result){
           deferred.resolve(result);
 	  		},function(reason){
+          console.log("erreuuuuuuuuuuuuur update : " +reason )
 	  			deferred.reject(reason)
 	  		});
         return deferred.promise;
   	};
 
   	/**
-  	* create or update rdv
+  	* create or update user
   	*/
-  	var createOrUpdateRdv=function(db,rdv){
+  	var createOrUpdateUser=function(db,user){
         var deferred=$q.defer();
-        getRdvById(db,rdv.id).then(function(result){ //return 1 row
+        getUserById(db,user.id).then(function(result){ //return 1 row
           if(result.rows.length==1){ 
            // console.log("found===>update "+result.rows.length)
-            updateRdv(db,rdv).then(function(result){
-              //console.log("rdv updateeeeee ")
+            updateUser(db,user).then(function(result){
+             // console.log("updateeeeee ")
               deferred.resolve(result);
             },function(reason){
+              console.log("erreur update : " +reason )
               deferred.reject(reason)
             });
 
           }else{
           //  console.log("not found===>insert")
-            setRdv(db,rdv).then(function(result){
-            //console.log("rdv ajoutéééééé")
+            setUser(db,user).then(function(result){
+           // console.log("ajoutéééééé")
             deferred.resolve(result);
             },function(reason){
+               console.log("erreur ajout : " +reason )
+
               deferred.reject(reason)
             });
           }
@@ -166,33 +168,17 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
         return deferred.promise;
     }
 
-    /**
-     *  remove contact
-     */
-    var deleteRdv=function(db,id){
-        var deferred=$q.defer();
-        var query = "delete from rdv where id='"+id+"'";
-        $cordovaSQLite.execute(db, query).then(function(result){
-          deferred.resolve(result);
-        },function(reason){
-          console.log("error: "+reason)
-          deferred.reject(reason)
-        });
-        return deferred.promise;
-     }
-
         
   	
 
 
 	return{
-		getRdvList : getRdvList,
-    getRdvLocalList : getRdvLocalList,
-		createRdvTable: createRdvTable,
-		setRdv : setRdv,
-		getRdvById : getRdvById,
-		updateRdv : updateRdv,
-		createOrUpdateRdv : createOrUpdateRdv,
-    deleteRdv : deleteRdv
+		getUser : getUser,
+    	getLocaluser : getLocaluser,
+		createUserTable: createUserTable,
+		setUser : setUser,
+		getUserById : getUserById,
+		updateUser : updateUser,
+		createOrUpdateUser : createOrUpdateUser
 	}
 })

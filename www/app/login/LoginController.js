@@ -6,7 +6,7 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
          * create/open DB
          */
         if (window.cordova) {
-            db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2}); // device
+            db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2, location: 1}); // device
         } else {
             db = window.openDatabase("smartH", '1', 'desc', 1024 * 1024 * 5); // browser
 
@@ -58,16 +58,23 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
                 if(data.identification==0){
                     console.log("mot de passe ou email incorrecte")
                 }else{
-                    LoginFactory.createIdentifiantTable(db,function(CallBack){});
-                    LoginFactory.setCredentials(db,user.email,user.password,data.identification, function(callBack){
-                        $state.go('menu.home') ;
-                    })
+                    LoginFactory.createIdentifiantTable(db).then(function(result){
+                        LoginFactory.setCredentials(db,user.email,user.password,data.identification).then(function(result){
+                            $state.go('synchronisation') ;
+                        },function(reason){
+
+                        });
+                    },function(){
+
+                    });
+
+ 
                     localStorage.setItem("isAuthenticated", true);
 
                 }
                 
 
-            }).error(function(a,b,c,d){
+            }).error(function(data, status, headers, config ){
 
                  $ionicLoading.show({ template: 'pas de réponse du serveur'  });
              });
@@ -78,6 +85,6 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
 
     function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-}
+        return re.test(email);
+    }
 })

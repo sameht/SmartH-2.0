@@ -1,8 +1,6 @@
 appContext.factory('PopupFactory', function($ionicPopup){
 
-	var 
-
-	pup=function(msg){
+	var myPopup=function(msg){
 		var popup = $ionicPopup.alert({
         title: 'Problème!',
         subTitle: msg

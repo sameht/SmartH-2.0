@@ -6,7 +6,7 @@ appContext.controller('MenuController', function($scope, $state, $ionicHistory, 
          * create/open DB
          */
         if (window.cordova) {
-            db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2}); // device
+            db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2, location: 1}); // device
         } else {
             db = window.openDatabase("smartH", '1', 'desc', 1024 * 1024 * 5); // browser
 
@@ -19,7 +19,7 @@ appContext.controller('MenuController', function($scope, $state, $ionicHistory, 
 
 	console.warn('Menu controller')
 	$scope.logout=function(){
-		LoginFactory.emptyIdentifiantTable(db,function(callBack){})
+		LoginFactory.emptyIdentifiantTable(db).then(function(result){},function(reason){});
 		LoginFactory.logout();
 		//localStorage.clear(isAuthentified);
 		localStorage.setItem("isAuthenticated", false);

@@ -4,34 +4,34 @@
 			<ion-list >
 			  <ion-item class="item item-thumbnail-left" ui-sref="menu.doctor">
 			     <img style="background-image:url(img/doctor.jpg); border-radius:50%; background-position:center center; background-size:cover; width:100%; height:100%;"> 
-			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>Marty McFly</B></h2>
-			    <p> généraliste</p>
+			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>{{consultation.doctor}}</B></h2>
+			    <p> {{consultation.specialite}}</p>
 			  </ion-item>
 			</ion-list>
 
   			<ion-list >
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
-			    	November 05, 2015
+			    	{{consultation.date}}
 			     </ion-item>
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Maladie :</B></h3>
-			    	Allergies alimentaires
+			    	{{consultation.maladie}}
 			     </ion-item>
 			     <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Médicament:</B></h3>
-			    	 INTRINSA, IXENSE
+			    	 {{consultation.medicament}}
 			     </ion-item>
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Prix :</B></h3>
-			    	80 Dt
+			    	{{consultation.prix}}
 			     </ion-item>
 			</ion-list>
  		 </div>
 
   		<div class="list card">          
 		    	<h3 style="color: #2970E8; font-size: initial;">  <B>Déscription :</B></h3>
-		    	<p> Une consultation médicale peut être générale, gynécologique, pédiatrique, ophtalmologique...</p> 
+		    	<p> {{consultation.description}}</p> 
 		     
 		</div>
 	</ion-content>

@@ -4,7 +4,7 @@
 			<ion-list >
 			  <ion-item class="item item-thumbnail-left" ui-sref="menu.doctor">
 			     <img style="background-image:url(img/doctor.jpg); border-radius:50%; background-position:center center; background-size:cover; width:100%; height:100%;"> 
-			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>Marty McFly</B></h2>
+			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>{{rdv.doctor}}</B></h2>
 			    <p> généraliste</p>
 			  </ion-item>
 			</ion-list>
@@ -12,15 +12,15 @@
   			<ion-list >
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
-			    	November 05, 2016
+			    	{{rdv.date}}
 			     </ion-item>
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Heure :</B></h3>
-			    	10:30
+			    	{{rdv.heure}}
 			     </ion-item>
 			     <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Cabinet :</B></h3>
-			    	  5000 MONASTIR, Av.Habib BOURGUIBA
+			    	{{rdv.adresse}}
 			     </ion-item>
 			</ion-list>
  		 </div>

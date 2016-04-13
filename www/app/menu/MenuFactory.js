@@ -1,0 +1,1 @@
+appContext.factory('MenuFactory', function(){})

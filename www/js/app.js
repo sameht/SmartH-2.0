@@ -32,6 +32,14 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       controller : 'StartupController'
     })
 
+   .state('synchronisation',{
+      url : '/synchronisation',
+      cache : false,
+      templateUrl : 'app/startup/startup.html',
+      controller : 'SynchronisationController'
+    })
+
+
     .state('menu',{
       url : '/menu',
       cache : false,
@@ -63,7 +71,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
     })
 
     .state('menu.consultation',{
-      url : '/consultation',
+      url : '/consultation/{id:int}',
       cache : false,
       views: {
         'menuContent': {
@@ -85,7 +93,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
     })
 
     .state('menu.rdv',{
-      url : '/rdv',
+      url : '/rdv/{id:int}',
       cache : false,
       views: {
         'menuContent': {
