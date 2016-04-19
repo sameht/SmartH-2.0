@@ -1,78 +1,90 @@
-appContext.controller('ResultDoctorController', function($scope, $state, $cordovaGeolocation, $ionicLoading,PopupFactory, ConnectionFactory) {
+appContext.controller('ResultDoctorController', function($scope,$rootScope,$ionicPlatform, DoctorLocatorFactory, $state, $cordovaGeolocation, $ionicLoading,PopupFactory, ConnectionFactory) {
+  
+   $scope.doctorArray=[]
+  $ionicPlatform.ready(function() {
+      /*************  BD ********************/ 
+      if (window.cordova) {
+        db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2, location: 1}); // device
+      } else {
+          db = window.openDatabase("smartH", '1', 'desc', 1024 * 1024 * 5); // browser
+      }
+      /************ get Doctor listfrom local db *******************/
+      DoctorLocatorFactory.getDoctorLocalList(db).then(function(result){
+         
+        for (var i = 0; i < result.rows.length; i++) {
+          $scope.doctorArray.push(result.rows[i]);
+        };
+         // console.log( $scope.doctorArray[0])
+      /******************map *********************/
+      var markersArray = [];
+      /* Déclaration de l'objet qui définira les limites de la map */ 
+       var bounds = new google.maps.LatLngBounds();
+       var latLng = {lat: 50.087, lng: 14.421};
+       var destinationA="Aéroport international de Tunis-Carthage, Tunis, Gouvernorat de Tunis";
+       var destinationB = "Maison des Jeunes Djerba Midoun, Djerba Midun, Médenine";
+       var destArray= $scope.doctorArray;
+       var destinationIcon = 'https://chart.googleapis.com/chart?' +
+      'chst=d_map_pin_letter&chld=D|FF0000|000000';
+       var originIcon = 'https://chart.googleapis.com/chart?' +
+       'chst=d_map_pin_letter&chld=O|FFFF00|000000';
 
-  //check network connection
-  ConnectionFactory.isConnected(
-
-    function(connectedCallBack){
-       console.log("connected");
-          // Setup the loader
-          $ionicLoading.show({
-             content: 'Loading',
-             animation: 'fade-in',
+      // create the map that will be displayed on view
+      var map = new google.maps.Map(document.getElementById('map'), {
+           /* center: {lat: 55.53, lng: 9.4},
+            zoom: 10*/
+             mapTypeId: google.maps.MapTypeId.ROADMAP
           });
+      //convertir des adresses "string" en coordonnées géographiques 
+      var geocoder = new google.maps.Geocoder();
 
-         console.log("map");
-
-        /****************     Map     ******************/
-         var options = {timeout: 10000, enableHighAccuracy: false};
+      /*------------function showGeocodedAddressOnMap-----------------*/
        
-        $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-       
-          var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-       
-          var mapOptions = {
-            center: latLng,
-            zoom: 15,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          };
-       
-          $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-          
-          //Wait until the map is loaded
-          google.maps.event.addListenerOnce($scope.map, 'idle', function(){
-           
-            var marker = new google.maps.Marker({
-                map: $scope.map,
-                animation: google.maps.Animation.DROP,
-                position: latLng
-            });      
-             // info Window
-            var infoWindow = new google.maps.InfoWindow({
-                content: "Here <br/> I am!"
-            });
-           
-            google.maps.event.addListener(marker, 'click', function () {
-                infoWindow.open($scope.map, marker);
-            });
-           
-          });
+      var showGeocodedAddressOnMap = function(asDestination) {
+            var icon = asDestination ? destinationIcon : originIcon; //if adDestination=false :icon=originIcon
+            return function(results, status) {
+              if (status === google.maps.GeocoderStatus.OK) {
+                map.fitBounds(bounds.extend(results[0].geometry.location));
+                markersArray.push(new google.maps.Marker({
+                  map: map,
+                  position: results[0].geometry.location,
+                   animation: google.maps.Animation.DROP,
+                  icon: icon
+                }));
 
-          $ionicLoading.hide();
+                 // info Window
+                var infoWindow = new google.maps.InfoWindow({
+                    content: "Here <br/> I am!"
+                });
+               
+                google.maps.event.addListener(markersArray[markersArray.length-1], 'click', function () {
+                    infoWindow.open(map, markersArray[markersArray.length-1]);
+                });   
+              } else {
+                alert('Geocode was not successful due to: ' + status);
+              }
+            };
+    };
+    /*-------------------------------------------------------------*/
+    //show all markers
+      for (var i = 0; i < destArray.length; i++) {
+        geocoder.geocode({'address': destArray[i].adresse}, showGeocodedAddressOnMap(true)); 
 
-        }, function(error){
-          $ionicLoading.hide();
-          console.log("Could not get location");
-          $ionicLoading.show({  template: 'Could not get location , activez le GPS',  duration: 1700 });
-        });
-    }
+      };
 
-    , function(notConnectedCallBack){
-       PopupFactory.myPopup('Utiliser le GPS ainsi que les reseaux cellulaires et wifi pour determiner la position');
-       console.log("not connected");
-    }
+      /******************fin map *********************/
 
-  );
-
-
-  /*****************************************************/
-
-
-/****************    List     ******************/
-    $scope.doctorArray=[];
-
-    
-  for(var i=0 ;i<=5 ;i++){
-    $scope.doctorArray[i]={doctor : "doctor "+(i+1),specialty:"dermatologue" ,address :'teboulba'}
-  }
+      /************ fin :  get Doctor listfrom local db *************/
+     },function(error){
+        console.log("error getDoctorLocalList : "+error)
+      })
+ 
+     
+  },function(error){
+    console.log("error ionicPlatform ready")
+  })
 
 });
+
+
+
+      

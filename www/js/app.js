@@ -125,7 +125,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
       }
     })
     .state('menu.doctor',{
-      url : '/doctor',
+      url : '/doctor/{id:int}',
       cache : false,
       views: {
         'menuContent': {

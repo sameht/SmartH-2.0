@@ -8,17 +8,18 @@
 
                 <!-- adresse -->
             <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+                <input class="textfield__input" type="text" required="required" id="adresse" ng-model="user.adresse"/>
             <label class="textfield__label" >Adresse :</label>
             </div>
 
             <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Distance en Km :</label>
+                <input class="textfield__input" type="text" required="required" id="distance" ng-model="user.distance" />
+            <label class="textfield__label" >Distance en Km : </label>
             </div>
 
             <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultDoctor">
+                <button class="button button-block " style="    background-color: #EAEAEA;"ng-click='rechercher(user)'>
+                    <!--  ui-sref="menu.resultDoctor" --> 
                   chercher
                 </button>
             </div>

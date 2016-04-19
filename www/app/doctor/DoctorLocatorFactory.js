@@ -1,4 +1,4 @@
-appContext.factory('DoctorLocatorFactory', function($http,$q){
+appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
   /**
    * get doctor list from server
    */
@@ -30,10 +30,10 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
 		}; 
 
 		//return $http(request)
-		var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"},
-          			{id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"},
-          			{id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"},
-          			{id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"}
+		var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:null},
+          			{id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:null},
+          			{id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:null},
+          			{id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:null}
 		] //+ spécialité de médecin
 
 		return array
@@ -46,7 +46,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
       var deferred= $q.defer();
       var CreateQuery = 'CREATE TABLE IF NOT EXISTS doctor (' +
             'id INTEGER PRIMARY KEY, ' +
-            'doctor text, specialite text,sexe text, adresse text, tel text)';
+            'doctor text, specialite text,sexe text, adresse text, tel text,distance text)';
       $cordovaSQLite.execute(db, CreateQuery).then(
           function(result) {
               deferred.resolve(result);
@@ -63,8 +63,8 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
     var setDoctor = function(db,doc) {
        var deferred= $q.defer();
 
-      var query=" INSERT INTO doctor (id, doctor, specialite,sexe,adresse,tel) VALUES (?,?,?,?,?,?) "
-      $cordovaSQLite.execute(db, query, [doc.id,doc.doctor, doc.specialite,doc.sexe,doc.adresse,doc.tel]).then(function(result) {
+      var query=" INSERT INTO doctor (id, doctor, specialite,sexe,adresse,tel,distance) VALUES (?,?,?,?,?,?,?) "
+      $cordovaSQLite.execute(db, query, [doc.id,doc.doctor, doc.specialite,doc.sexe,doc.adresse,doc.tel,doc.distance]).then(function(result) {
          deferred.resolve(result)
 
       }, function(reason) {
@@ -74,13 +74,14 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
 
       return deferred.promise; 
     } 
-		/**
-		* select rdv details by id
-		*/
-    var getRdvById = function(db,id){
+
+	/**
+	* select rdv details by id
+	*/
+    var getDoctorById = function(db,id){
 
 	      var deferred = $q.defer();
-	      var query = 'SELECT * FROM rdv where id='+id;
+	      var query = 'SELECT * FROM doctor where id='+id;
 	      //console.warn(query);
 	      $cordovaSQLite.execute(db, query).then(function(result) {
 	          //zone 2
@@ -98,17 +99,17 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
    * get doctor list from local db
    */
   var getDoctorLocalList=function(db){ 
-     var deferred = $q.defer();
-     var query="select * from doctor ";
-     $cordovaSQLite.execute(db,query).then(function(result){
-
+      var deferred = $q.defer();
+      var query="select * from doctor ";
+      console.warn(query);
+      $cordovaSQLite.execute(db,query).then(function(result){
         
       deferred.resolve(result);
-    },function(reason){
+      },function(reason){
         console.log("error: " +reason);
         deferred.reject(reason);
-   })
-   return deferred.promise;
+     })
+     return deferred.promise;
 
   }
 
@@ -116,12 +117,13 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
 	* update rdv 
 	*/
   	var updateDoctor = function (db,doc){
-      var deferred = $q.defer();
+        var deferred = $q.defer();
 	  		var  query="update doctor set doctor='"+doc.doctor+"', "+
   					"specialite='"+doc.specialite+"', "+
   					"sexe='"+doc.sexe +"', "+
             		"adresse='"+doc.adresse+"', "+
-  					"tel='"+doc.tel+"'"+
+            "tel='"+doc.tel+"', "+
+  					"distance='"+doc.distance+"'"+
   					"where id="+doc.id+"";
            // console.warn(query);
 	  		$cordovaSQLite.execute(db, query).then(function(result){
@@ -133,7 +135,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
         return deferred.promise;
   	};
 
-  	/**
+  /**
   	* create or update doctor
   	*/
   	var createOrUpdateDoctor=function(db,doc){
@@ -157,21 +159,73 @@ appContext.factory('DoctorLocatorFactory', function($http,$q){
               deferred.reject(reason)
             });
           }
-      },function(reason){ 
+         },function(reason){ 
           deferred.reject(reason)
 
-      });
+        });
         return deferred.promise;
+    }
+    /**
+     *Calculate distance and return doctor
+     */
+    var calculateDistance=function(origin , doctor){
+      var deferred=$q.defer();
+      var service = new google.maps.DistanceMatrixService;
+              service.getDistanceMatrix({
+                origins: [origin],
+                destinations: [doctor.adresse],
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC, // distance
+                avoidHighways: false,
+                avoidTolls: false
+                      // resultat du calcule
+                }, function(response, status){
+                  if(status==google.maps.DistanceMatrixStatus.INVALID_REQUEST){
+                        alert('Error was: ' + status);
+                        deferred.reject(reason);
+                  }else
+                      if (status !== google.maps.DistanceMatrixStatus.OK) {
+                        alert('Error was: ' + status);
+                        deferred.reject(reason)
+                      } else {
+                          var originList = response.originAddresses;
+                          var destinationList = response.destinationAddresses;
+                           var results = response.rows[0].elements;
+                           var distance=results[0].distance.value;
+                           doctor.distance=distance;
+                           var doc=doctor
+                           deferred.resolve(doc);
+                      }
+                })
+       return deferred.promise;
     }
 
 
+    /**
+     * delete all records from doctor table
+     */
+    var emptyDoctorTable = function(db) {
+
+        var deferred=$q.defer();
+        var query = "DROP Table IF EXISTS doctor ";
+        $cordovaSQLite.execute(db, query).then(function(result) {
+            deferred.resolve(result);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+         return deferred.promise;
+
+    };
+
 	return{
 		getDoctorList : getDoctorList,
+    setDoctor : setDoctor,
 		createDoctorTable : createDoctorTable,
-		getRdvById : getRdvById,
+		getDoctorById : getDoctorById,
 		getDoctorLocalList : getDoctorLocalList,
 		updateDoctor : updateDoctor,
-		createOrUpdateDoctor : createOrUpdateDoctor
-  
+		createOrUpdateDoctor : createOrUpdateDoctor,
+    calculateDistance : calculateDistance,
+    emptyDoctorTable : emptyDoctorTable
 	}
 })
