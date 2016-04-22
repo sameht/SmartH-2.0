@@ -1,88 +1,83 @@
-appContext.controller('DoctorLocatorController', function($scope,$rootScope,PopupFactory, ConnectionFactory,$ionicPlatform, $cordovaGeolocation,DoctorLocatorFactory, $state){
-   
+appContext.controller('DoctorLocatorController', function($scope,$rootScope,$ionicLoading,PopupFactory, ConnectionFactory,$ionicPlatform, $cordovaGeolocation,DoctorLocatorFactory, $state){
+    console.warn('DoctorLocatorController')
+
     $ionicPlatform.ready(function() {
 	     
         if (window.cordova) {
             db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2, location: 1}); // device
         } else {
             db = window.openDatabase("smartH", '1', 'desc', 1024 * 1024 * 5); // browser
-
+            console.warn("created !")
         }
 
 
-      
-      $scope.rechercher=function(localisation){
-      	ConnectionFactory.isConnected( function(connectedCallBack){
-      		DoctorLocatorFactory.emptyDoctorTable(db).then(function(){
-
-      		var DocNb=0;
-      		var DocArray=[];
-	      	
-		    var array=DoctorLocatorFactory.getDoctorList();
+      $scope.searchByLocation=function(localisation){
+      	  // Setup the loader
+           $ionicLoading.show({
+              content: 'Loading',
+              animation: 'fade-in',
+           });
+ 
+      	ConnectionFactory.isConnected( function(){
+      		DoctorLocatorFactory.emptyDoctorTable(db).then(function(){	      	
 
 	    	var options = {timeout: 10000, enableHighAccuracy: false};
 	        $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
 	        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 	            $rootScope.latLng=latLng;
-	            var i=0;
-	            for (i = 0; i < array.length; i++) {
-		    		//console.log(array[i].adresse+' '+i)
-		    		DoctorLocatorFactory.calculateDistance(latLng,array[i]).then(function(result){
-		    			
-		    			var doc=result
-		    			//ajouter la valeur de distance 
-		    			console.log(parseInt(localisation.distance));
-		    			
-		    			if(doc.distance < parseInt(localisation.distance)){
-		    			    DocNb=DocNb+1;
-		    			    DoctorLocatorFactory.createDoctorTable(db).then(function(result){
- 	    			         	DoctorLocatorFactory.setDoctor(db,doc).then(function(result){
- 	    			         		console.log(DocNb)
- 	    			         		if (i==array.length-1) {
- 	    			         			console.log("======> résultat")
- 	    			         			$state.go('menu.resultDoctor');
- 	    			         		}
-	 	    			        },function(reason){
-	 	    			         	console.log("error setDoctor"+reason)
-	 	    			        })
-		    			     
-		    			    },function(reason){
-		    			      console.log("error createDoctorTable"+reason)
-		    			    })
-
-		    			};
-		    		},function(reason){
-		    			console.log("erreur calculateDistance : "+reason)
-		    		})
-
-					if(DocNb==0 && i==array.length-1){
-		    			console.log("aucune résultat")
-		    		}
-	    		};
-	    	
+	    		console.log(latLng)
+	    		var array=DoctorLocatorFactory.getDoctorList( parseInt(localisation.distance),latLng);
 	    		
+	    		if(array.length==0){
+	    			console.log("pas de résultat")
+	    			$ionicLoading.hide();
+	    			$ionicLoading.show({ template: 'pas de résultat', duration:3000 });
+	    		}else{
+	    			console.log("il y a de résultat")
+
+	    			DoctorLocatorFactory.createDoctorTable(db).then(function(result){
+	    				DoctorLocatorFactory.insertBulkIntoDoctorTable(db,array).then(function(result){
+	    					$ionicLoading.hide();
+	    					$state.go('menu.resultDoctor')
+
+	    				},function(error){
+	    					$ionicLoading.hide();
+	    					console.log("erreur insertBulkIntoDoctorTable :" +error)
+
+	    				})
+		    			
+		    		},function(error){
+		    			$ionicLoading.hide();
+		    			console.log("erreur createDoctorTable :" +error)
+		    		})
+		    		
+	    		}
+
 
 	         },function(error){
 	    		console.log("erreur getCurrentPosition :" +error)
+	    		$ionicLoading.hide();
+	    		$ionicLoading.show({ template: 'activer le gps', duration:3000 });
+
 	         });
 
 		    },function(erreur){
+		    	$ionicLoading.hide();
       			console.log("erreur emptyDoctorTable :" +erreur)
       		});
-	   }, function(notConnectedCallBack){
+	   }, function(){
+	   	$ionicLoading.hide();
         PopupFactory.myPopup('Utiliser les reseaux cellulaires et wifi pour determiner la recherche');
         console.log("not connected");
-    	})
+    	});
 		
 
-      }
+      };
 
 
     //ionicplateform ready
-	},function(error){
+	});
 
-	})
-
-})
+});
 

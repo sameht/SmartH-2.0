@@ -2,7 +2,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
   /**
    * get doctor list from server
    */
-	var getDoctorList=function(){
+	var getDoctorList=function(dist,currentPosition){
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
 			method :"Post",
@@ -30,10 +30,10 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 		}; 
 
 		//return $http(request)
-		var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:null},
-          			{id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:null},
-          			{id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:null},
-          			{id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:null}
+		var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+          			{id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
+          			{id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
+          			{id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
 		] //+ spécialité de médecin
 
 		return array
@@ -209,6 +209,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
         var deferred=$q.defer();
         var query = "DROP Table IF EXISTS doctor ";
         $cordovaSQLite.execute(db, query).then(function(result) {
+      
             deferred.resolve(result);
         }, function(reason) {
             deferred.reject(reason);
@@ -216,6 +217,44 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
          return deferred.promise;
 
     };
+    /**
+     * insert an array of contact into contacts
+     */
+    var insertBulkIntoDoctorTable = function(db, doctorArray) {
+
+      var deferred=$q.defer();
+      var insertQuery = "INSERT INTO doctor " + 
+        " SELECT '" + doctorArray[0].id  + "' AS 'id', '" +
+          doctorArray[0].doctor  + "' AS 'doctor','" + 
+          doctorArray[0].specialite + "' AS 'specialite','" + 
+          doctorArray[0].sexe + "' AS 'sexe','"+
+          doctorArray[0].adresse + "' AS 'adresse', '" + 
+          doctorArray[0].tel + "' AS 'tel','" + 
+          doctorArray[0].distance+"' AS 'distance' ";
+
+      for (var i =1; i < doctorArray.length; i++) {
+
+        insertQuery = insertQuery + "  UNION SELECT '"
+            + doctorArray[i].id + "','"
+            + doctorArray[i].doctor + "', '"
+            + doctorArray[i].specialite + "','"
+            + doctorArray[i].sexe + "', '"
+            + doctorArray[i].adresse + "', '"
+            + doctorArray[i].tel + "', '"
+            +doctorArray[i].distance +"'";
+      }
+
+  
+
+        $cordovaSQLite.execute(db, insertQuery).then(function(result) {
+            
+                deferred.resolve(result);
+
+            }, function(reason) {
+               deferred.reject(reason);
+            });
+         return deferred.promise;
+      }
 
 	return{
 		getDoctorList : getDoctorList,
@@ -226,6 +265,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 		updateDoctor : updateDoctor,
 		createOrUpdateDoctor : createOrUpdateDoctor,
     calculateDistance : calculateDistance,
-    emptyDoctorTable : emptyDoctorTable
+    emptyDoctorTable : emptyDoctorTable,
+    insertBulkIntoDoctorTable : insertBulkIntoDoctorTable
 	}
 })

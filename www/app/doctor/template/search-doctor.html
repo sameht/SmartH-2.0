@@ -1,96 +1,105 @@
 <ion-view view-title="Localisation">
-<ion-tabs class="tabs-top tabs-icon-top">
-    <!-- filtre basique -->
-    <ion-tab title="Filtre basique" icon="ion-search">
-        <i></i>
-        <ion-content class="s-text-center">
-            
+	<div class="tabsdemoDynamicHeight " style="margin-top: 45px;">
+	  <md-content>
+	    <md-tabs md-dynamic-height="" md-border-bottom="">
 
-                <!-- adresse -->
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="adresse" ng-model="user.adresse"/>
-            <label class="textfield__label" >Adresse :</label>
-            </div>
+            <md-tab>
+                <md-tab-label >
+                   <!--  <span class="ion-search" style="font-size: 30px;"></span><br> -->
+                    <label>filter by location</label>
+                </md-tab-label>
+                <md-tab-body class="md-padding ">
+                	<div class="s-text-center">
+                		<!-- adresse -->
+			            <div class="textfield textfield--floatingLabel">
+			                <input class="textfield__input" type="text" required="required" id="adresse" ng-model="user.adresse"/>
+			            <label class="textfield__label" >Adresse :</label>
+			            </div>
 
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="distance" ng-model="user.distance" />
-            <label class="textfield__label" >Distance en Km : </label>
-            </div>
+			            <div class="textfield textfield--floatingLabel">
+			                <input class="textfield__input" type="number" required="required" id="distance" ng-model="user.distance" />
+			            <label class="textfield__label" >Distance en Km : </label>
+			            </div>
 
-            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="    background-color: #EAEAEA;"ng-click='rechercher(user)'>
-                    <!--  ui-sref="menu.resultDoctor" --> 
-                  chercher
-                </button>
-            </div>
+			            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
+			                <button class="button button-block " style="    background-color: #EAEAEA;"ng-click='searchByLocation(user)'>
+			                    <!--  ui-sref="menu.resultDoctor" --> 
+			                  chercher
+			                </button>
+			            </div>
+                	</div>
+                </md-tab-body>
+            </md-tab>
+
+<!-- ----------------------------------------------------------- -->	     
+
+			<md-tab>
+                <md-tab-label icon="ion-search">
+<!--                     <span class="ion-search"></span> -->
+						<label>basic filter</label>
+                 </md-tab-label>
+                 <md-tab-body class="md-padding ">
+					<div class="s-text-center">
+						<!-- adresse -->
+			            <div class="textfield textfield--floatingLabel">
+			                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+			            <label class="textfield__label" >Nom :</label>
+			            </div>
+
+			            <div class="textfield textfield--floatingLabel">
+			                <input class="textfield__input" type="text" required="required" id="homeSearch" />
+			            <label class="textfield__label" >Prénom:</label>
+			            </div>
+
+			           
+			           <div class="subject">
+			              <label class="dropdown-label" for="subject"></label>
+			              <select class="dropdown-select" placeholder="Spécialité" name="subject" id="subject_input" required>
+			                <option disabled hidden selected>Spécialité</option>
+			                <option>généraliste</option>
+			                <option>Gynécologue</option>
+			                <option>Ophtalmologue</option>
+			                <option>Stomatologue</option><option>généraliste</option>
+			                <option>Gynécologue</option>
+			                <option>Ophtalmologue</option>
+			                <option>Stomatologue</option><option>généraliste</option>
+			                <option>Gynécologue</option>
+			                <option>Ophtalmologue</option>
+			                <option>Stomatologue</option>
+			              </select>
+			            </div>
 
 
-        </ion-content>
 
-    </ion-tab>
+			            		<!-- RadioBox : gender -->
+			      		<!--************************************ -->
 
-
-    <!-- filtre par localisation -->
-    <ion-tab title="Filtre" icon="ion-android-funnel">
-        <i></i>
-        <ion-content class="s-text-center">
-            
-
-                <!-- adresse -->
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Nom :</label>
-            </div>
-
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Prénom:</label>
-            </div>
-
-           
-           <div class="subject">
-              <label class="dropdown-label" for="subject"></label>
-              <select class="dropdown-select" placeholder="Spécialité" name="subject" id="subject_input" required>
-                <option disabled hidden selected>Spécialité</option>
-                <option>généraliste</option>
-                <option>Gynécologue</option>
-                <option>Ophtalmologue</option>
-                <option>Stomatologue</option><option>généraliste</option>
-                <option>Gynécologue</option>
-                <option>Ophtalmologue</option>
-                <option>Stomatologue</option><option>généraliste</option>
-                <option>Gynécologue</option>
-                <option>Ophtalmologue</option>
-                <option>Stomatologue</option>
-              </select>
-            </div>
+						<div >
+						 
+						        <input type="radio" name="sexe" id="homme" class="css-checkbox2" />
+						        <label for="homme" class="css-label2">Homme</label>
+						   
+						        <input type="radio" name="sexe" id="femme" class="css-checkbox2" checked="checked"/>
+						        <label for="femme" class="css-label2" style="margin-left: 20px;">Femme</label>
+						      
+						</div>
 
 
+			            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
+			                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultDoctor">
+			                  chercher
+			                </button>
+			            </div>
+					</div>
 
-            <!-- RadioBox : gender -->
-      <!--************************************ -->
 
-<div >
+                </md-tab-body>
+            </md-tab>
+
+
+	    </md-tabs>
+	  </md-content>
+	</div>
+
  
-        <input type="radio" name="sexe" id="homme" class="css-checkbox2" />
-        <label for="homme" class="css-label2">Homme</label>
-   
-        <input type="radio" name="sexe" id="femme" class="css-checkbox2" checked="checked"/>
-        <label for="femme" class="css-label2" style="margin-left: 20px;">Femme</label>
-      
-</div>
-
-
-            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultDoctor">
-                  chercher
-                </button>
-            </div>
-
-        </ion-content>
-        <ion-footer-bar>
-        </ion-footer-bar>
-    </ion-tab>
-
-</ion-tabs>
 </ion-view>

@@ -88,7 +88,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 	          deferred.resolve(result);
 	        }, function(reason) {
 	        	//TODO FIXME 
-	          console.log("error " + reason);
+	          console.log("error " + JSON.stringify(reason));
 	          deferred.reject(reason);
 	        });
 		     
@@ -101,13 +101,14 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
    */
   var getRdvLocalList=function(db){ 
      var deferred = $q.defer();
-     var query="select * from rdv where etat='true'";
+     var query="SELECT * FROM rdv WHERE etat = 'true' ";
      $cordovaSQLite.execute(db,query).then(function(result){
 
         
       deferred.resolve(result);
     },function(reason){
-        console.log("error: " +reason);
+        console.log("error " + JSON.stringify(reason));
+         
         deferred.reject(reason);
    })
    return deferred.promise;
@@ -171,7 +172,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
      */
     var deleteRdv=function(db,id){
         var deferred=$q.defer();
-        var query = "delete from rdv where id='"+id+"'";
+        var query = "delete from rdv where id="+id;
         $cordovaSQLite.execute(db, query).then(function(result){
           deferred.resolve(result);
         },function(reason){

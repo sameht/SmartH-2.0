@@ -14,7 +14,7 @@ appContext.controller('MenuController', function($scope, $state, $ionicHistory, 
     });
 
 
-	$ionicHistory.clearHistory();
+	//$ionicHistory.clearHistory();
     $ionicHistory.nextViewOptions({ disableBack: true, disableAnimate: true, historyRoot: true });
 
 	console.warn('Menu controller')

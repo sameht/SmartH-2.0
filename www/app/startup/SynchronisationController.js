@@ -1,11 +1,16 @@
-appContext.controller('SynchronisationController', function($state, RdvFactory, CompteFactory, ConsultationFactory,$scope, $ionicPlatform){
+appContext.controller('SynchronisationController', function($state, RdvFactory, CompteFactory, ConsultationFactory,$scope, $ionicLoading, $ionicPlatform){
 
 	$scope.rdvArray=[];
     // for opening db:
     var db = null;
 
     $ionicPlatform.ready(function() {
-        
+
+         $ionicLoading.show({
+             content: 'Loading',
+             animation: 'fade-in',
+          }); 
+
         /**
          * create/open DB
          */
@@ -54,7 +59,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 	    */
 	    CompteFactory.createUserTable(db).then(function(result){
 			// console.log("create user table")
-			console.log(CompteFactory.getUser()[0])
+			console.log("getuser : "+CompteFactory.getUser()[0])
 			var array=CompteFactory.getUser();
 				CompteFactory.createOrUpdateUser(db,array[0]).then(function(result){
 					//console.log("user ajoutéé"+array[0])
@@ -74,6 +79,8 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 			
 	    /*
 	    $q.all().then().....    */
+
+	    $ionicLoading.hide();
 
 		$state.go('menu.home') ;
 

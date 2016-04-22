@@ -2,12 +2,29 @@
   background-color: transparent !important; 
 }
 .tabsdemoDynamicHeight md-content md-tabs {
-	background: #f6f6f6;
-	border: 1px solid #e1e1e1; 
+	/*background: #f6f6f6;*/
+	background: #ffffff;
+/*	border: 1px solid #e1e1e1; */
+}
+.tabsdemoDynamicHeight md-content md-tab md-tab-label{
+	width : 50% !important;
 }
 .tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper {
-	background: white; 
+	/*background: white;*/ 
+	    background-color: #F8F8F8;
   }
+.tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper{
+	width: 100% !important ;
+}
+.tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-ink-bar{
+	width : 50% !important;
+	color:#30A7CC;
+    background:#30A7CC;
+}
+.tabsdemoDynamicHeight md-content md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item{
+	width : 50% !important;
+}
 .tabsdemoDynamicHeight md-content h1:first-child {
-    margin-top: 0; }
+    margin-top: 0; 
+}
 

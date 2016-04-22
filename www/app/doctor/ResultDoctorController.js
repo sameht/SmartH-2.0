@@ -1,7 +1,15 @@
-appContext.controller('ResultDoctorController', function($scope,$rootScope,$ionicPlatform, DoctorLocatorFactory, $state, $cordovaGeolocation, $ionicLoading,PopupFactory, ConnectionFactory) {
-  
-   $scope.doctorArray=[]
+appContext.controller('ResultDoctorController', function($scope,$ionicHistory, $rootScope,$ionicPlatform, DoctorLocatorFactory, $state, $cordovaGeolocation, $ionicLoading,PopupFactory, ConnectionFactory) {
+    console.warn('ResultDoctorController')
+
+
   $ionicPlatform.ready(function() {
+   // Setup the loader
+           $ionicLoading.show({
+              content: 'Loading',
+              animation: 'fade-in',
+           });
+
+
       /*************  BD ********************/ 
       if (window.cordova) {
         db = window.sqlitePlugin.openDatabase({name : "smartH" , androidDatabaseImplementation: 2, location: 1}); // device
@@ -10,16 +18,17 @@ appContext.controller('ResultDoctorController', function($scope,$rootScope,$ioni
       }
       /************ get Doctor listfrom local db *******************/
       DoctorLocatorFactory.getDoctorLocalList(db).then(function(result){
-         
+         var array =[];
         for (var i = 0; i < result.rows.length; i++) {
-          $scope.doctorArray.push(result.rows[i]);
+            array[i]=result.rows.item(i);
         };
+        $scope.doctorArray=array;
          // console.log( $scope.doctorArray[0])
       /******************map *********************/
       var markersArray = [];
       /* Déclaration de l'objet qui définira les limites de la map */ 
        var bounds = new google.maps.LatLngBounds();
-       var latLng = {lat: 50.087, lng: 14.421};
+    //   var latLng = {lat: 50.087, lng: 14.421};
        var destinationA="Aéroport international de Tunis-Carthage, Tunis, Gouvernorat de Tunis";
        var destinationB = "Maison des Jeunes Djerba Midoun, Djerba Midun, Médenine";
        var destArray= $scope.doctorArray;
@@ -65,22 +74,45 @@ appContext.controller('ResultDoctorController', function($scope,$rootScope,$ioni
             };
     };
     /*-------------------------------------------------------------*/
-    //show all markers
+   
+
+
+    //show current position marker markers
+    console.log( $rootScope.latLng);
+  geocoder.geocode({'location': $rootScope.latLng}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        map.setZoom(11);
+        var marker = new google.maps.Marker({
+          position: $rootScope.latLng,
+          map: map, 
+          icon : originIcon
+        });
+        console.log("results[1].formatted_address : "+results[1].formatted_address)
+$ionicLoading.hide();
+
+      } else {
+        window.alert('No results found');
+      }
+    } else {
+      window.alert('Geocoder failed due to: ' + status);
+    }
+  });
+
+
+  //show doctor markers
       for (var i = 0; i < destArray.length; i++) {
         geocoder.geocode({'address': destArray[i].adresse}, showGeocodedAddressOnMap(true)); 
-
-      };
-
+          };
       /******************fin map *********************/
 
       /************ fin :  get Doctor listfrom local db *************/
      },function(error){
+      $ionicLoading.hide();
         console.log("error getDoctorLocalList : "+error)
       })
  
      
-  },function(error){
-    console.log("error ionicPlatform ready")
   })
 
 });
