@@ -30,10 +30,14 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 		}; 
 
 		//return $http(request)
-		var array =[{id : 10, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 112,doctor: "Marty twwwwwo",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 11,doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-					{id : 12, doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+		var array =[{id : 110,idDoc:1, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 112,idDoc:2, doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 115,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 117,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 118,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 119,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+					{id : 12, idDoc:3,doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
 		] //+ spécialité de médecin
 
 		return array
@@ -47,7 +51,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
       var deferred= $q.defer();
       var CreateQuery = 'CREATE TABLE IF NOT EXISTS rdv (' +
             'id INTEGER PRIMARY KEY, ' +
-            'doctor text, date text,heure text, adresse text, etat text)';
+            'idDoc INTEGER,doctor text, date text,heure text, adresse text, etat text)';
       $cordovaSQLite.execute(db, CreateQuery).then(
           function(result) {
               deferred.resolve(result);
@@ -65,8 +69,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
     var setRdv = function(db,rdv) {
        var deferred= $q.defer();
 
-      var query=" INSERT INTO rdv (id, doctor, date,heure,adresse,etat) VALUES (?,?,?,?,?,?) "
-      $cordovaSQLite.execute(db, query, [rdv.id,rdv.doctor, rdv.date,rdv.heure,rdv.adresse,rdv.etat]).then(function(result) {
+      var query=" INSERT INTO rdv (id, idDoc, doctor, date,heure,adresse,etat) VALUES (?,?,?,?,?,?,?) "
+      $cordovaSQLite.execute(db, query, [rdv.id, rdv.idDoc, rdv.doctor, rdv.date,rdv.heure,rdv.adresse,rdv.etat]).then(function(result) {
          deferred.resolve(result)
 
       }, function(reason) {
@@ -121,7 +125,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
   	var updateRdv = function (db,rdv){
   	//	console.log("to update"+rdv.doctor)
       var deferred = $q.defer();
-	  		var  query="update rdv set doctor='"+rdv.doctor+"', "+
+	  		var  query="update rdv set idDoc='"+rdv.idDoc+"', "+
+            "doctor='"+rdv.doctor+"', "+
   					"date='"+rdv.date+"', "+
   					"heure='"+rdv.heure +"', "+
             "adresse='"+rdv.adresse+"', "+

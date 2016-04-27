@@ -29,9 +29,12 @@ appContext.factory('ConsultationFactory', function($q,$cordovaSQLite){
 			}
 		};
 				//return $http(request)
-		var array =[{id : 10, doctor: "Martyy one", specialite:"généraliste",date:"November 05, 2015",maladie:"Allergies alimentaires",medicament:"INTRINSA, IXENSE",prix:"80",description:" Une consultation médicale peut être générale, gynécologique,"},
-					{id : 11, doctor: "Marty two", specialite:"généraliste",date:"10/10/2012",maladie:"maladie",medicament:"medi",prix:"50",description:"desc"},
-					{id : 12, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"}
+		var array =[{id : 15, idDoc:1, doctor: "Martyy one", specialite:"généraliste",date:"November 05, 2015",maladie:"Allergies alimentaires",medicament:"INTRINSA, IXENSE",prix:"80",description:" Une consultation médicale peut être générale, gynécologique,"},
+					{id : 70,idDoc:2, doctor: "Marty two", specialite:"généraliste",date:"10/10/2012",maladie:"maladie",medicament:"medi",prix:"50",description:"desc"},
+					{id : 90,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
+					{id : 95,idDoc:4, doctor: "Marty four", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
+					//{id : 96,idDoc:5, doctor: "Marty five", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
+					{id : 91,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"}
 				]
 		return array 
 	 }
@@ -43,7 +46,7 @@ appContext.factory('ConsultationFactory', function($q,$cordovaSQLite){
 		var deferred=$q.defer();
 		var query="CREATE TABLE IF NOT EXISTS consultation ("+
 			"id INTEGER PRIMARY KEY ,"+
-			"doctor text, specialite text, date text,maladie text, medicament text, prix text, description text)"
+			"idDoc INTEGER, doctor text, specialite text, date text,maladie text, medicament text, prix text, description text)"
 		$cordovaSQLite.execute(db,query).then(function(result){
 			deferred.resolve(result);
 		}, function(reason){
@@ -59,8 +62,9 @@ appContext.factory('ConsultationFactory', function($q,$cordovaSQLite){
 	 var setConsultation=function(db,cons){
 	 var deferred= $q.defer();
 
-      var query=" INSERT INTO consultation (id, doctor, specialite, date,maladie,medicament,prix,description) VALUES (?,?,?,?,?,?,?,?) "
-      $cordovaSQLite.execute(db, query, [cons.id,cons.doctor, cons.specialite, cons.date,cons.maladie,cons.medicament,cons.prix,cons.description]).then(function(result) {
+      var query=" INSERT INTO consultation (id, idDoc, doctor, specialite, date,maladie,medicament,prix,description) VALUES (?,?,?,?,?,?,?,?,?) "
+      //console.warn(query);
+      $cordovaSQLite.execute(db, query, [cons.id, cons.idDoc, cons.doctor, cons.specialite, cons.date,cons.maladie,cons.medicament,cons.prix,cons.description]).then(function(result) {
          deferred.resolve(result)
 
       }, function(reason) {
@@ -116,7 +120,8 @@ appContext.factory('ConsultationFactory', function($q,$cordovaSQLite){
 	var updateConsultation=function(db,cons){
 		  	//	console.log("to update"+rdv.doctor)
       var deferred = $q.defer();
-	  		var  query="update consultation set doctor='"+cons.doctor+"', "+
+	  		var  query="update consultation set idDoc='"+cons.idDoc+"', "+
+  					"doctor='"+cons.doctor+"', "+
   					"specialite='"+cons.specialite+"', "+
   					"date='"+cons.date +"', "+
   					"maladie='"+cons.maladie+"',"+

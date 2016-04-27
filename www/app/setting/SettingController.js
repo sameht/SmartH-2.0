@@ -5,14 +5,16 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 
 	$scope.canceled=function(){
 			if($scope.canceledRDV.checked){
-				if (window.cordova){
-					NotificationFactory.singleNotification(1,'Un rendez-vous est annulé');
+				if (window.cordova){ //device
+					NotificationFactory.delayedNotification(1,'Un rendez-vous est annulé');
 				} else {
 					console.log('Notification : activé');
 				}	 
 			}else
 			   {console.log('Notification : désactivé'); }
 		};
+
+/*---------------------------------------------------------------*/
 
 	/************ rendez-vous à venir ****************/
 
@@ -30,8 +32,6 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 			} 
 		}
     }
-
-
 
 
     $scope.choice = { checked: '' };
@@ -83,6 +83,17 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 		}
 
 	}
-		
+	
+
+
+	/*---------------------------------------------------------------*/
+
+	
 
 })
+
+
+
+
+
+

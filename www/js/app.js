@@ -58,6 +58,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
+    /*------------------------------*/
 
     .state('menu.listConsultation',{
       url : '/listConsultation',
@@ -80,6 +81,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
+    /*------------------------------*/
 
     .state('menu.listRdv',{
       url : '/listRdv',
@@ -102,6 +104,29 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
+    /*------------------------------*/
+
+    .state('menu.doctorList',{
+      url : '/doctorList',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/myDoctors/template/doctor-list.html",
+          controller : 'DoctorListController'
+        }
+      }
+    })
+    .state('menu.MyDoctor',{
+      url : '/myDoctor/{id:int}',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/myDoctors/template/my-doctor.html",
+          controller : 'MyDoctorController'
+        }
+      }
+    })
+    /*------------------------------*/
 
     .state('menu.searchDoctor',{
       url : '/searchDoctor',
@@ -134,6 +159,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
+    /*------------------------------*/
 
     .state('menu.searchPharmacy',{
       url : '/searchPharmacy',
@@ -166,6 +192,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
+    /*------------------------------*/
 
     .state('menu.compte',{
       url : '/compte',
@@ -177,6 +204,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
+    /*------------------------------*/
 
     .state('menu.setting',{
       url : '/setting',
@@ -188,7 +216,8 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
         }
       }
     })
-
+    /*------------------------------*/
+    
     .state('login',{
       url : '/login', 
       cache : false,

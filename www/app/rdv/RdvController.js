@@ -1,5 +1,17 @@
 appContext.controller('RdvController', function($scope, RdvFactory, $stateParams, $ionicPlatform) {
 
+    this.topDirections = ['left', 'up'];
+      this.bottomDirections = ['down', 'right'];
+      this.isOpen = false;
+      this.availableModes = ['md-fling', 'md-scale'];
+      this.selectedMode = 'md-fling';
+      this.availableDirections = ['up', 'down', 'left', 'right'];
+      this.selectedDirection = 'up';
+
+
+
+
+      
     // for opening db:
     var db = null;
     $ionicPlatform.ready(function() {
@@ -21,6 +33,7 @@ appContext.controller('RdvController', function($scope, RdvFactory, $stateParams
             if (result.rows.length == 1) {
                 $scope.rdv = {
                     id: result.rows.item(0).id,
+                    idDoc: result.rows.item(0).idDoc,
                     doctor: result.rows.item(0).doctor,
                     date: result.rows.item(0).date,
                     heure: result.rows.item(0).heure,

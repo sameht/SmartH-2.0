@@ -2,7 +2,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
   /**
    * get doctor list from server
    */
-	var getDoctorList=function(dist,currentPosition){
+	var getDoctorListByDistance=function(dist,currentPosition){
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
 			method :"Post",
@@ -38,6 +38,50 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 
 		return array
 	};
+
+  /**
+   * get doctor list from server
+   */
+  var getDoctorList=function(name,lastname,speciality,gendre){
+    var request = {
+      url : "http://www.buzcard.fr/identification.aspx?request=identification",
+      method :"Post",
+      cache : false,
+      headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    //'token': kjkjkjljljkjk
+                },
+      transformRequest: function(obj) {
+                    var str = [];
+                    for (var p in obj)
+                        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                    return str.join("&");
+                },
+
+            transformResponse: function(data) {
+                var x2js = new X2JS();
+                var json = x2js.xml_str2json(data);
+                return json;
+            },                                
+           /*les données utilisé dans la requete*/
+      data : {
+       /* name : name ,
+        lastname : lastname,
+        speciality : speciality,
+        gendre : gendre*/
+      }
+    }; 
+
+    //return $http(request)
+    var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+                {id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
+                {id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
+                {id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
+    ] //+ spécialité de médecin
+
+    return array
+  };
+
 
     /**
      * create doctor table
@@ -76,7 +120,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     } 
 
 	/**
-	* select rdv details by id
+	* select doctor details by id from local db
 	*/
     var getDoctorById = function(db,id){
 
@@ -256,8 +300,34 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
          return deferred.promise;
       }
 
+  function getCurrentPosition() {
+      var deferred = $q.defer();
+      console.log('getCurrentPosition function')
+      if (!navigator.geolocation) {
+          $ionicLoading.hide();
+          console.log('geolocation not supported')
+          deferred.reject('Geolocation not supported.');
+      } else {
+          console.log('geolocation is supported')
+          navigator.geolocation.getCurrentPosition(
+              function (position) {
+                  console.log("search current position 1")
+                  var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                  console.log("search current position 2")
+                  deferred.resolve(latLng);
+              },
+              function (err) {
+
+                  $ionicLoading.hide();
+                  deferred.reject(err);
+              });
+      }
+
+        return deferred.promise;
+    }
+
 	return{
-		getDoctorList : getDoctorList,
+		getDoctorListByDistance : getDoctorListByDistance,
     setDoctor : setDoctor,
 		createDoctorTable : createDoctorTable,
 		getDoctorById : getDoctorById,
@@ -266,6 +336,8 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 		createOrUpdateDoctor : createOrUpdateDoctor,
     calculateDistance : calculateDistance,
     emptyDoctorTable : emptyDoctorTable,
-    insertBulkIntoDoctorTable : insertBulkIntoDoctorTable
+    insertBulkIntoDoctorTable : insertBulkIntoDoctorTable,
+    getDoctorList : getDoctorList,
+    getCurrentPosition : getCurrentPosition
 	}
 })

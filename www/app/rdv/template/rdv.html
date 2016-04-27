@@ -1,8 +1,11 @@
 <ion-view view-title="rendez-vous">
+
+
 	<ion-content>
 		<div class="list card">
 			<ion-list >
-			  <ion-item class="item item-thumbnail-left" ui-sref="menu.doctor">
+			  <ion-item class="item item-thumbnail-left" href="#/menu/myDoctor/{{rdv.idDoc}}">
+
 			     <img style="background-image:url(img/doctor.jpg); border-radius:50%; background-position:center center; background-size:cover; width:100%; height:100%;"> 
 			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>{{rdv.doctor}}</B></h2>
 			    <p> généraliste</p>
@@ -12,7 +15,7 @@
   			<ion-list >
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
-			    	{{rdv.date}}
+			    	{{rdv.date}} 
 			     </ion-item>
 			    <ion-item >      
 			    	<h3 style="font-size: initial;">  <B>Heure :</B></h3>
@@ -24,11 +27,18 @@
 			     </ion-item>
 			</ion-list>
  		 </div>
+ 		 
 <!--
   		<div class="list card">          
 		    	<h3 style="color: #2970E8; font-size: initial;">  <B>Analyse :</B></h3>
 		    	<p> ....</p>  
 		</div> 
 -->		
+
+
+<!-- ---------------------------------- -->	
+
+
+
 	</ion-content>
 </ion-view>

@@ -123,6 +123,6 @@ appContext.factory('LoginFactory', function($http, $cordovaSQLite, $q){
 		setCredentials : setCredentials,
 		logout : logout,
 		emptyIdentifiantTable : emptyIdentifiantTable,
-        selectCredentials : selectCredentials
+    selectCredentials : selectCredentials
 	}
 })

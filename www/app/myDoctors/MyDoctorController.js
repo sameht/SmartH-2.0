@@ -1,5 +1,5 @@
-appContext.controller('ConsultationController', function($scope, $ionicPlatform,$stateParams,ConsultationFactory){
-	// for opening db:
+appContext.controller('MyDoctorController', function($scope, $stateParams,MyDoctorsFactory, $ionicPlatform,  ConnectionFactory){
+// for opening db:
     var db = null;
     $ionicPlatform.ready(function() {
         /**
@@ -16,18 +16,15 @@ appContext.controller('ConsultationController', function($scope, $ionicPlatform,
         }
 
 
-        ConsultationFactory.getConsultationById(db, $stateParams.id).then(function(result) {
+        MyDoctorsFactory.getLocalDoctorById(db, $stateParams.id).then(function(result) {
             if (result.rows.length == 1) {
-                $scope.consultation = {
+                $scope.doctor = {
                     id: result.rows.item(0).id,
-                    idDoc: result.rows.item(0).idDoc,
                     doctor: result.rows.item(0).doctor,
                     specialite: result.rows.item(0).specialite,
-                    date: result.rows.item(0).date,
-                    maladie: result.rows.item(0).maladie,
-                    medicament: result.rows.item(0).medicament,
-                    prix: result.rows.item(0).prix,
-                    description: result.rows.item(0).description
+                    sexe: result.rows.item(0).sexe,
+                    adresse: result.rows.item(0).adresse,
+                    tel: result.rows.item(0).tel
                 }
             }
         }, function(reason) { 

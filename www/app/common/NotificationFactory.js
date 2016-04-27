@@ -32,10 +32,13 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
           }).then(function (result) {
             console.log('Notification 2 triggered');
           });
+          cordova.plugins.notification.local.on("trigger", function(notification) {
+              alert("triggered: 11111" );
+          });
 
           cordova.plugins.notification.local.on("click", function (notification, state) {
               console.log("notification 2 was clicked");
-              $state.go("menu.rdv");
+              $state.go("menu.listRdv");
           }, this)
 
         };
@@ -53,7 +56,7 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
 
           cordova.plugins.notification.local.on("click", function (notification, state) {
               console.log("notification 1 was clicked");
-              $state.go("menu.rdv");
+              $state.go("menu.listRdv");
           }, this)
         };      
          
@@ -84,6 +87,8 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
           })
         }; 
 
+
+      
         return {
         	singleNotification :singleNotification ,
         	delayedNotification : delayedNotification ,
