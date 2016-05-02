@@ -1,4 +1,4 @@
-appContext.controller('ListConsultationController', function($scope, $ionicPlatform, MyDoctorsFactory, ConsultationFactory) {
+appContext.controller('ListConsultationController', function($scope, $q, $ionicPlatform, MyDoctorsFactory, ConsultationFactory) {
     $scope.consultationArray = [];
 
     var db = null;
@@ -18,19 +18,23 @@ appContext.controller('ListConsultationController', function($scope, $ionicPlatf
 
         }
 
+        var displayCons = function() {
+            // display local consultation list
+            ConsultationFactory.getConsultationLocalList(db).then(function(result) {
+                var array = [];
+                for (var i = 0; i < result.rows.length; i++) {
+                    array[i] = result.rows.item(i);
+                }; // return array of objects 
+                $scope.consultationArray = array;
+                //   console.log("consultation affiché ")
+            }, function(reason) {
+                console.log("error " + reason)
+            });
+
+        }
 
 
-        // display local consultation list
-        ConsultationFactory.getConsultationLocalList(db).then(function(result) {
-            var array = [];
-            for (var i = 0; i < result.rows.length; i++) {
-                array[i] = result.rows.item(i);
-            }; // return array of objects 
-            $scope.consultationArray = array;
-            //   console.log("consultation affiché ")
-        }, function(reason) {
-            console.log("error " + reason)
-        });
+        displayCons();
 
 
         /*-------------------------------------*/
@@ -45,60 +49,80 @@ appContext.controller('ListConsultationController', function($scope, $ionicPlatf
             }
             /*-------------------------------------*/
 
+        
         $scope.doRefresh = function() {
-            // $scope.consultationArray=[];
-            idDoctorArray = []
-            ConsultationFactory.createConsultationTable(db).then(function() {
 
-                var array = ConsultationFactory.getConsultationList();
-                for (var i = 0; i < array.length; i++) {
-                    if (pushIfNotExist(idDoctorArray, array[i].idDoc)) {
-                        idDoctorArray.push(array[i].idDoc)
+            /**
+             * consultation
+             */
+
+            ConsultationFactory.createConsultationTable(db).then(function(result) {
+
+                ConsultationFactory.getConsultationList().then(function(consultationArray) {
+
+                    for (var i = 0; i < consultationArray.length; i++) {
+
+                        if (pushIfNotExist(idDoctorArray, consultationArray[i].idDoc)) {
+                            idDoctorArray.push(consultationArray[i].idDoc)
+                        }
+
                     }
-                    ConsultationFactory.createOrUpdateRdv(db, array[i]).then(function(result) {
-                        // console.log("rdv ajouté "+i)
-                        // display local consultation list
-                        ConsultationFactory.getConsultationLocalList(db).then(function(result) {
-                            var Consarray = [];
-                            for (var i = 0; i < result.rows.length; i++) {
-                                Consarray[i] = result.rows.item(i);
-                            }; // return array of objects 
-                            $scope.consultationArray = Consarray;
-                            console.log(Consarray)
-                                //   console.log("consultation affiché ")
-                        }, function(reason) {
-                            console.log("error " + reason)
-                        });
-                    }, function(reason) {
 
-                    }).finally(function() {
-                        // Stop the ion-refresher from spinning
-                        $scope.$broadcast('scroll.refreshComplete');
-                    });
+                    ConsultationFactory.consultationAppelRecur(db, 0, consultationArray, function(valid) {
+                        if (!valid) {
+                            console.error("consultationArray error");
 
-                };
+                        } else {
 
-                /*---------------------------------*/
-                MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
-                        console.log("refresh doctors")
-                        for (var i = 0; i < idDoctorArray.length; i++) {
-                            var doctorArray = MyDoctorsFactory.getDoctorById(idDoctorArray[i]);
-                            console.log("doctorArray " + doctorArray[0].id)
+                            /**
+                             * my doctors
+                             */
+                            MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
 
-                            MyDoctorsFactory.createOrUpdateDoctor(db, doctorArray[0]).then(function() {
-                                console.log("updated")
-                            }, function(error) {
-                                console.log('error : ' + error)
-                            })
-                        };
+                                    MyDoctorsFactory.getDoctorList().then(function(DocArray) {
 
-                    }, function(reason) {
+
+                                        MyDoctorsFactory.DoctorListAppelRecur(db, 0, DocArray, function(valid) {
+                                            if (!valid) {
+                                                console.error("DoctorListAppelRecur error");
+                                            } else {
+                                                displayCons();
+                                            }
+
+                                        })
+
+
+                                    }, function() {
+                                        console.error("getConsultationList error");
+
+                                    });
+
+
+                                }, function(reason) {
+                                    console.error("createConsultationTable error");
+                                })
+                                /*************************************************/
+
+                        }
 
                     })
-                    /*--------------------------------*/
+
+                }, function() {
+                    console.error("getConsultationList error");
+
+                });
+
 
             }, function(reason) {
+                console.error("createConsultationTable error");
+            })
 
+            /**********************************************************************************/
+            /*--------------------------------------------------------------------------------*/
+
+            .finally(function() {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
             });
 
         }

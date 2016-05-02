@@ -16,73 +16,82 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
 
 
         $scope.searchByLocation = function(localisation) {
-            // Setup the loader
-            $ionicLoading.show({
-                content: 'Loading',
-                animation: 'fade-in',
-            });
+            
+            if(localisation==undefined){
+                $ionicLoading.show({
+                    template: 'Vous devez introduire la distance',
+                    duration: 2500
+                });
+            }else{
+                // Setup the loader
+                $ionicLoading.show({
+                    content: 'Loading',
+                    animation: 'fade-in',
+                });
 
-            ConnectionFactory.isConnected(function() {
-                DoctorLocatorFactory.emptyDoctorTable(db).then(function() {
+                ConnectionFactory.isConnected(function() {
+                    DoctorLocatorFactory.emptyDoctorTable(db).then(function() {
 
-                    var options = {timeout: 10000, enableHighAccuracy: false};
-                    console.log("DoctorLocatorFactory.getCurrentPosition()....")
-                    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
-  
-                     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                            $rootScope.latLng = latLng;
-                            //console.log("latLng : "+latLng)
-                            var array = DoctorLocatorFactory.getDoctorListByDistance(parseInt(localisation.distance), latLng);
+                        var options = {timeout: 10000, enableHighAccuracy: false};
+                        console.log("DoctorLocatorFactory.getCurrentPosition()....")
+                        $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+      
+                         var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                                $rootScope.latLng = latLng;
+                                //console.log("latLng : "+latLng)
+                                var array = DoctorLocatorFactory.getDoctorListByDistance(parseInt(localisation.distance), latLng);
 
-                            if (array.length == 0) {
-                                console.log("pas de résultat")
-                                $ionicLoading.hide();
-                                $ionicLoading.show({
-                                    template: 'pas de résultat',
-                                    duration: 3000
-                                });
-                            } else {
-                                console.log("il y a de résultat")
+                                if (array.length == 0) {
+                                    console.log("pas de résultat")
+                                    $ionicLoading.hide();
+                                    $ionicLoading.show({
+                                        template: 'Aucun médecin trouvé',
+                                        duration: 3000
+                                    });
+                                } else {
+                                    console.log("il y a de résultat")
 
-                                DoctorLocatorFactory.createDoctorTable(db).then(function(result) {
-                                    DoctorLocatorFactory.insertBulkIntoDoctorTable(db, array).then(function(result) {
-                                        $ionicLoading.hide();
-                                        $state.go('menu.resultDoctor')
+                                    DoctorLocatorFactory.createDoctorTable(db).then(function(result) {
+                                        DoctorLocatorFactory.insertBulkIntoDoctorTable(db, array).then(function(result) {
+                                            $ionicLoading.hide();
+                                            $state.go('menu.resultDoctor')
+
+                                        }, function(error) {
+                                            $ionicLoading.hide();
+                                            console.log("erreur insertBulkIntoDoctorTable :" + error)
+
+                                        })
 
                                     }, function(error) {
                                         $ionicLoading.hide();
-                                        console.log("erreur insertBulkIntoDoctorTable :" + error)
-
+                                        console.log("erreur createDoctorTable :" + error)
                                     })
 
-                                }, function(error) {
-                                    $ionicLoading.hide();
-                                    console.log("erreur createDoctorTable :" + error)
-                                })
-
-                            }
+                                }
 
 
-                    },function(error){
-                        //if faut activer le gps
+                        },function(error){
+                            //if faut activer le gps
+                            $ionicLoading.hide();
+                            PopupFactory.myPopup('activez le gps pour determiner la recherche');
+                            console.log("error "+error)
+                            
+                            //$ionicLoading.show({ template: 'activer le gps', duration:3000 });
+                        })
+
+
+                    }, function(erreur) {
                         $ionicLoading.hide();
-                        PopupFactory.myPopup('activez le gps pou determiner la recherche');
-                        console.log("error "+error)
-                        
-                        //$ionicLoading.show({ template: 'activer le gps', duration:3000 });
-                    })
-
-
-                }, function(erreur) {
+                        console.log("erreur emptyDoctorTable :" + erreur)
+                    });
+                }, function() {
                     $ionicLoading.hide();
-                    console.log("erreur emptyDoctorTable :" + erreur)
+                    PopupFactory.myPopup('Utiliser les reseaux cellulaires et wifi pour determiner la recherche');
+                    console.log("not connected");
                 });
-            }, function() {
-                $ionicLoading.hide();
-                PopupFactory.myPopup('Utiliser les reseaux cellulaires et wifi pour determiner la recherche');
-                console.log("not connected");
-            });
 
+            }
+            
 
         };
 
@@ -92,14 +101,27 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
         
         $scope.search = function(doc) {
             // Setup the loader
+            var doc2={name:"", lastname:"", specialty:"", gendre:""}
+            if(doc==undefined){
+
+               $ionicLoading.show({
+                    template: 'Vous devez remplir au moins un champs',
+                    duration: 4000
+                });
+            }else{
+                for(var item in doc){
+                    doc2[item]=doc[item]
+                 
+                }
+
             $ionicLoading.show({
                 content: 'Loading',
                 animation: 'fade-in',
             });
-
+            $rootScope.latLng = undefined
             ConnectionFactory.isConnected(function() {
                 DoctorLocatorFactory.emptyDoctorTable(db).then(function() {
-                    var array = DoctorLocatorFactory.getDoctorList(doc.name, doc.lastname, doc.specialty, doc.gendre)
+                    var array = DoctorLocatorFactory.getDoctorList(doc2.name,doc2.lastname, doc2.specialty, doc2.gendre)
                     if (array.length == 0) {
                         console.log("pas de résultat")
                         $ionicLoading.hide();
@@ -140,8 +162,8 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
 
 
         }
-
-
+    //else    
+    }
         //ionicplateform ready
     });
 

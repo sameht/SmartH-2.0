@@ -31,7 +31,7 @@
                 </md-tab-body>
             </md-tab>
 
-<!-- ----------------------------------------------------------- -->	     
+<!-- ---------------------------------------------------------------------------------------------- -->	     
 
 			<md-tab>
                 <md-tab-label icon="ion-search">
@@ -47,7 +47,7 @@
 			            </div>
 
 			            <div class="textfield textfield--floatingLabel">
-			                <input class="textfield__input" type="text" required="required" id="homeSearch" ng-model="doctor.lastname"/>
+			                <input class="textfield__input" type="text"  required="required" ng-model="doctor.lastname"/>
 			            <label class="textfield__label" >Prénom:</label>
 			            </div>
 
@@ -76,10 +76,10 @@
 
 						<div >
 						 
-						        <input type="radio" name="sexe" id="homme" class="css-checkbox2" />
+						        <input type="radio" name="sexe" id="homme"  ng-model="doctor.gendre" class="css-checkbox2" ng-value="'homme'"/>
 						        <label for="homme" class="css-label2">Homme</label>
 						   
-						        <input type="radio" name="sexe" id="femme" class="css-checkbox2" checked="checked"/>
+						        <input type="radio" name="sexe" id="femme" ng-model="doctor.gendre"class="css-checkbox2" checked="checked" ng-value="'femme'"/>
 						        <label for="femme" class="css-label2" style="margin-left: 20px;">Femme</label>
 						      
 						</div>

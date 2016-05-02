@@ -210,7 +210,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
         return deferred.promise;
     }
     /**
-     *Calculate distance and return doctor
+     *Calculate distance and return distance
      */
     var calculateDistance=function(origin , doctor){
       var deferred=$q.defer();
@@ -236,9 +236,8 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
                           var destinationList = response.destinationAddresses;
                            var results = response.rows[0].elements;
                            var distance=results[0].distance.value;
-                           doctor.distance=distance;
-                           var doc=doctor
-                           deferred.resolve(doc);
+                          
+                           deferred.resolve(distance);
                       }
                 })
        return deferred.promise;
@@ -262,7 +261,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 
     };
     /**
-     * insert an array of contact into contacts
+     * insert an array of doctors into doctor
      */
     var insertBulkIntoDoctorTable = function(db, doctorArray) {
 
@@ -326,6 +325,12 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
         return deferred.promise;
     }
 
+
+
+
+
+    
+
 	return{
 		getDoctorListByDistance : getDoctorListByDistance,
     setDoctor : setDoctor,
@@ -339,5 +344,6 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     insertBulkIntoDoctorTable : insertBulkIntoDoctorTable,
     getDoctorList : getDoctorList,
     getCurrentPosition : getCurrentPosition
+
 	}
 })

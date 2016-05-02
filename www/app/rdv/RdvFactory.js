@@ -3,13 +3,14 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
    * get rdv list from server
    */
 	var getRdvList=function(){
+
+    var deferred = $q.defer();
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
 			method :"Post",
 			cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    //'token': kjkjkjljljkjk
                 },
 			transformRequest: function(obj) {
                     var str = [];
@@ -24,23 +25,26 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
                 return json;
             },																
            /*les données utilisé dans la requete*/
-			data : {
-				//id : id
-			}
 		}; 
 
 		//return $http(request)
-		var array =[{id : 110,idDoc:1, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+    setTimeout(function() {
+
+        var array =[{id : 110,idDoc:1, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
           {id : 112,idDoc:2, doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 115,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 115,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
           {id : 117,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
           {id : 118,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
           {id : 119,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-					{id : 12, idDoc:3,doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-		] //+ spécialité de médecin
+          {id : 12, idDoc:3,doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+    ] //+ spécialité de médecin
+      deferred.resolve(array);
+    }, 1500);
 
-		return array
+		
+
+		return deferred.promise
 	};
 
 
@@ -186,10 +190,63 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
         });
         return deferred.promise;
      }
+     
+    /**
+     * insert an array of rdv into rdv
+     */
+    var insertBulkIntoRdvTable = function(db, rdvArray) {
 
-        
+      var deferred=$q.defer();
+      var insertQuery = "INSERT INTO rdv " + 
+        " SELECT '" + rdvArray[0].id  + "' AS 'id', '" +
+          rdvArray[0].idDoc  + "' AS 'idDoc','" + 
+          rdvArray[0].doctor  + "' AS 'doctor','" + 
+          rdvArray[0].date + "' AS 'date','" + 
+          rdvArray[0].heure + "' AS 'heure','"+
+          rdvArray[0].adresse + "' AS 'adresse', '" + 
+          rdvArray[0].etat+"' AS 'etat' ";
+
+      for (var i =1; i < rdvArray.length; i++) {
+
+        insertQuery = insertQuery + "  UNION SELECT '"
+            + rdvArray[i].id + "','"
+            + rdvArray[i].idDoc + "', '"
+            + rdvArray[i].doctor + "', '"
+            + rdvArray[i].date + "','"
+            + rdvArray[i].heure + "', '"
+            + rdvArray[i].adresse + "', '"
+            +rdvArray[i].etat +"'";
+      }
+
+  
+
+        $cordovaSQLite.execute(db, insertQuery).then(function(result) {
+            
+                deferred.resolve(result);
+
+            }, function(reason) {
+               deferred.reject(reason);
+            });
+         return deferred.promise;
+      }
   	
+    var rdvAppelRecur=function (db,counter, rdvList, callBack) {
+        var length = rdvList.length;
 
+        if (counter < length) {
+
+            createOrUpdateRdv(db, rdvList[counter]).then(function(result) {
+                counter++;
+                rdvAppelRecur(db,counter, rdvList, callBack);
+            }, function(reason) {
+                return callBack(false)
+            });
+
+        } else {
+            return callBack(true)
+        }
+
+}
 
 	return{
 		getRdvList : getRdvList,
@@ -199,6 +256,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 		getRdvById : getRdvById,
 		updateRdv : updateRdv,
 		createOrUpdateRdv : createOrUpdateRdv,
-    deleteRdv : deleteRdv
+    deleteRdv : deleteRdv,
+    insertBulkIntoRdvTable : insertBulkIntoRdvTable,
+    rdvAppelRecur : rdvAppelRecur
 	}
 })

@@ -22,16 +22,19 @@ appContext.controller('ListRdvController', function($scope, MyDoctorsFactory, Rd
 
 
         // display local rdv list
+        var displayRdv = function() {
+            RdvFactory.getRdvLocalList(db).then(function(result) {
+                var array = [];
+                for (var i = 0; i < result.rows.length; i++) {
+                    array[i] = result.rows.item(i);
+                }; // return array of objects 
+                $scope.rdvArray = array;
+            }, function(reason) {
 
-        RdvFactory.getRdvLocalList(db).then(function(result) {
-            var array = [];
-            for (var i = 0; i < result.rows.length; i++) {
-                array[i] = result.rows.item(i);
-            }; // return array of objects 
-            $scope.rdvArray = array;
-        }, function(reason) {
+            });
+        }
 
-        });
+        displayRdv();
 
         /*-------------------------------------*/
         var pushIfNotExist = function(array, elt) {
@@ -45,59 +48,76 @@ appContext.controller('ListRdvController', function($scope, MyDoctorsFactory, Rd
             }
             /*-------------------------------------*/
 
+        idDoctorArray = []
         $scope.doRefresh = function() {
-            idDoctorArray = []
-            $scope.rdvArray = [];
+            /**
+             * rdv
+             */
+
             RdvFactory.createRdvTable(db).then(function() {
-                //  console.log("createRdvTable")
-                var rdvList=RdvFactory.getRdvList();
-                for (var i = 0; i < rdvList.length; i++) {
 
-                    if (pushIfNotExist(idDoctorArray, rdvList[i].idDoc)) {
-                        idDoctorArray.push(rdvList[i].idDoc)
-                    }
+                    RdvFactory.getRdvList().then(function(rdvList) {
 
-                    RdvFactory.createOrUpdateRdv(db, rdvList[i]).then(function(result) {
-                        // console.log("rdv ajouté "+i)
-                        RdvFactory.getRdvLocalList(db).then(function(result) {
-                            var array = [];
-                            for (var i = 0; i < result.rows.length; i++) {
-                                array[i] = result.rows.item(i);
-                            }; // return array of objects 
-                            $scope.rdvArray = array;
-                        }, function(reason) {
+                        for (var i = 0; i < rdvList.length; i++) {
 
-                        });
-                    }, function(reason) {
+                            if (pushIfNotExist(idDoctorArray, rdvList[i].idDoc)) {
+                                idDoctorArray.push(rdvList[i].idDoc)
+                            }
 
-                    }).finally(function() {
-                        // Stop the ion-refresher from spinning
-                        $scope.$broadcast('scroll.refreshComplete');
-                    });
-
-
-                };
-
-                /*---------------------------------*/
-                MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
-                        console.log("refresh doctors")
-                        for (var i = 0; i < idDoctorArray.length; i++) {
-                            var doctorArray = MyDoctorsFactory.getDoctorById(idDoctorArray[i]);
-                            console.log("doctorArray " + doctorArray[0].id)
-
-                            MyDoctorsFactory.createOrUpdateDoctor(db, doctorArray[0]).then(function() {
-                                console.log("updated")
-                            }, function(error) {
-                                console.log('error : ' + error)
-                            })
                         };
 
-                    }, function(reason) {
+                        RdvFactory.rdvAppelRecur(db, 0, rdvList, function(valid) {
 
-                    })
-                /*--------------------------------*/
-            }, function(reason) {
+                            if (!valid) {
+                                console.error("valid " + valid)
 
+                            } else {
+                                /**
+                                 * my doctors
+                                 */
+
+                                MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
+
+                                        MyDoctorsFactory.getDoctorList().then(function(DocArray) {
+
+
+                                            MyDoctorsFactory.DoctorListAppelRecur(db, 0, DocArray, function(valid) {
+                                                if (!valid) {
+                                                    console.error("DoctorListAppelRecur error");
+                                                } else {
+                                                    displayRdv();
+                                                }
+
+                                            })
+
+
+                                        }, function() {
+                                            console.error("getConsultationList error");
+
+                                        });
+
+
+                                    }, function(reason) {
+                                        console.error("createConsultationTable error");
+                                    })
+                                    /*************************************************/
+                            }
+
+                        });
+
+                    }, function() {
+                        console.log("eroor")
+                    });
+
+                }, function(reason) {
+
+                })
+                /**********************************************************************************/
+                /*--------------------------------------------------------------------------------*/
+
+            .finally(function() {
+                // Stop the ion-refresher from spinning
+                $scope.$broadcast('scroll.refreshComplete');
             });
 
         }
@@ -106,11 +126,3 @@ appContext.controller('ListRdvController', function($scope, MyDoctorsFactory, Rd
 
 
 })
-
-
-/*      rdv=RdvFactory.getRdvList();
-      for (var i = 0; i<rdv.length; i++) {
-          RdvFactory.setRdv(db,rdv[i],function(){
-              console.log("rdv ajouté")
-          })
-      };*/

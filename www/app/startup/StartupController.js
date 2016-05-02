@@ -3,7 +3,7 @@ appContext.controller('StartupController',function($state,$ionicLoading, $ionicP
 	console.warn("StartupController")
 	//test if the user is authenticated
 	var isAuthenticated = localStorage.getItem("isAuthenticated");
-   
+   	var x2js = new X2JS();
     //console.log(isAuthenticated);
     
     $ionicLoading.show({

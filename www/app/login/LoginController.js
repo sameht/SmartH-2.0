@@ -42,7 +42,7 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
                 $ionicLoading.hide()
             }, 1700);
 
-        } else if(!user.email || user.email =="undefined" || ! validateEmail(user.email) )  {
+        } else if(!user.email || user.email =="undefined" /*|| ! validateEmail(user.email)*/ )  {
             $ionicLoading.show({
                 template: 'Veuillez introduire votre email'
             });
@@ -55,6 +55,8 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
             //here goes your code
    
             LoginFactory.doLogin(user).success(function(data, status, headers, config ){
+                console.log("reponse du serveur...... :D")
+                console.log(data)
                 if(data.identification==0){
                     console.log("mot de passe ou email incorrecte")
                 }else{
@@ -76,7 +78,7 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
 
             }).error(function(data, status, headers, config ){
 
-                 $ionicLoading.show({ template: 'pas de réponse du serveur'  });
+                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
              });
         };
     };
