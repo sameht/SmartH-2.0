@@ -1,6 +1,6 @@
 appContext.controller('RdvController', function($scope,$mdDialog, RdvFactory, $stateParams, $ionicPlatform) {
 
-      
+
     // for opening db:
     var db = null;
     $ionicPlatform.ready(function() {
@@ -31,32 +31,31 @@ appContext.controller('RdvController', function($scope,$mdDialog, RdvFactory, $s
                     adresse: result.rows.item(0).adresse
                 }
             }
-        }, function(reason) { 
+        }, function(reason) {
         });
 
 
        /**
-        * update button 
+        * update button
         */
 
-        $scope.update =function(){
 
-        
-
-
-        }
-    /************************************************/
-    /*  var self = this;
-      $scope.openDialog = function($event) {
-        $mdDialog.show({
-        controller: updateController,
-        controllerAs: 'ctrl',
-        templateUrl: '.html',
-        parent: angular.element(document.body),
-        targetEvent: $event,
-        clickOutsideToClose:true
-      })
-    }*/
-    /*------------------------------*/
     });
+
+    $scope.editRdv =function(){
+
+    }
+
+    $scope.annulerRdv =function(){
+        
+    }
+    $scope.isOpen = false;
+    $scope.selectedMode = 'md-fling';
+    /*
+    $scope.topDirections = ['left', 'up'];
+    $scope.bottomDirections = ['down', 'right'];
+    $scope.availableModes = ['md-fling', 'md-scale'];
+    $scope.availableDirections = ['up', 'down', 'left', 'right'];
+    $scope.selectedDirection = 'up';
+    */
 })
