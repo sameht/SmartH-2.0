@@ -33,7 +33,7 @@
 * header
 */
 .s-dropdown-btn{
-  background-color: #F8F8F8;
+  background-color: #425F9C;
 }
 .s-dropdown-menu{
   position: absolute; 
@@ -41,6 +41,12 @@
   left: inherit !important;
 }
 
+.s-bar-color{
+  background-color: #425F9C;
+}
+.s-white-text{
+  color: #ffffff;
+}
 /** 
 * home
 */

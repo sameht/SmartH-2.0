@@ -1,14 +1,14 @@
 appContext.factory('LoginFactory', function($http, $cordovaSQLite, $q){
 	
 	var login = function (user){
-		user.email = "edouard.nilsson@gmail.com";
-    user.password = "buzbuz"
+	//	user.email = "edouard.nilsson@gmail.com";
+  //  user.password = "buzbuz"
 /*    user.email = "demo";
 		user.password = "demo"*/
 		var request = {
-			//url : "http://smarth.azurewebsites.net/api/WSAuthentification/Get?Login=demo&Password=demo",
-			url : "http://www.buzcard.fr/identification.aspx?request=identification",
-      method :"Post",
+			url : "http://smarth.azurewebsites.net/api/WSAuthentification/Get?Login=demo&Password=demo",
+			//url : "http://www.buzcard.fr/identification.aspx?request=identification",
+      method :"Get",
 			cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -21,11 +21,11 @@ appContext.factory('LoginFactory', function($http, $cordovaSQLite, $q){
                     return str.join("&");
                 },
 
-            transformResponse: function(data) {
+           /* transformResponse: function(data) {
                 var x2js = new X2JS();
                 var json = x2js.xml_str2json(data);
                 return json;
-            },
+            },*/
 			data : {
 				email : user.email,
 				hash : user.password 

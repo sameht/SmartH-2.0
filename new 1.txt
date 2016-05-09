@@ -1,0 +1,5 @@
+C:\Users\m_s info\AppData\Roaming\npm;
+C:\Program Files\android\sdk\platform-tools;
+C:\Program Files\android\sdk\tools;
+C:\Program Files\apache-ant-1.9.6\bin;
+C:\Program Files\Java\jdk1.8.0_25\bin

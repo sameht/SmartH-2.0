@@ -57,11 +57,12 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
             LoginFactory.doLogin(user).success(function(data, status, headers, config ){
                 console.log("reponse du serveur...... :D")
                 console.log(data)
-                if(data.identification==0){
+                //$state.go('synchronisation') ;
+                if(data==0){
                     console.log("mot de passe ou email incorrecte")
                 }else{
                     LoginFactory.createIdentifiantTable(db).then(function(result){
-                        LoginFactory.setCredentials(db,user.email,user.password,data.identification).then(function(result){
+                        LoginFactory.setCredentials(db,user.email,user.password,data).then(function(result){
                             $state.go('synchronisation') ;
                         },function(reason){
 

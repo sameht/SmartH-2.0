@@ -1,77 +1,99 @@
 <ion-view view-title="Localisation">
-<ion-tabs class="tabs-top tabs-icon-top">
-    <!-- filtre basique -->
-    <ion-tab title="Filtre basique" icon="ion-search">
-        <i></i>
-        <ion-content class="s-text-center">
-            
+    <div class="tabsdemoDynamicHeight " style="margin-top: 45px;">
+      <md-content>
+        <md-tabs md-dynamic-height="" md-border-bottom="">
 
-                <!-- adresse -->
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Adresse :</label>
-            </div>
+            <md-tab>
+                <md-tab-label >
+                   <!--  <span class="ion-search" style="font-size: 30px;"></span><br> -->
+                    <label>filter by location</label>
+                </md-tab-label>
+                <md-tab-body class="md-padding ">
+                <div style="    background-color: #E8E4E4; height: 10px;"></div>
+                    <div class="s-text-center">
+                        <!-- adresse -->
+                        <div class="textfield textfield--floatingLabel">
+                            <input class="textfield__input" type="text" required="required" id="adresse" ng-model="doc.adresse"/>
+                        <label class="textfield__label" >Adresse :</label>
+                        </div>
 
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Distance en Km :</label>
-            </div>
+                        <div class="textfield textfield--floatingLabel">
+                            <input class="textfield__input" type="number" required="required" id="distance" ng-model="doc.distance" />
+                        <label class="textfield__label" >Distance en Km : </label>
+                        </div>
 
-            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultPharmacy">
-                  chercher
-                </button>
-            </div>
+                        <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
+                            <button class="button button-block " style="    background-color: #EAEAEA;"ng-click='searchByLocation(doc)'>
+                                <!--  ui-sref="menu.resultDoctor" --> 
+                              chercher
+                            </button>
+                        </div>
+                    </div>
+                </md-tab-body>
+            </md-tab>
+
+<!-- ---------------------------------------------------------------------------------------------- -->      
+
+            <md-tab>
+                <md-tab-label icon="ion-search">
+<!--                     <span class="ion-search"></span> -->
+                        <label>basic filter</label>
+                 </md-tab-label>
+                 <md-tab-body class="md-padding ">
+                 <div style="    background-color: #E8E4E4; height: 10px;"></div>
+                    <div class="s-text-center">
+                        <!-- coordonnées -->
+                        <div class="textfield textfield--floatingLabel">
+                            <input class="textfield__input" type="text" required="required" id="name" ng-model="doctor.name"/>
+                        <label class="textfield__label" >Nom :</label>
+                        </div>
+
+                        <div class="textfield textfield--floatingLabel">
+                            <input class="textfield__input" type="text"  required="required" ng-model="doctor.lastname"/>
+                        <label class="textfield__label" >Prénom:</label>
+                        </div>
+
+                       
+                       <div class="subject">
+                          <label class="dropdown-label" for="subject"></label>
+                          <select class="dropdown-select" placeholder="Spécialité" name="subject" id="subject_input" ng-model="doctor.specialty" required>
+                            <option disabled hidden selected>type</option>
+                            <option>pharmacie de nuit</option>
+                            <option>pharmacie de jour</option>
+                            
+                          </select>
+                        </div>
 
 
-        </ion-content>
 
-    </ion-tab>
+                                <!-- RadioBox : gender -->
+                        <!--************************************ -->
 
-
-    <!-- filtre par localisation -->
-    <ion-tab title="Filtre" icon="ion-android-funnel">
-        <i></i>
-        <ion-content class="s-text-center">
-            
-
-                <!-- adresse -->
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Nom :</label>
-            </div>
-
-            <div class="textfield textfield--floatingLabel">
-                <input class="textfield__input" type="text" required="required" id="homeSearch" />
-            <label class="textfield__label" >Prénom:</label>
-            </div>
-
-           
-           <div class="subject">
-              <label class="dropdown-label" for="subject"></label>
-              <select class="dropdown-select" placeholder="Ville" name="subject" id="subject_input" required>
-                <option disabled hidden selected>Ville :</option>
-                <option>Tunis</option>
-                <option>Monastir</option>
-                <option>Sousse</option>
-                <option>Mahdia</option>
-                <option>Nabeul</option>
-       
-              </select>
-            </div>
+                        <div >
+                         
+                                <input type="radio" name="sexe" id="homme"  ng-model="doctor.gendre" class="css-checkbox2" ng-value="'homme'"/>
+                                <label for="homme" class="css-label2">Homme</label>
+                           
+                                <input type="radio" name="sexe" id="femme" ng-model="doctor.gendre"class="css-checkbox2" checked="checked" ng-value="'femme'"/>
+                                <label for="femme" class="css-label2" style="margin-left: 20px;">Femme</label>
+                              
+                        </div>
 
 
-      <!--************************************ -->
+                        <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
+                            <button class="button button-block " style="    background-color: #EAEAEA;" ng-click='search(doctor)'>
+                              chercher
+                            </button>
+                        </div>
+                    </div>
 
-            <div style="margin-top:40px; margin-left:10%; margin-right:10%;">
-                <button class="button button-block " style="    background-color: #EAEAEA;" ui-sref="menu.resultPharmacy">
-                  chercher
-                </button>
-            </div>
+                </md-tab-body>
+            </md-tab>
 
-        </ion-content>
 
-    </ion-tab>
+        </md-tabs>
+      </md-content>
+    </div>
 
-</ion-tabs>
+ 
 </ion-view>

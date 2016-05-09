@@ -58,17 +58,10 @@ appContext.controller('ListConsultationController', function($scope, $q, $ionicP
 
             ConsultationFactory.createConsultationTable(db).then(function(result) {
 
-                ConsultationFactory.getConsultationList().then(function(consultationArray) {
+                ConsultationFactory.getConsultationList().success(function(data, status, headers, config ){
 
-                    for (var i = 0; i < consultationArray.length; i++) {
 
-                        if (pushIfNotExist(idDoctorArray, consultationArray[i].idDoc)) {
-                            idDoctorArray.push(consultationArray[i].idDoc)
-                        }
-
-                    }
-
-                    ConsultationFactory.consultationAppelRecur(db, 0, consultationArray, function(valid) {
+                    ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
                         if (!valid) {
                             console.error("consultationArray error");
 
@@ -107,10 +100,10 @@ appContext.controller('ListConsultationController', function($scope, $q, $ionicP
 
                     })
 
-                }, function() {
-                    console.error("getConsultationList error");
+                 }).error(function(data, status, headers, config ){
 
-                });
+                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
+             });
 
 
             }, function(reason) {

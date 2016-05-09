@@ -20,6 +20,15 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial'])
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+    /********************************************
+    var push=new Ionic.Push({
+      "debug": true
+    });
+
+    push.register(function(token){
+      console.log("device token "+token.token)
+    })
+    /***********************************************/
   });
 })
 

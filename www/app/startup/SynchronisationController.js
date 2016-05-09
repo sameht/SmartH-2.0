@@ -93,11 +93,11 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         ConsultationFactory.createConsultationTable(db).then(function(result) {
 
-            ConsultationFactory.getConsultationList().then(function(consultationArray) {
+            ConsultationFactory.getConsultationList().success(function(data, status, headers, config ){
 
-                ConsultationFactory.consultationAppelRecur(db, 0, consultationArray, function(valid) {
+                ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
                     if (!valid) {
-                        console.error("consultationArray error");
+                        console.error("consultation data error");
                         deferredCons.reject()
                     } else {
 
@@ -108,10 +108,10 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
                 })
 
 
-            }, function() {
-                console.error("getConsultationList error");
+                }).error(function(data, status, headers, config ){
 
-            });
+                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
+             });
 
 
         }, function(reason) {
