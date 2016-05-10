@@ -1,4 +1,4 @@
-appContext.controller('LoginController', function($scope,  $ionicPlatform, $ionicLoading, $state, $ionicHistory, LoginFactory ){
+appContext.controller('LoginController', function($scope,  $ionicPlatform, $ionicLoading, $state, $ionicHistory, LoginFactory,ionicToast ){
     // for opening db:
     var db = null;
     $ionicPlatform.ready(function() {
@@ -17,74 +17,48 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
 
     $ionicHistory.clearHistory();
     $ionicHistory.nextViewOptions({ disableBack: true, disableAnimate: true, historyRoot: true });
-//$rootScope.$viewHistory.backView = null;
-    
+
     $scope.signin = function(user) {
-        console.log(user)
         if (!user) {
+          ionicToast.show('Veuillez remplir tout les champs', 'top', false, 2500);
 
-            $ionicLoading.show({
-            template: 'Veuillez remplir tout les champs'
-            });
-
-            setTimeout(function() {
-                $ionicLoading.hide()
-            }, 1700);
-            
-           
-
+        } else if(!user.email || user.email =="undefined" || ! validateEmail(user.email) )  {
+            ionicToast.show('Veuillez introduire un email valide ', 'top', false, 2500);
         } else if (!user.password || user.password =="undefined") {
-            $ionicLoading.show({
-                template: 'Veuillez introduire votre mot de pass'
-            });
-
-            setTimeout(function() {
-                $ionicLoading.hide()
-            }, 1700);
-
-        } else if(!user.email || user.email =="undefined" /*|| ! validateEmail(user.email)*/ )  {
-            $ionicLoading.show({
-                template: 'Veuillez introduire votre email'
-            });
-
-            setTimeout(function() {
-                $ionicLoading.hide()
-            }, 1700);
+          ionicToast.show('Veuillez introduire un mot de passe', 'top', false, 2500);
         }else{
 
-            //here goes your code
-   
             LoginFactory.doLogin(user).success(function(data, status, headers, config ){
-                console.log("reponse du serveur...... :D")
-                console.log(data)
-                //$state.go('synchronisation') ;
+
                 if(data==0){
-                    console.log("mot de passe ou email incorrecte")
+                  ionicToast.show('mot de passe ou email incorrecte', 'top', false, 2500);
                 }else{
                     LoginFactory.createIdentifiantTable(db).then(function(result){
                         LoginFactory.setCredentials(db,user.email,user.password,data).then(function(result){
                             $state.go('synchronisation') ;
                         },function(reason){
-
+                          ionicToast.show('Une erreur est survenue', 'top', false, 2500);
                         });
                     },function(){
-
+                      ionicToast.show('Une erreur est survenue', 'top', false, 2500);
                     });
 
- 
+
                     localStorage.setItem("isAuthenticated", true);
 
                 }
-                
+
 
             }).error(function(data, status, headers, config ){
 
-                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
+                 ionicToast.show('Une erreur est survenue', 'top', false, 2500);
              });
         };
     };
 
-
+    $scope.hideToast = function(){
+      ionicToast.hide();
+    };
 
     function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
