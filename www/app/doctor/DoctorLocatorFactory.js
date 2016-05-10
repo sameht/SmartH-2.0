@@ -2,7 +2,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
   /**
    * get doctor list from server
    */
-	var getDoctorListByDistance=function(dist,currentPosition){
+	var getDoctorListByDistance=function(dist,region,ville,currentPosition){
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
 			method :"Post",

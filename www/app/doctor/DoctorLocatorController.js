@@ -15,11 +15,11 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
         }
 
 
-        $scope.searchByLocation = function(localisation) {
+        $scope.searchByLocation = function(doctor) {
             
-            if(localisation==undefined){
+            if(doctor==undefined){
                 $ionicLoading.show({
-                    template: 'Vous devez introduire la distance',
+                    template: 'Vous devez introduire un champ',
                     duration: 2500
                 });
             }else{
@@ -39,7 +39,7 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                          var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                                 $rootScope.latLng = latLng;
                                 //console.log("latLng : "+latLng)
-                                var array = DoctorLocatorFactory.getDoctorListByDistance(parseInt(localisation.distance), latLng);
+                                var array = DoctorLocatorFactory.getDoctorListByDistance(parseInt(doctor.distance),doctor.region,doctor.ville, latLng);
 
                                 if (array.length == 0) {
                                     console.log("pas de résultat")
@@ -73,7 +73,7 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                         },function(error){
                             //if faut activer le gps
                             $ionicLoading.hide();
-                            PopupFactory.myPopup('activez le gps pour determiner la recherche');
+                            PopupFactory.myPopup('Activez le gps pour determiner la recherche');
                             console.log("error "+error)
                             
                             //$ionicLoading.show({ template: 'activer le gps', duration:3000 });
