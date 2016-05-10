@@ -47,6 +47,96 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 		return deferred.promise
 	};
 
+  /**
+   *  remove rdv
+   */
+  var deleteRdvServer = function(id,callBack,errorCallBack){
+    
+    // the send request parameters
+    var request = {
+            method: 'POST',
+            url: 'http://buzcard.fr/contacts.aspx?request=update',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            transformRequest: function(obj) {
+              var str = [];
+              for ( var p in obj)
+                str.push(encodeURIComponent(p) + "="
+                        + encodeURIComponent(obj[p]));
+              return str.join("&");
+            },
+            transformResponse: function(data) {
+              var x2js = new X2JS();
+              var json = x2js.xml_str2json(data);
+              return json;
+            },
+            data: {
+              rdv_id:id,
+              field : "status",
+              value : "deleted"
+            },
+//            timeout : 5000,
+    };
+    
+    $http(request).success(function(data, status, headers, config) {
+        callBack(data);
+    }).error(function(data, status, headers, config) {
+      errorCallBack(status);
+    });
+  };
+
+
+  /**
+   *   update rdv server
+   */
+  var updateRdvServer = function(i,contactId, contact,callBack,errorCallBack){
+    
+     var length =0;
+     for(j in contact){
+       if(length == i)   key = j;
+       length++;
+     }
+   // the send request parameters
+    var request = {
+      method: 'POST',
+      url: 'http://buzcard.fr/contacts.aspx?request=update',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      transformRequest: function(obj) {
+        var str = [];
+        for ( var p in obj)
+          str.push(encodeURIComponent(p) + "="
+                  + encodeURIComponent(obj[p]));
+        return str.join("&");
+      },
+      transformResponse: function(data) {
+        var x2js = new X2JS();
+        var json = x2js.xml_str2json(data);
+        return json;
+      },
+      data: {
+        contact_id:contactId,
+        field : key,
+        value : contact[key]
+      },
+//      timeout : 5000,
+    };
+    
+    $http(request).success(function(data, status, headers, config) {
+      if(i<length){
+        i++;
+        updateContactServer(i, contactId, contact,callBack,errorCallBack);
+      }else{
+        callBack(data);
+      } 
+    }).error(function(data, status, headers, config) {
+      errorCallBack(status);
+    });
+  };
+
+
 
 	/**
      * create Rdv table
@@ -250,6 +340,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 
 	return{
 		getRdvList : getRdvList,
+    deleteRdvServer : deleteRdvServer,
     getRdvLocalList : getRdvLocalList,
 		createRdvTable: createRdvTable,
 		setRdv : setRdv,

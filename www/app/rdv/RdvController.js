@@ -43,7 +43,11 @@ appContext.controller('RdvController', function($scope,$mdDialog, RdvFactory, $s
     });
 
     $scope.editRdv =function(){
-
+        RdvFactory.deleteRdvServer($scope.rdv.id, function(data){
+            $ionicLoading.show({ template: 'Demande envoyée', duration:3000  });
+        },function(error){
+            $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
+        })
     }
 
     $scope.annulerRdv =function(){

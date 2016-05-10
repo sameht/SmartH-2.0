@@ -1,8 +1,17 @@
-appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
+appContext.factory('PharmacyLocatorFactory', function($http,$q,$cordovaSQLite){
+  var getArray=function (){
+    var array =[{id : 10, pharmacien: "Marty one",pharmacy:"nom de pharmacie1"type:"généraliste",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+                {id : 11, pharmacien: "Marty 2",pharmacy:"nom de pharmacie2"type:"généraliste",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+                {id : 12, pharmacien: "Marty 3",pharmacy:"nom de pharmacie3"type:"généraliste",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+                {id : 13, pharmacien: "Marty 4",pharmacy:"nom de pharmacie4"type:"généraliste",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+               
+    ] //+ spécialité de médecin
+    return array;
+  }
   /**
    * get doctor list from server
    */
-	var getDoctorListByDistance=function(dist,currentPosition){
+	var getPharmacyListByDistance=function(dist,currentPosition){
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
 			method :"Post",
@@ -30,26 +39,21 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 		}; 
 
 		//return $http(request)
-		var array =[{id : 10, doctor: "Marty MONASTIR",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
-          			{id : 11, doctor: "Marty Tunis",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
-          			{id : 12, doctor: "Marty Téboulba",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
-          			{id : 13, doctor: "Marty Moknine",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
-		] //+ spécialité de médecin
+		
 
-		return array
+		return getArray()
 	};
 
   /**
    * get doctor list from server
    */
-  var getDoctorList=function(name,lastname,speciality,gendre){
+  var getPharmacyList=function(pharmacy,pharmacien,type){
     var request = {
       url : "http://www.buzcard.fr/identification.aspx?request=identification",
       method :"Post",
       cache : false,
       headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    //'token': kjkjkjljljkjk
                 },
       transformRequest: function(obj) {
                     var str = [];
@@ -73,22 +77,17 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     }; 
 
     //return $http(request)
-    var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
-                {id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
-                {id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
-                {id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
-    ] //+ spécialité de médecin
 
-    return array
+    return getArray()
   };
 
 
     /**
      * create doctor table
      */
-    var createDoctorTable = function(db) {
+    var createPharmacyTable = function(db) {
       var deferred= $q.defer();
-      var CreateQuery = 'CREATE TABLE IF NOT EXISTS doctor (' +
+      var CreateQuery = 'CREATE TABLE IF NOT EXISTS pharmacy (' +
             'id INTEGER PRIMARY KEY, ' +
             'doctor text, specialite text,sexe text, adresse text, tel text,distance text)';
       $cordovaSQLite.execute(db, CreateQuery).then(
@@ -104,7 +103,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     /**
      * save the doctor into the doctor Table
      */
-    var setDoctor = function(db,doc) {
+    var setPharmacy = function(db,doc) {
        var deferred= $q.defer();
 
       var query=" INSERT INTO doctor (id, doctor, specialite,sexe,adresse,tel,distance) VALUES (?,?,?,?,?,?,?) "
@@ -122,7 +121,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 	/**
 	* select doctor details by id from local db
 	*/
-    var getDoctorById = function(db,id){
+    var getPharmacyById = function(db,id){
 
 	      var deferred = $q.defer();
 	      var query = 'SELECT * FROM doctor where id='+id;
@@ -142,7 +141,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
   /**
    * get doctor list from local db
    */
-  var getDoctorLocalList=function(db){ 
+  var getPharmacyLocalList=function(db){ 
       var deferred = $q.defer();
       var query="select * from doctor ";
       console.warn(query);
@@ -160,7 +159,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
    /**
 	* update rdv 
 	*/
-  	var updateDoctor = function (db,doc){
+  	var updatePharmacy = function (db,doc){
         var deferred = $q.defer();
 	  		var  query="update doctor set doctor='"+doc.doctor+"', "+
   					"specialite='"+doc.specialite+"', "+
@@ -182,7 +181,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
   /**
   	* create or update doctor
   	*/
-  	var createOrUpdateDoctor=function(db,doc){
+  	var createOrUpdatePharmacy=function(db,doc){
         var deferred=$q.defer();
         getDoctorById(db,doc.id).then(function(result){ //return 1 row
           if(result.rows.length==1){ 
@@ -247,7 +246,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     /**
      * delete all records from doctor table
      */
-    var emptyDoctorTable = function(db) {
+    var emptyPharmacyTable = function(db) {
 
         var deferred=$q.defer();
         var query = "DROP Table IF EXISTS doctor ";
@@ -263,7 +262,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     /**
      * insert an array of doctors into doctor
      */
-    var insertBulkIntoDoctorTable = function(db, doctorArray) {
+    var insertBulkIntoPharmacyTable = function(db, doctorArray) {
 
       var deferred=$q.defer();
       var insertQuery = "INSERT INTO doctor " + 
@@ -332,17 +331,17 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
     
 
 	return{
-		getDoctorListByDistance : getDoctorListByDistance,
-    setDoctor : setDoctor,
-		createDoctorTable : createDoctorTable,
-		getDoctorById : getDoctorById,
-		getDoctorLocalList : getDoctorLocalList,
-		updateDoctor : updateDoctor,
-		createOrUpdateDoctor : createOrUpdateDoctor,
+		getPharmacyListByDistance : getPharmacyListByDistance,
+    getPharmacyList : getPharmacyList,
+		createPharmacyTable : createPharmacyTable,
+		setPharmacy : setPharmacy,
+    getPharmacyById : getPharmacyById,
+		getPharmacyLocalList : getPharmacyLocalList,
+		updatePharmacy : updatePharmacy,
+		createOrUpdatePharmacy : createOrUpdatePharmacy,
     calculateDistance : calculateDistance,
-    emptyDoctorTable : emptyDoctorTable,
-    insertBulkIntoDoctorTable : insertBulkIntoDoctorTable,
-    getDoctorList : getDoctorList,
+    emptyPharmacyTable : emptyPharmacyTable,
+    insertBulkIntoPharmacyTable : insertBulkIntoPharmacyTable,
     getCurrentPosition : getCurrentPosition
 
 	}

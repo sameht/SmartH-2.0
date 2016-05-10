@@ -30,10 +30,12 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
                 array[i] = result.rows.item(i);
             };
             $scope.doctorArray = array;
+            console.log($scope.doctorArray)
             /*----------------------------------------------*/
             /*---------------------map-----------------------*/
             var bounds = new google.maps.LatLngBounds;
             var markersArray = [];
+            var infoWindowArray = [];
 
             var destArray = $scope.doctorArray;
 
@@ -54,7 +56,7 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
 
             deleteMarkers(markersArray);
             /*----------------------------------------------*/
-            var showGeocodedAddressOnMap = function(asDestination) {
+            var showGeocodedAddressOnMap = function(asDestination,doc) {
                 var icon = asDestination ? destinationIcon : originIcon;
                 return function(results, status) {
                   if (status === google.maps.GeocoderStatus.OK) {
@@ -65,6 +67,26 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
                       animation: google.maps.Animation.DROP,
                       icon: icon
                     }));
+
+                    if(doc!=undefined){
+                      var contentString="Doctor : "+doc.doctor+"<br/>Spécialité : "+doc.specialite ;
+                    }else{
+                      var contentString="Ma position"
+                    }
+
+                    var arraylength=markersArray.length;
+                    
+                    infoWindowArray.push(new google.maps.InfoWindow({
+                      content: contentString
+                    }));
+
+                       markersArray[arraylength-1].addListener('click', function() {
+                        for(var i =0; i<infoWindowArray.length; i++){
+                          infoWindowArray[i].close();
+                        }
+                        infoWindowArray[arraylength-1].open(map,markersArray[arraylength-1]);
+                      });
+
                   } else {
                     $ionicLoading.hide();
                     alert('Geocode was not successful due to: ' + status);
@@ -84,7 +106,8 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
 
         for (var i = 0; i < destinationList.length; i++) {
             geocoder.geocode({'address': destinationList[i].adresse},
-            showGeocodedAddressOnMap(true));
+            showGeocodedAddressOnMap(true,$scope.doctorArray[i]));
+            console.log($scope.doctorArray[i].doctor)
         };
 
 
@@ -94,8 +117,10 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
         function deleteMarkers(markersArray) {
           for (var i = 0; i < markersArray.length; i++) {
             markersArray[i].setMap(null);
+            infoWindowArray[i].setMap(null)
           }
           markersArray = [];
+          infoWindowArray=[];
         }
         /*-------------------------------------------*/
 
