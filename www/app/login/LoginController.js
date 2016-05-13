@@ -13,14 +13,16 @@ appContext.controller('LoginController', function($scope,$rootScope,  $ionicPlat
         }
 
     });
-
-    console.log($ionicHistory.backView().stateName)
+    if($ionicHistory.backView()!=null){
+        console.log($ionicHistory.backView().stateName)
     if($ionicHistory.backView().stateName=="visiteurMenu.visiteurHome"){
 
     }else{
         $ionicHistory.clearHistory();
         $ionicHistory.nextViewOptions({ disableBack: true, disableAnimate: true, historyRoot: true });
     }
+    }
+    
 
 
     $scope.signin = function(user) {
