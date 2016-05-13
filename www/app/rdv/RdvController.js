@@ -1,4 +1,4 @@
-appContext.controller('RdvController', function($scope,$mdDialog, RdvFactory, $stateParams, $ionicPlatform) {
+appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, RdvFactory, $stateParams, $ionicPlatform) {
 
 
     // for opening db:

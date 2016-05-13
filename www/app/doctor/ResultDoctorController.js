@@ -1,7 +1,16 @@
 appContext.controller('ResultDoctorController', function($scope, $ionicHistory, $rootScope, $ionicPlatform, DoctorLocatorFactory, $state, $cordovaGeolocation, $ionicLoading, PopupFactory, ConnectionFactory) {
     console.warn('ResultDoctorController')
 
-
+    $scope.goToDoctor=function(id){
+      if($rootScope.isAuthenticated==false){
+        
+         $state.go('visiteurMenu.doctor', {id: id });
+       }else{
+        // $state.go("menu.doctor"+id)
+         $state.go('menu.doctor', {id: id });
+       }
+     
+    }
     $ionicPlatform.ready(function() {
         // Setup the loader
         $ionicLoading.show({

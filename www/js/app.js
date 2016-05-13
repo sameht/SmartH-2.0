@@ -53,7 +53,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
       url : '/menu',
       cache : false,
       abstract: true,
-      templateUrl : 'app/menu/app-menu.html',
+      templateUrl : 'app/menu/template/app-menu.html',
       controller : 'MenuController'
     })
 
@@ -62,11 +62,13 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
       cache : false,
       views: {
         'menuContent': {
-          templateUrl: "app/home/home.html",
+          templateUrl: "app/home/template/home.html",
           controller : 'HomeController'
         }
       }
     })
+
+    
     /*------------------------------*/
 
     .state('menu.listConsultation',{
@@ -234,7 +236,108 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
       controller : 'LoginController'
 
 
-    }) ;
+    }) 
+
+
+
+    /*------------------------------*/
+
+    /*------------------------------*/
+
+    /*------------------------------*/
+ /*------------------------------*/
+.state('visiteurMenu',{
+      url : '/visiteurMenu',
+      cache : false,
+      abstract: true,
+      templateUrl : 'app/menu/template/visiteur-menu.html',
+      controller : 'VisiteurMenuController'
+    })
+
+    .state('visiteurMenu.visiteurHome',{
+      url : '/visiteurHome',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/home/template/visiteur-home.html",
+          controller : 'VisiteurHomeController'
+        }
+      }
+    })
+ /*------------------------------*/
+  /*------------------------------*/
+
+
+    .state('visiteurMenu.searchPharmacy',{
+      url : '/searchPharmacy',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/pharmacy/template/search-pharmacy.html",
+          controller : 'PharmacyLocatorController'
+        }
+      }
+    })
+
+
+    .state('visiteurMenu.searchDoctor',{
+      url : '/searchDoctor',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/doctor/template/search-doctor.html",
+          controller : 'DoctorLocatorController'
+        }
+      }
+    })
+
+    .state('visiteurMenu.resultDoctor',{
+      url : '/resultDoctor',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/doctor/template/result-doctor.html",
+          controller : 'ResultDoctorController'
+        }
+      }
+    })
+    .state('visiteurMenu.doctor',{
+      url : '/doctor/{id:int}',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/doctor/template/doctor.html",
+          controller : 'DoctorController'
+        }
+      }
+    })
+    /**********/
+
+    .state('visiteurMenu.resultPharmacy',{
+      url : '/resultPharmacy',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/pharmacy/template/result-pharmacy.html",
+          controller : 'ResultPharmacyController'
+        }
+      }
+    })
+    .state('visiteurMenu.pharmacy',{
+      url : '/pharmacy',
+      cache : false,
+      views: {
+        'menuContent': {
+          templateUrl: "app/pharmacy/template/pharmacy.html",
+          controller : 'PharmacyController'
+        }
+      }
+    })
+    
+ 
+
+
+    ;
 
   $urlRouterProvider.otherwise('/startup')
 })

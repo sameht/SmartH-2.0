@@ -1,4 +1,4 @@
-appContext.controller('LoginController', function($scope,  $ionicPlatform, $ionicLoading, $state, $ionicHistory, LoginFactory,ionicToast ){
+appContext.controller('LoginController', function($scope,$rootScope,  $ionicPlatform, $ionicLoading, $state, $ionicHistory, LoginFactory,ionicToast ){
     // for opening db:
     var db = null;
     $ionicPlatform.ready(function() {
@@ -14,9 +14,14 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
 
     });
 
+    console.log($ionicHistory.backView().stateName)
+    if($ionicHistory.backView().stateName=="visiteurMenu.visiteurHome"){
 
-    $ionicHistory.clearHistory();
-    $ionicHistory.nextViewOptions({ disableBack: true, disableAnimate: true, historyRoot: true });
+    }else{
+        $ionicHistory.clearHistory();
+        $ionicHistory.nextViewOptions({ disableBack: true, disableAnimate: true, historyRoot: true });
+    }
+
 
     $scope.signin = function(user) {
         if (!user) {
@@ -35,6 +40,7 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
                 }else{
                     LoginFactory.createIdentifiantTable(db).then(function(result){
                         LoginFactory.setCredentials(db,user.email,user.password,data).then(function(result){
+                            $rootScope.isAuthenticated=false
                             $state.go('synchronisation') ;
                         },function(reason){
                           ionicToast.show('Une erreur est survenue', 'top', false, 2500);
@@ -50,7 +56,7 @@ appContext.controller('LoginController', function($scope,  $ionicPlatform, $ioni
 
 
             }).error(function(data, status, headers, config ){
-
+                  console.log("erreur : login")
                  ionicToast.show('Une erreur est survenue', 'top', false, 2500);
              });
         };

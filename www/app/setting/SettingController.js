@@ -16,6 +16,22 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 
 /*---------------------------------------------------------------*/
 
+	/*********  rendez-vous modifié  ****************/
+    $scope.editRDV = { checked: false };
+
+	$scope.edit=function(){
+			if($scope.editRDV.checked){
+				if (window.cordova){ //device
+					NotificationFactory.delayedNotification(1,'Un rendez-vous est modifié');
+				} else {
+					console.log('Notification : activé');
+				}	 
+			}else
+			   {console.log('Notification : désactivé'); }
+		};
+
+/*---------------------------------------------------------------*/
+
 	/************ rendez-vous à venir ****************/
 
 
@@ -35,13 +51,13 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 
 
     $scope.choice = { checked: '' };
-
+    var secParJour=86400;
 	$scope.notifyMe=function(){
 		/**** button B1 ****/
 		if($scope.choice.checked== 'B1'){
 			if (window.cordova){
 				if(NotificationFactory.PresentNotification(2)){
-					NotificationFactory.updateSingleNotification(2,10,'This is updated text 1!');
+					NotificationFactory.updateSingleNotification(2,1*secParJour,'This is updated text 1!');
 					console.log('update 10');
 				}else{
 					NotificationFactory.delayedNotification(2,'add delayedNotification 10 sec');
@@ -55,7 +71,7 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 		if($scope.choice.checked== 'B2'){
 			if (window.cordova){
 				if(NotificationFactory.PresentNotification(2)){
-					NotificationFactory.updateSingleNotification(2,20,'This is updated text 2!');
+					NotificationFactory.updateSingleNotification(2,2*secParJour,'This is updated text 2!');
 					console.log('update 20');
 				}else{
 					NotificationFactory.delayedNotification(2,'add delayedNotification 20 sec');
@@ -71,7 +87,7 @@ appContext.controller('SettingController', function($scope,NotificationFactory){
 		if($scope.choice.checked== 'B3'){
 			if (window.cordova){
 				if(NotificationFactory.PresentNotification(2)){
-					NotificationFactory.updateSingleNotification(2,30,'This is updated text 3!');
+					NotificationFactory.updateSingleNotification(2,3*secParJour,'This is updated text 3!');
 					console.log('update 30');
 				}else{
 					NotificationFactory.delayedNotification(2,'add delayedNotification 30 sec');

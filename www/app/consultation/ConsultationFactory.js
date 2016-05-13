@@ -1,4 +1,15 @@
 appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
+    var getData=function(){
+        var array =[{id : 15, idDoc:1, doctor: "Martyy one", specialite:"généraliste",date:"November 05, 2015",maladie:"Allergies alimentaires",medicament:"INTRINSA, IXENSE",prix:"80",description:" Une consultation médicale peut être générale, gynécologique,"},
+          {id : 70,idDoc:2, doctor: "Marty two", specialite:"généraliste",date:"10/10/2012",maladie:"maladie",medicament:"medi",prix:"50",description:"desc"},
+          {id : 90,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
+          {id : 95,idDoc:4, doctor: "Marty four", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
+          {id : 96,idDoc:5, doctor: "Marty five", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
+          {id : 91,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"}
+        ]
+
+    return array
+  }
 	/**
 	 * Get consultation list from server
 	 */
@@ -30,22 +41,14 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 				//id : id
 			}
 		};
-				return $http(request)
-/*
-				setTimeout(function() {
-					var array =[{id : 15, idDoc:1, doctor: "Martyy one", specialite:"généraliste",date:"November 05, 2015",maladie:"Allergies alimentaires",medicament:"INTRINSA, IXENSE",prix:"80",description:" Une consultation médicale peut être générale, gynécologique,"},
-					{id : 70,idDoc:2, doctor: "Marty two", specialite:"généraliste",date:"10/10/2012",maladie:"maladie",medicament:"medi",prix:"50",description:"desc"},
-					{id : 90,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
-					{id : 95,idDoc:4, doctor: "Marty four", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
-					{id : 96,idDoc:5, doctor: "Marty five", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
-					{id : 91,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"}
-				]
-					deferred.resolve(array);
-				}, 1500);*/
+			//	return $http(request)
 
-		
-		//return deferred.promise 
-	 }
+				setTimeout(function() {
+					
+					deferred.resolve(getData());
+				}, 1500);
+		return deferred.promise 
+	 };
 
 	/**
 	 *Create consultation table

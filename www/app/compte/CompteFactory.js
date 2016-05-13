@@ -1,12 +1,16 @@
 appContext.factory('CompteFactory', function($q, $http,$cordovaSQLite){
+  var getData=function(){
+        var array =[{id : 10, name: "Anne",lastname :"Hathaway",city :"Tunis, TN",sexe:"femme",BD:"10/11/1982",address :"Tunis, TN",couv:"CNAM"}]
 
+    return array
+  }
 	/**
    * get user list from server
    */
 	var getUser=function(){
 		var request = {
-			url : "http://www.buzcard.fr/identification.aspx?request=identification",
-			method :"Post",
+			url : "http://smarth.azurewebsites.net/api/WSUtilisateur/Get",
+			method :"Get",
 			cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -19,23 +23,19 @@ appContext.factory('CompteFactory', function($q, $http,$cordovaSQLite){
                     return str.join("&");
                 },
 
-            transformResponse: function(data) {
+           /* transformResponse: function(data) {
                 var x2js = new X2JS();
                 var json = x2js.xml_str2json(data);
                 return json;
-            },																
+            },	*/															
            /*les données utilisé dans la requete*/
 			data : {
 				//id : id
 			}
 		}; 
 
-		//return $http(request)
-		var array =[{id : 10, name: "Anne",lastname :"Hathaway",city :"Tunis, TN",sexe:"femme",BD:"10/11/1982",address :"Tunis, TN",couv:"CNAM"}
-					
-		]
-
-		return array
+	//	return $http(request)
+    return getData()
 	};
 
 

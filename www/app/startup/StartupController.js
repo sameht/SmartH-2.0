@@ -1,4 +1,4 @@
-appContext.controller('StartupController',function($state,$ionicLoading, $ionicPlatform, $ionicHistory,LoginFactory,RdvFactory){
+appContext.controller('StartupController',function($state,$rootScope,$ionicLoading, $ionicPlatform, $ionicHistory,LoginFactory,RdvFactory){
 
 	console.warn("StartupController")
 	//test if the user is authenticated
@@ -38,12 +38,16 @@ appContext.controller('StartupController',function($state,$ionicLoading, $ionicP
 	LoginFactory.selectCredentials(db).then(function(result){
 
 		if(typeof(result)=='number'){
-			$state.go('login')
+			$rootScope.isAuthenticated=false
+			$state.go('visiteurMenu.visiteurHome')
 		}else{
+			
 			if(result.rows.length>0){
+				$rootScope.isAuthenticated=true
 				$state.go('synchronisation')
 			}else{
-				$state.go('login')
+				$rootScope.isAuthenticated=false
+				$state.go('visiteurMenu.visiteurHome')
 			}
 		}
 			
@@ -59,5 +63,6 @@ appContext.controller('StartupController',function($state,$ionicLoading, $ionicP
     });
 
 	$ionicLoading.hide();
-	$ionicHistory.clearHistory();
+	//$ionicHistory.clearHistory();
+	$ionicHistory.nextViewOptions({ disableBack: true, disableAnimate: true, historyRoot: true });
 })

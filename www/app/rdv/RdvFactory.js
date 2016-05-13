@@ -1,4 +1,16 @@
 appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
+  var getData=function(){
+     var array =[{id : 110,idDoc:1, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 112,idDoc:2, doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 115,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 117,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 118,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 119,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+          {id : 12, idDoc:3,doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+    ] 
+    return array;
+  }
   /**
    * get rdv list from server
    */
@@ -6,8 +18,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 
     var deferred = $q.defer();
 		var request = {
-			url : "http://www.buzcard.fr/identification.aspx?request=identification",
-			method :"Post",
+			url : "http://smarth.azurewebsites.net/api/WSRendezVous/Get",
+			method :"Get",
 			cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -23,23 +35,15 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
                 var x2js = new X2JS();
                 var json = x2js.xml_str2json(data);
                 return json;
-            },																
+            }																
            /*les données utilisé dans la requete*/
 		}; 
 
 		//return $http(request)
     setTimeout(function() {
 
-        var array =[{id : 110,idDoc:1, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 112,idDoc:2, doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 115,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 117,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 118,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 119,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 12, idDoc:3,doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-    ] //+ spécialité de médecin
-      deferred.resolve(array);
+        
+      deferred.resolve(getData());
     }, 1500);
 
 		
@@ -90,13 +94,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
   /**
    *   update rdv server
    */
-  var updateRdvServer = function(i,contactId, contact,callBack,errorCallBack){
-    
-     var length =0;
-     for(j in contact){
-       if(length == i)   key = j;
-       length++;
-     }
+  var updateRdvServer = function(id,date, heure,callBack,errorCallBack){
+
    // the send request parameters
     var request = {
       method: 'POST',
@@ -117,20 +116,17 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
         return json;
       },
       data: {
-        contact_id:contactId,
-        field : key,
-        value : contact[key]
+        id:id,
+        date : date,
+        heure : heure
       },
 //      timeout : 5000,
     };
     
     $http(request).success(function(data, status, headers, config) {
-      if(i<length){
-        i++;
-        updateContactServer(i, contactId, contact,callBack,errorCallBack);
-      }else{
+    
         callBack(data);
-      } 
+      
     }).error(function(data, status, headers, config) {
       errorCallBack(status);
     });

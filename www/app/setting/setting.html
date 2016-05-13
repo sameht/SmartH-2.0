@@ -7,6 +7,10 @@
           <div class="item item-divider"></div>
           <ion-toggle ng-model="canceledRDV.checked" ng-change="canceled()" toggle-class=""> rendez-vous annulé</ion-toggle>
             
+         
+          <div class="item item-divider"></div>
+          <ion-toggle ng-model="editRDV.checked" ng-change="edit()" toggle-class=""> rendez-vous modifié</ion-toggle>
+            
           <div class="item item-divider"></div>
         
            <!--***************************************** -->
@@ -23,7 +27,6 @@
           
           </div>
 
-          {{choice.checked }}
          <!--***************************************** -->
 
 

@@ -54,7 +54,12 @@ appContext.controller('PharmacyLocatorController', function($scope, $rootScope, 
                                     DoctorLocatorFactory.createDoctorTable(db).then(function(result) {
                                         DoctorLocatorFactory.insertBulkIntoDoctorTable(db, array).then(function(result) {
                                             $ionicLoading.hide();
-                                            $state.go('menu.resultDoctor')
+                                               if($rootScope.isAuthenticated==false){ // c'st un visiteur
+                                                $state.go('visiteurMenu.resultDoctor')
+                                            }else{
+                                               $state.go('menu.resultDoctor')
+                                            }
+                                            
 
                                         }, function(error) {
                                             $ionicLoading.hide();

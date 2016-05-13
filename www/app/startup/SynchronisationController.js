@@ -48,10 +48,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
                 return true;
             }
             /*-------------------------------------*/
-        $rootScope.t1 = 0;
-        $rootScope.t2 = 0;
-        $rootScope.t3 = 0;
-        $rootScope.t4 = 0;
+       
 
 
 
@@ -61,9 +58,10 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         RdvFactory.createRdvTable(db).then(function() {
 
-            RdvFactory.getRdvList().then(function(rdvList) {
+           // RdvFactory.getRdvList().success(function(data, status, headers, config ){
+            RdvFactory.getRdvList().then(function(data ){
 
-                RdvFactory.rdvAppelRecur(db, 0, rdvList, function(valid) {
+                RdvFactory.rdvAppelRecur(db, 0, data, function(valid) {
 
 
                     if (!valid) {
@@ -78,8 +76,10 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
                 });
 
-            }, function() {
+           // }).error (function(data, status, headers, config ) {
+            },function(data) {
                 console.log("eroor")
+                $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
             });
 
         }, function(reason) {
@@ -93,7 +93,8 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         ConsultationFactory.createConsultationTable(db).then(function(result) {
 
-            ConsultationFactory.getConsultationList().success(function(data, status, headers, config ){
+            //ConsultationFactory.getConsultationList().success(function(data, status, headers, config ){
+            ConsultationFactory.getConsultationList().then(function(data ){
 
                 ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
                     if (!valid) {
@@ -108,7 +109,8 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
                 })
 
 
-                }).error(function(data, status, headers, config ){
+                //}).error(function(data, status, headers, config ){
+                },function(data){
 
                  $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
              });
@@ -156,8 +158,9 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         CompteFactory.createUserTable(db).then(function(result) {
 
-            var array = CompteFactory.getUser();
-            CompteFactory.createOrUpdateUser(db, array[0]).then(function(result) {
+           // CompteFactory.getUser().success(function(data, status, headers, config ){
+            data=CompteFactory.getUser()
+            CompteFactory.createOrUpdateUser(db, data[0]).then(function(result) {
                 console.info("createOrUpdateUser okkkkkkkkk");
                 deferredUser.resolve();
 
@@ -167,7 +170,11 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
 
             })
+        /*}).error(function(data, status, headers, config ){
+        
 
+                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
+             });*/
 
         }, function(reason) {
 
@@ -178,7 +185,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         $q.all([
                 promiseRdv,
-                promiseCons,
+               // promiseCons,
                 promiseDoctor,
                 promiseUser
             ])
