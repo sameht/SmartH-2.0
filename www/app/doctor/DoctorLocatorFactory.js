@@ -1,11 +1,20 @@
 appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
+  var getData =function(){
+        var array =[{id : 10, doctor: "Marty MONASTIR",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
+                {id : 11, doctor: "Marty Tunis",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
+                {id : 12, doctor: "Marty Téboulba",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
+                {id : 13, doctor: "Marty Moknine",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
+    ] //+ spécialité de médecin
+
+    return array
+  }
   /**
    * get doctor list from server
    */
 	var getDoctorListByDistance=function(dist,region,ville,currentPosition){
 		var request = {
 			url : "http://www.buzcard.fr/identification.aspx?request=identification",
-			method :"Post",
+			method :"Get",
 			cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -18,11 +27,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
                     return str.join("&");
                 },
 
-            transformResponse: function(data) {
-                var x2js = new X2JS();
-                var json = x2js.xml_str2json(data);
-                return json;
-            },																
+         																
            /*les données utilisé dans la requete*/
 			data : {
 				//id : id
@@ -30,13 +35,7 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
 		}; 
 
 		//return $http(request)
-		var array =[{id : 10, doctor: "Marty MONASTIR",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
-          			{id : 11, doctor: "Marty Tunis",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
-          			{id : 12, doctor: "Marty Téboulba",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
-          			{id : 13, doctor: "Marty Moknine",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
-		] //+ spécialité de médecin
-
-		return array
+	 return getData();
 	};
 
   /**
@@ -44,8 +43,8 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
    */
   var getDoctorList=function(name,lastname,speciality,gendre){
     var request = {
-      url : "http://www.buzcard.fr/identification.aspx?request=identification",
-      method :"Post",
+      url : "http://smarth.azurewebsites.net/api/WSDoctorList/Get",
+      method :"Get",
       cache : false,
       headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -58,28 +57,19 @@ appContext.factory('DoctorLocatorFactory', function($http,$q,$cordovaSQLite){
                     return str.join("&");
                 },
 
-            transformResponse: function(data) {
-                var x2js = new X2JS();
-                var json = x2js.xml_str2json(data);
-                return json;
-            },                                
+                                      
            /*les données utilisé dans la requete*/
       data : {
-       /* name : name ,
+        name : name ,
         lastname : lastname,
         speciality : speciality,
-        gendre : gendre*/
+        gendre : gendre
       }
     }; 
 
-    //return $http(request)
-    var array =[{id : 10, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001",distance:20},
-                {id : 11, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30},
-                {id : 12, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15},
-                {id : 13, doctor: "Marty threee",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
-    ] //+ spécialité de médecin
+    return $http(request)
+   //return getData();
 
-    return array
   };
 
 

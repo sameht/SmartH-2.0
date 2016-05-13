@@ -1,4 +1,4 @@
-appContext.controller('SynchronisationController', function($state, RdvFactory, MyDoctorsFactory, $rootScope, CompteFactory, ConsultationFactory, $scope, $ionicLoading, $ionicPlatform, $q) {
+appContext.controller('SynchronisationController', function($state, LoginFactory,RdvFactory, MyDoctorsFactory, $rootScope, CompteFactory, ConsultationFactory, $scope, $ionicLoading, $ionicPlatform, $q) {
 
 
     // for opening db:
@@ -48,8 +48,12 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
                 return true;
             }
             /*-------------------------------------*/
-       
-
+            
+            LoginFactory.selectCredentials(db).then(function(result){
+                $rootScope.idUser=parseInt(result.rows[0].userId) 
+            },function(error){
+                console.log("error selectCredentials: "+ error)
+            })
 
 
         /**
@@ -58,7 +62,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         RdvFactory.createRdvTable(db).then(function() {
 
-           // RdvFactory.getRdvList().success(function(data, status, headers, config ){
+           // RdvFactory.getRdvList($rootScope.idUser).success(function(data, status, headers, config ){
             RdvFactory.getRdvList().then(function(data ){
 
                 RdvFactory.rdvAppelRecur(db, 0, data, function(valid) {
@@ -93,7 +97,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         ConsultationFactory.createConsultationTable(db).then(function(result) {
 
-            //ConsultationFactory.getConsultationList().success(function(data, status, headers, config ){
+            //ConsultationFactory.getConsultationList($rootScope.idUser).success(function(data, status, headers, config ){
             ConsultationFactory.getConsultationList().then(function(data ){
 
                 ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
@@ -125,11 +129,12 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
          */
 
         MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
+            //MyDoctorsFactory.getDoctorList($rootScope.idUser).success(function(data, status, headers, config ){
 
-            MyDoctorsFactory.getDoctorList().then(function(DocArray) {
+            MyDoctorsFactory.getDoctorList().then(function(data) {
 
 
-                MyDoctorsFactory.DoctorListAppelRecur(db, 0, DocArray, function(valid) {
+                MyDoctorsFactory.DoctorListAppelRecur(db, 0, data, function(valid) {
                     if (!valid) {
                         console.error("DoctorListAppelRecur error");
                         deferredDoctor.reject()
@@ -140,7 +145,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
                 })
 
-
+            //}).error(function(data, status, headers, config ){
             }, function() {
                 console.error("getConsultationList error");
 
@@ -158,7 +163,7 @@ appContext.controller('SynchronisationController', function($state, RdvFactory, 
 
         CompteFactory.createUserTable(db).then(function(result) {
 
-           // CompteFactory.getUser().success(function(data, status, headers, config ){
+           // CompteFactory.getUser($rootScope.idUser).success(function(data, status, headers, config ){
             data=CompteFactory.getUser()
             CompteFactory.createOrUpdateUser(db, data[0]).then(function(result) {
                 console.info("createOrUpdateUser okkkkkkkkk");

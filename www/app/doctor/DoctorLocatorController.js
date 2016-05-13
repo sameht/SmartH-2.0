@@ -39,8 +39,19 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                          var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                                 $rootScope.latLng = latLng;
                                 //console.log("latLng : "+latLng)
-                                var array = DoctorLocatorFactory.getDoctorListByDistance(parseInt(doctor.distance),doctor.region,doctor.ville, latLng);
-
+                                var array =DoctorLocatorFactory.getDoctorListByDistance(parseInt(doctor.distance),doctor.region,doctor.ville, latLng);/*.success(function(data, status, headers, config) {
+                                 for(var i=0; i<data.length;i++){
+                                    var array=[]
+                                  array.push({
+                                     id : data[i].Id, 
+                                      doctor: data[i].Nom+" "+data[i].Prenom,
+                                     specialite:data[i].IdSpecialite,
+                                     sexe:data[i].Sexe,
+                                     adresse :data[i].Adresse,
+                                     tel:data[i].Tel,
+                                     BD:data[i].DateNaissance
+                                  })
+                                } */
                                 if (array.length == 0) {
                                     console.log("pas de résultat")
                                     $ionicLoading.hide();
@@ -74,7 +85,9 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                                     })
 
                                 }
-
+                               /* }).error(function(data, status, headers, config) {
+                                  
+                                }); */
 
                         },function(error){
                             //if faut activer le gps
@@ -127,7 +140,25 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
             $rootScope.latLng = undefined
             ConnectionFactory.isConnected(function() {
                 DoctorLocatorFactory.emptyDoctorTable(db).then(function() {
-                    var array = DoctorLocatorFactory.getDoctorList(doc2.name,doc2.lastname, doc2.specialty, doc2.gendre)
+                    DoctorLocatorFactory.getDoctorList(doc2.name,doc2.lastname, doc2.specialty, doc2.gendre).success(function(data, status, headers, config) {
+       
+        for(var i=0; i<data.length;i++){
+            var array=[]
+          array.push({
+             id : data[i].Id, 
+              doctor: data[i].Nom+" "+data[i].Prenom,
+             specialite:data[i].IdSpecialite,
+             sexe:data[i].Sexe,
+             adresse :data[i].Adresse,
+             tel:data[i].Tel,
+             BD:data[i].DateNaissance
+          })
+        }
+        
+        console.log(data.length);
+        /*********************************************************************************/
+
+
                     if (array.length == 0) {
                         console.log("pas de résultat")
                         $ionicLoading.hide();
@@ -159,6 +190,14 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                         })
 
                     }
+
+
+        }).error(function(data, status, headers, config) {
+          
+        });
+
+                    
+
                 }, function(erreur) {
                     $ionicLoading.hide();
                     console.log("erreur emptyDoctorTable :" + erreur)
