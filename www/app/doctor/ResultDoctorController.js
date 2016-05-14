@@ -37,6 +37,7 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
             var array = [];
             for (var i = 0; i < result.rows.length; i++) {
                 array[i] = result.rows.item(i);
+                
             };
             $scope.doctorArray = array;
             console.log($scope.doctorArray)

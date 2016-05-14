@@ -14,11 +14,11 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
   /**
    * get rdv list from server
    */
-	var getRdvList=function(){
+	var getRdvList=function(id){
 
     var deferred = $q.defer();
 		var request = {
-			url : "http://smarth.azurewebsites.net/api/WSRendezVous/Get",
+			url : "http://smarth.azurewebsites.net/api/WSRendezVous/Get?Id=1",
 			method :"Get",
 			cache : false,
 			headers: {
@@ -29,26 +29,19 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
                     for (var p in obj)
                         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                     return str.join("&");
-                },
-
-            transformResponse: function(data) {
-                var x2js = new X2JS();
-                var json = x2js.xml_str2json(data);
-                return json;
-            }																
+                },														
            /*les données utilisé dans la requete*/
+      data : {
+        id :id
+      }
 		}; 
 
-		//return $http(request)
-    setTimeout(function() {
-
-        
+		return $http(request)
+/*    setTimeout(function() {
       deferred.resolve(getData());
     }, 1500);
 
-		
-
-		return deferred.promise
+		return deferred.promise*/
 	};
 
   /**

@@ -1,4 +1,4 @@
-appContext.controller('StartupController',function($state,$rootScope,$ionicLoading, $ionicPlatform, $ionicHistory,LoginFactory,RdvFactory){
+appContext.controller('StartupController',function($state,$rootScope,DoctorLocatorFactory,$ionicLoading, $ionicPlatform, $ionicHistory,LoginFactory,RdvFactory){
 
 	console.warn("StartupController")
 	//test if the user is authenticated
@@ -34,7 +34,48 @@ appContext.controller('StartupController',function($state,$rootScope,$ionicLoadi
 
         }
 
+/********************************************************************/
+    var t=new Date().getTime();
+        /**
+         * get All doctors from server
+         */
+        
+                DoctorLocatorFactory.getDoctorList().success(function(data, status, headers, config) {
+                      console.log("==> durée de résultat getAll Doctors List :")
+                        console.log((new Date().getTime())-t)
+                    var array=[]
+                    for(var i=0; i<data.length;i++){
+                      array.push({
+                         id : data[i].Id, 
+                          doctor: data[i].Nom+" "+data[i].Prenom,
+                         specialite:data[i].IdSpecialite,
+                         sexe:data[i].Sexe,
+                         adresse :data[i].AdresseCabinet,
+                         tel:data[i].Tel,
+                         BD:data[i].DateNaissance
+                      })
+                    }
+                    /******************************/
 
+                    DoctorLocatorFactory.createAllDoctorsTable(db).then(function(){
+                        DoctorLocatorFactory.insertBulkIntoAllDoctorsTable(db, array).then(function(result) {
+                                
+
+                            }, function(error) {
+                                
+                                console.log("erreur insertBulkIntoDoctorTable :" + error)
+
+                            })
+                     },function(error){
+
+                     })
+
+                }).error(function(data, status, headers, config){
+                    console.log(status)
+                })
+
+
+/**************************************************************************/
 	LoginFactory.selectCredentials(db).then(function(result){
 
 		if(typeof(result)=='number'){
@@ -50,12 +91,12 @@ appContext.controller('StartupController',function($state,$rootScope,$ionicLoadi
 				$state.go('visiteurMenu.visiteurHome')
 			}
 		}
-			
-			
 		
 	},function(reason){
 
 	});
+
+
 
 	
 

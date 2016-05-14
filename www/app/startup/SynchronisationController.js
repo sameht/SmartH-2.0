@@ -55,16 +55,18 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                 console.log("error selectCredentials: "+ error)
             })
 
-
+        var t =new Date().getTime();
+        
         /**
          * rdv
          */
 
         RdvFactory.createRdvTable(db).then(function() {
 
-           // RdvFactory.getRdvList($rootScope.idUser).success(function(data, status, headers, config ){
-            RdvFactory.getRdvList().then(function(data ){
-
+           RdvFactory.getRdvList($rootScope.idUser).success(function(data, status, headers, config ){
+           // RdvFactory.getRdvList().then(function(data ){
+                console.log("==> durée de résultat getRdvList:")
+                console.log((new Date().getTime())-t)
                 RdvFactory.rdvAppelRecur(db, 0, data, function(valid) {
 
 
@@ -80,8 +82,8 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
                 });
 
-           // }).error (function(data, status, headers, config ) {
-            },function(data) {
+            }).error (function(data, status, headers, config ) {
+           // },function(data) {
                 console.log("eroor")
                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
             });
@@ -97,9 +99,10 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
         ConsultationFactory.createConsultationTable(db).then(function(result) {
 
-            //ConsultationFactory.getConsultationList($rootScope.idUser).success(function(data, status, headers, config ){
-            ConsultationFactory.getConsultationList().then(function(data ){
-
+            ConsultationFactory.getConsultationList($rootScope.idUser).success(function(data, status, headers, config ){
+            //ConsultationFactory.getConsultationList().then(function(data ){
+                 console.log("==> durée de résultat getConsultationList : ")
+            console.log((new Date().getTime())-t)
                 ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
                     if (!valid) {
                         console.error("consultation data error");
@@ -113,8 +116,8 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                 })
 
 
-                //}).error(function(data, status, headers, config ){
-                },function(data){
+                }).error(function(data, status, headers, config ){
+                //},function(data){
 
                  $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
              });
@@ -132,7 +135,8 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
             //MyDoctorsFactory.getDoctorList($rootScope.idUser).success(function(data, status, headers, config ){
 
             MyDoctorsFactory.getDoctorList().then(function(data) {
-
+                console.log("==> durée de résultat getDoctorList : ")
+                console.log((new Date().getTime())-t)
 
                 MyDoctorsFactory.DoctorListAppelRecur(db, 0, data, function(valid) {
                     if (!valid) {
@@ -163,9 +167,26 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
         CompteFactory.createUserTable(db).then(function(result) {
 
-           // CompteFactory.getUser($rootScope.idUser).success(function(data, status, headers, config ){
-            data=CompteFactory.getUser()
-            CompteFactory.createOrUpdateUser(db, data[0]).then(function(result) {
+            CompteFactory.getUser($rootScope.idUser).success(function(data, status, headers, config ){
+            //array=CompteFactory.getUser()
+            console.log("==> durée de résultat getUser :")
+            console.log((new Date().getTime())-t)
+            var array=[]
+                   
+                      array.push({id :  data.Id, 
+                                name: data.Nom,
+                                lastname :data.Prenom,
+                                city :"Tunis, TN",
+                                sexe:data.Sexe,
+                                BD:data.DateNaissance,
+                                address :data.Adresse,
+                                couv:data.CouvertureSociale,
+                                cin : data.Cin,
+                                tel: data.Tel,
+                                profession:data.ProfessionPatient,
+                                etatCivile: data.EtatCivile})
+
+            CompteFactory.createOrUpdateUser(db, array[0]).then(function(result) {
                 console.info("createOrUpdateUser okkkkkkkkk");
                 deferredUser.resolve();
 
@@ -175,11 +196,11 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
 
             })
-        /*}).error(function(data, status, headers, config ){
+        }).error(function(data, status, headers, config ){
         
 
                  $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
-             });*/
+             });
 
         }, function(reason) {
 
@@ -190,9 +211,9 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
         $q.all([
                 promiseRdv,
-               // promiseCons,
                 promiseDoctor,
-                promiseUser
+                promiseUser,
+                promiseCons
             ])
             .then(function(values) {
 

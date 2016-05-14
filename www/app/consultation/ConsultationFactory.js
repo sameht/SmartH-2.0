@@ -13,11 +13,11 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 	/**
 	 * Get consultation list from server
 	 */
-	 var getConsultationList=function(){
+	 var getConsultationList=function(id){
 
 	 	var deferred = $q.defer()
 	 	var request={
-	 		url : "http://smarth.azurewebsites.net/api/WSConsultation/Get",
+	 		url : "http://smarth.azurewebsites.net/api/WSConsultation/Get?Id=1",
 			method :"Get",
 			cache : false,
 			headers: {
@@ -31,23 +31,19 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
                     return str.join("&");
                 },
 
-            /*transformResponse: function(data) {
-                var x2js = new X2JS();
-                var json = x2js.xml_str2json(data);
-                return json;
-            },*/																
+          																
            /*les données utilisé dans la requete*/
 			data : {
-				//id : id
+				id : id
 			}
 		};
-			//	return $http(request)
-
+				return $http(request)
+/*
 				setTimeout(function() {
 					
 					deferred.resolve(getData());
 				}, 1500);
-		return deferred.promise 
+		return deferred.promise */
 	 };
 
 	/**
@@ -242,7 +238,7 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
             return callBack(true)
         }
 
-}
+    }
 
 	/**
 	 *return

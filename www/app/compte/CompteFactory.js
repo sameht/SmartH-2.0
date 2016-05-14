@@ -7,9 +7,9 @@ appContext.factory('CompteFactory', function($q, $http,$cordovaSQLite){
 	/**
    * get user list from server
    */
-	var getUser=function(){
+	var getUser=function(id){
 		var request = {
-			url : "http://smarth.azurewebsites.net/api/WSUtilisateur/Get",
+			url : "http://smarth.azurewebsites.net/api/WSUtilisateur/Get?Id=1",
 			method :"Get",
 			cache : false,
 			headers: {
@@ -22,20 +22,15 @@ appContext.factory('CompteFactory', function($q, $http,$cordovaSQLite){
                         str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                     return str.join("&");
                 },
-
-           /* transformResponse: function(data) {
-                var x2js = new X2JS();
-                var json = x2js.xml_str2json(data);
-                return json;
-            },	*/															
+															
            /*les données utilisé dans la requete*/
 			data : {
-				//id : id
+				id : id
 			}
 		}; 
 
-	//	return $http(request)
-    return getData()
+		return $http(request)
+  //  return getData()
 	};
 
 
