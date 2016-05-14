@@ -3,9 +3,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'ionic-toast'])
+var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'ionic-toast','ionic.service.core', 'ionic.service.push',])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicPush,$ionicPopup) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -20,15 +20,31 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
-    /********************************************
-    var push=new Ionic.Push({
-      "debug": true
-    });
 
-    push.register(function(token){
-      console.log("device token "+token.token)
-    })
-    /***********************************************/
+// -----------
+Ionic.io();
+$ionicPush.init({
+    "debug": false,
+    "onNotification": function(notification) {
+        console.warn(notification);
+        popup = $ionicPopup.show({
+            template: '<h4 style="text-align: center;vertical-align: middle; display:block ">' + notification.text + '<h4/><br><a class="button button-full" style="font-weight: bolder;" id="bwlogin" ng-click="ok()">Ok</a>',
+            title: "Smart-H"
+        });
+    },
+    "onRegister": function(data) {
+
+      //  deviceToken = $cordovaDevice.getUUID();
+        localStorage.setItem('deviceId', data.token);
+        localStorage.setItem('deviceToken', data.token);
+        console.log("-----------------")
+        console.log(JSON.stringify(data.token))
+        console.log("-----------------")
+
+    }
+});
+$ionicPush.register();
+// ---------
   });
 })
 
@@ -68,7 +84,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
       }
     })
 
-    
+
     /*------------------------------*/
 
     .state('menu.listConsultation',{
@@ -236,7 +252,7 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
       controller : 'LoginController'
 
 
-    }) 
+    })
 
 
 
@@ -333,8 +349,8 @@ var appContext=angular.module('starter', ['ionic','ngCordova', 'ngMaterial', 'io
         }
       }
     })
-    
- 
+
+
 
 
     ;
