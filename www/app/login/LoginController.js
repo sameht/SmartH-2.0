@@ -1,6 +1,7 @@
-appContext.controller('LoginController', function($scope,$rootScope,  $ionicPlatform, $ionicLoading, $state, $ionicHistory, LoginFactory,ionicToast ){
+appContext.controller('LoginController', function($scope,$rootScope,  $ionicPlatform, $ionicLoading, $state, $ionicHistory, LoginFactory,ionicToast,$ionicPush,$ionicPopup ){
     // for opening db:
     var db = null;
+    var popup = "";
     $ionicPlatform.ready(function() {
         /**
          * create/open DB
@@ -42,7 +43,40 @@ appContext.controller('LoginController', function($scope,$rootScope,  $ionicPlat
                 }else{
                     LoginFactory.createIdentifiantTable(db).then(function(result){
                         LoginFactory.setCredentials(db,user.email,user.password,data).then(function(result){
-                            $rootScope.isAuthenticated=false
+                            $rootScope.isAuthenticated=false;
+
+
+// -----------------------------------------
+                                // -----------
+                            Ionic.io();
+                            $ionicPush.init({
+                                "debug": false,
+                                "onNotification": function(notification) {
+                                    console.warn(notification);
+                                    popup = $ionicPopup.show({
+                                        template: '<h4 style="text-align: center;vertical-align: middle; display:block ">' + notification.text + '<h4/><br><a class="button button-full" style="font-weight: bolder;" id="bwlogin" ng-click="ok()">Ok</a>',
+                                        title: "Smart-H",
+                                         scope: $scope,
+                                    });
+                                },
+                                "onRegister": function(data) {
+
+                                  //  deviceToken = $cordovaDevice.getUUID();
+                                    localStorage.setItem('deviceId', data.token);
+                                    localStorage.setItem('deviceToken', data.token);
+                                    console.log("-----------------")
+                                    console.log(JSON.stringify(data.token))
+                                    console.log("-----------------")
+
+                                }
+                            });
+                            $ionicPush.register();
+                            // ---------
+// -----------------------------------------
+
+
+
+
                             $state.go('synchronisation') ;
                         },function(reason){
                           ionicToast.show('Une erreur est survenue', 'top', false, 2500);
@@ -64,9 +98,19 @@ appContext.controller('LoginController', function($scope,$rootScope,  $ionicPlat
         };
     };
 
+
     $scope.hideToast = function(){
       ionicToast.hide();
     };
+   
+
+   $scope.ok = function() {
+      if ("undefined" !== typeof(popup) )
+        popup.close();
+        
+    };
+
+
 
     function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

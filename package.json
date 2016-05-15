@@ -32,8 +32,11 @@
       "id": "cordova-sqlite-storage"
     },
     {
-      "locator": "https://github.com/phonegap-build/PushPlugin.git",
-      "id": "com.phonegap.plugins.PushPlugin"
+      "variables": {
+        "SENDER_ID": "887174229010"
+      },
+      "locator": "phonegap-plugin-push",
+      "id": "phonegap-plugin-push"
     }
   ],
   "cordovaPlatforms": [
