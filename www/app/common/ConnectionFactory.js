@@ -5,7 +5,7 @@ var isConnected = function(connectedCallBack, notConnectedCallBack) {
        var testRequest = {
            method: 'GET',
            url: 'http://buzcard.fr/nepaseffacer.txt',
-           timeout: 2500,
+           timeout: 1500,
            params: { 
                'foobar': new Date().getTime() 
            },

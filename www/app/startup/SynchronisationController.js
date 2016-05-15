@@ -50,7 +50,8 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
             /*-------------------------------------*/
             
             LoginFactory.selectCredentials(db).then(function(result){
-                $rootScope.idUser=parseInt(result.rows[0].userId) 
+                $rootScope.idUser=parseInt(result.rows.item(0).userId) 
+                console.log(result.rows.item(0))
             },function(error){
                 console.log("error selectCredentials: "+ error)
             })

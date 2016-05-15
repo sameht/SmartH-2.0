@@ -73,10 +73,7 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
 
             /*les données utilisé dans la requete*/
             data: {
-                name: name,
-                lastname: lastname,
-                speciality: speciality,
-                gendre: gendre
+               
             }
         };
 
@@ -304,6 +301,23 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         return deferred.promise;
 
     };
+
+    /**
+     * delete all records from doctor table
+     */
+    var emptyAllDoctorTable = function(db) {
+
+        var deferred = $q.defer();
+        var query = "DROP Table IF EXISTS allDoctors ";
+        $cordovaSQLite.execute(db, query).then(function(result) {
+
+            deferred.resolve(result);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+
+    };
     /**
      * insert an array of doctors into doctor
      */
@@ -344,7 +358,7 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
     }
 
     /**
-     *Calculate distance and return distance
+     *Calculate distance and return doctor
      */
     var calculateDistance = function(origin, doctor) {
         console.log("3.3) ==> calculer la distance")
@@ -379,6 +393,9 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         return deferred.promise;
     }
 
+    /**
+     * filrer le résultat par distance
+     */    
     var FiltrerDistance = function(doc, dist, currentPosition, callBack) {
         console.log("2.2) ==> filtrer la distance")
         console.log("3) ==> calculer la distance")
@@ -398,15 +415,15 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         })
     }
 
+    /**
+     * Appel récursive de calcule de distance
+     */
     var distanceAppelRecur = function(db, counter, docList, dist, currentPosition, callBack) {
-            //console.log(counter)
-            console.log("1.1)==>distanceAppelRecur " + counter + " " + docList)
-                //console.log(docList[counter])
+
             var length = docList.length;
             //console.log(length)
 
             if (counter < length) {
-                console.log("2) ==> filtrer la distance")
                 FiltrerDistance(docList[counter], dist, currentPosition, function(valid) {
                     console.log(valid)
                     if (valid != null) {
@@ -416,7 +433,6 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
                             distanceAppelRecur(db, counter, docList, dist, currentPosition, callBack);
                         }, function(reason) {
 
-                            console.log("erreuuuuuuuuuuur setDoctor")
                             return callBack(false)
                         });
                     } else {
@@ -432,11 +448,87 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
                 return callBack(true)
             }
         }
+      /**
+       * Filtrer par région ou ville
+       */
+    var FiltrerVilleRegion = function(doc, region, ville, callBack) {
+        //filter avec ville et région
+        var geocoder = new google.maps.Geocoder;
+        var adresse = doc.adresse
+        geocoder.geocode({
+            'address': adresse
+        }, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                //resultsMap.setCenter(results[0].geometry.location);
+                var resultat = results[0].address_components
+                var locality = "";
+                var Gouvernorat = ""
+                var route = ""
+                    //les composants de l'adresse :
+                for (var i = 0; i < resultat.length; i++) {
+                    if (resultat[i].types[0] == "locality") {
+                        locality = resultat[i].long_name // ville
+                        console.log("ville: " + locality)
+
+                    }
+                    if (resultat[i].types[0] == "administrative_area_level_1") {
+                        Gouvernorat = resultat[i].long_name // région
+                        console.log("région : " + Gouvernorat)
+
+                    }
+                    if (resultat[i].types[0] == "route") {
+                        route = resultat[i].long_name // route
+                        console.log("route :" + route)
+                    }
+                };
+                /*comparaison */
+                if (region == Gouvernorat || ville == locality) {
+                    console.log("il ya de resultat")
+                    return callBack(doc);
+
+                } else {
+                    console.log("pas resultat")
+                    return callBack(null)
+                }
+
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+                return callBack(null)
+            }
+        });
+    }
+    var regionAppelRecur = function(db, counter, docList, region, ville, callBack) {
+            var length = docList.length;
+            //console.log(length)
+            if (counter < length) {
+                FiltrerVilleRegion(docList[counter], region, ville, function(valid) {
+                    console.log(valid)
+                    if (valid != null) {
+                        setDoctor(db, docList[counter]).then(function(result) {
+                            counter++;
+                            regionAppelRecur(db, counter, docList, region, ville, callBack);
+                        }, function(reason) {
+
+                            console.log("erreuuuuuuuuuuur setDoctor")
+                            return callBack(false)
+                        });
+                    } else {
+
+                        counter++;
+                        regionAppelRecur(db, counter, docList, region, ville, callBack);
+                        console.log("resultat null")
+                    }
+                })
+
+
+            } else {
+                return callBack(true)
+            }
+    }
         /**
          * get doctor list By distance
          */
-    var getDoctorListByDistance = function(dist, region, ville, currentPosition) {
-        console.log(isNaN(dist))
+    var getDoctorListByDistance = function(dist, region, ville, currentPosition,callBack) {
         var resultArray = [];
         var array = getData();
         getAllDoctorsLocalList(db).then(function(data) {
@@ -445,18 +537,33 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
                 };
                 console.log(resultArray)
                     //array=data.rows
-                distanceAppelRecur(db, 0, resultArray, dist, currentPosition, function(valid) {
+                if(!isNaN(dist)){ // par distance
+                    distanceAppelRecur(db, 0, resultArray, dist, currentPosition, function(valid) {
 
+                      if (!valid) {
+                          console.error("valid " + valid)
 
-                    if (!valid) {
-                        console.error("valid " + valid)
+                      } else {
 
-                    } else {
-                        console.info("rdvAppelRecur okkkkkkkkk");
+                            return callBack()
 
-                    }
+                      }
 
-                });
+                  });
+                }else{ //par ville etc 
+                  regionAppelRecur(db, 0, resultArray, region, ville, function(valid) {
+
+                      if (!valid) {
+                          console.error("valid " + valid)
+
+                      } else {
+                          return callBack()
+
+                      }
+
+                  });
+                }
+
             },
             function() {
 
@@ -464,7 +571,26 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
 
     };
 
-
+    /**
+     * GET the user credentials into the USER Table
+     */
+    var ifTableExist = function(db) {
+        var deferred=$q.defer();
+        $cordovaSQLite.execute(db, "SELECT name FROM sqlite_master WHERE type='table' AND name='allDoctors';").then(function(results) {
+            if (results.rows.length > 0) {
+                
+        
+                     deferred.resolve(true);
+   
+            } else {
+                console.log('table nexiste pas');
+                deferred.resolve(false);
+            }
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+    };
 
     return {
         getDoctorList: getDoctorList,
@@ -482,8 +608,10 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         createOrUpdateDoctor: createOrUpdateDoctor,
         calculateDistance: calculateDistance,
         emptyDoctorTable: emptyDoctorTable,
-        insertBulkIntoDoctorTable: insertBulkIntoDoctorTable
+        insertBulkIntoDoctorTable: insertBulkIntoDoctorTable,
+        emptyAllDoctorTable : emptyAllDoctorTable,
             //  getCurrentPosition : getCurrentPosition
+            ifTableExist : ifTableExist
 
     }
 })

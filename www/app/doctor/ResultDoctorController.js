@@ -1,4 +1,4 @@
-appContext.controller('ResultDoctorController', function($scope, $ionicHistory, $rootScope, $ionicPlatform, DoctorLocatorFactory, $state, $cordovaGeolocation, $ionicLoading, PopupFactory, ConnectionFactory) {
+appContext.controller('ResultDoctorController', function($scope, $ionicHistory, $rootScope, $ionicPlatform, DoctorLocatorFactory, $state, $cordovaGeolocation, $ionicLoading, PopupFactory, ConnectionFactory,ionicToast) {
     console.warn('ResultDoctorController')
 
     $scope.goToDoctor=function(id){
@@ -34,6 +34,10 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
         /************ get Doctor listfrom local db *******************/
 
         DoctorLocatorFactory.getDoctorLocalList(db).then(function(result) {
+
+          if(result.rows.length > 0){
+
+
             var array = [];
             for (var i = 0; i < result.rows.length; i++) {
                 array[i] = result.rows.item(i);
@@ -131,67 +135,22 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
           }
           markersArray = [];
           infoWindowArray=[];
-        }
+        };
         /*-------------------------------------------*/
 
 
+
+        }else{
+          $ionicLoading.hide();
+           ionicToast.show('Aucune résultat trouvée', 'middle', false, 2500);
+        }
             /************ fin :  get Doctor listfrom local db *************/
         }, function(error) {
             $ionicLoading.hide();
             console.log("error getDoctorLocalList : " + error)
-        })
+        });
 
 
-    })
+    });
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-      function(results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-          if (results[1]) {
-            map.setZoom(11);
-            var marker = new google.maps.Marker({
-              position: $rootScope.latLng,
-              map: map, 
-              icon : originIcon
-            });
-            console.log("results[1].formatted_address : "+results[1].formatted_address)
-        $ionicLoading.hide();
-
-          } else {
-            $ionicLoading.hide();
-            console.error('No results found')
-            window.alert('No results found');
-          }
-        } else {
-          $ionicLoading.hide();
-          console.error('Geocoder failed due to: ' + status)
-          window.alert('Geocoder failed due to: ' + status);
-        }
-      }*/
