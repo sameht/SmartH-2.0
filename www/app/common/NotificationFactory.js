@@ -5,7 +5,7 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
             id: ID,
             title: 'Notification!',
             text: msg,
-            icon: "img/icon.pnj",
+            icon: "img/iconBlue.png",
             data: {
               customProperty: 'custom value'
             }
@@ -25,15 +25,15 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
  
           $cordovaLocalNotification.schedule({
             id: ID,
-            title: 'Rappel',
+            title: 'SmartH',
             text: msg,
-            icon: "img/icon.pnj",
+            icon: "img/iconBlue.png",
             at: _10SecondsFromNow
           }).then(function (result) {
             console.log('Notification 2 triggered');
           });
           cordova.plugins.notification.local.on("trigger", function(notification) {
-              alert("triggered: 11111" );
+              alert(msg );
           });
 
           cordova.plugins.notification.local.on("click", function (notification, state) {
@@ -46,7 +46,7 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
         var everyMinuteNotification = function () {
           $cordovaLocalNotification.schedule({
             id: 3,
-            title: 'Warning',
+            title: 'SmartH',
             text: 'Dont fall asleep',
             icon: "img/icon.pnj",
             every: 'minute'
@@ -66,9 +66,9 @@ appContext.factory('NotificationFactory', function($cordovaLocalNotification, $s
 
           $cordovaLocalNotification.update({
             id: ID,
-            title: 'Warning Update',
+            title: 'SmartH',
             text: msg,
-            icon: "img/icon.pnj",
+            icon: "img/icon.png",
             at: SecondsFromNow
           }).then(function (result) {
             console.log('Notification 1 Updated');

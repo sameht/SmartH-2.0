@@ -36,6 +36,7 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
 
         return array
     }
+    
     var db = null;
     $ionicPlatform.ready(function() {
 
@@ -78,7 +79,7 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         };
 
         return $http(request)
-            //return getData();
+        return getData();
 
     };
     /**

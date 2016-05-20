@@ -5,23 +5,23 @@
             <p> </p>
         <div class="list">
           <div class="item item-divider"></div>
-          <ion-toggle ng-model="canceledRDV.checked" ng-change="canceled()" toggle-class=""> rendez-vous annulé</ion-toggle>
+          <ion-toggle ng-model="canceledRDV.checked" ng-checked="{{annuler}}" ng-change="canceled()" toggle-class=""> rendez-vous annulé</ion-toggle>
             
-         
+
           <div class="item item-divider"></div>
-          <ion-toggle ng-model="editRDV.checked" ng-change="edit()" toggle-class=""> rendez-vous modifié</ion-toggle>
+          <ion-toggle ng-model="editRDV.checked" ng-checked="{{modifier}}" ng-change="edit()" toggle-class=""> rendez-vous modifié</ion-toggle>
             
           <div class="item item-divider"></div>
         
            <!--***************************************** -->
-          <ion-toggle toggle-class="" ng-model="comingRDV.checked" ng-change="notification()">
+          <ion-toggle toggle-class="" ng-model="comingRDV.checked" ng-checked="{{ProchainRdv}}" ng-change="notification()">
                  rendez-vous à venir 
           </ion-toggle> 
 
           <div class="list" ng-show="comingRDV.checked">
 
          
-                 <ion-radio class="s-padding-left" ng-change="notifyMe()" ng-model="choice.checked" ng-value="'B1'">avant 1 jour</ion-radio>
+                 <ion-radio class="s-padding-left" ng-change="notifyMe()" checked ng-model="choice.checked" ng-value="'B1'">avant 1 jour</ion-radio>
                  <ion-radio class="s-padding-left" ng-change="notifyMe()" ng-model="choice.checked" ng-value="'B2'">avant 2 jours</ion-radio>
                  <ion-radio class="s-padding-left"  ng-change="notifyMe()" ng-model="choice.checked" ng-value="'B3'">avant 3 jours</ion-radio>
           

@@ -26,8 +26,8 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
                     id: result.rows.item(0).id,
                     idDoc: result.rows.item(0).idDoc,
                     doctor: result.rows.item(0).doctor,
-                    date: result.rows.item(0).date,
-                    heure: result.rows.item(0).heure,
+                    date: new Date( result.rows.item(0).date),
+                    // heure: result.rows.item(0).heure,
                     adresse: result.rows.item(0).adresse
                 }
             }
@@ -43,15 +43,16 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
     });
 
     $scope.editRdv =function(){
-        RdvFactory.deleteRdvServer($scope.rdv.id, function(data){
-            $ionicLoading.show({ template: 'Demande envoyée', duration:3000  });
-        },function(error){
-            $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
-        })
+       angular.element('#rdvEdit').triggerHandler('click');
     }
 
     $scope.annulerRdv =function(){
         
+         RdvFactory.deleteRdvServer($scope.rdv.id, function(data){
+            $ionicLoading.show({ template: 'Demande envoyée', duration:3000  });
+        },function(error){
+            $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
+        })
     }
     $scope.isOpen = false;
     $scope.selectedMode = 'md-fling';
@@ -62,4 +63,6 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
     $scope.availableDirections = ['up', 'down', 'left', 'right'];
     $scope.selectedDirection = 'up';
     */
+
+   
 })

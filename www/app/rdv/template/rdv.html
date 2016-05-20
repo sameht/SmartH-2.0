@@ -14,7 +14,7 @@
 								</md-fab-trigger>
 								<md-fab-actions>
 									 <md-button ng-click="annulerRdv()" aria-label="accessibility" class="md-fab md-raised md-mini md-accent">
-											<md-icon class="material-icons" aria-label="accessibility">add</md-icon>
+											<md-icon class="material-icons" aria-label="accessibility">delete_sweep</md-icon>
 									 </md-button>
 
 									 <md-button aria-label="Edit" ng-click="editRdv()" class="md-fab md-raised md-mini md-accent">
@@ -32,23 +32,26 @@
 
 			     <img style="background-image:url(img/doctor.jpg); border-radius:50%; background-position:center center; background-size:cover; width:100%; height:100%;">
 			    <h2 style="margin-top: 20px !important; font-size: larger;"><B>{{rdv.doctor}}</B></h2>
-			    <p> généraliste</p>
+			    <p> Ophtalmologie</p>
 			  </ion-item>
 			</ion-list>
 
   			<ion-list >
 			    <ion-item >
 			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
-			    	{{rdv.date}}
+			    	{{rdv.date | date :"dd-MMM-yyyy"}}
 			     </ion-item>
 			    <ion-item >
 			    	<h3 style="font-size: initial;">  <B>Heure :</B></h3>
-			    	{{rdv.heure}}
+			    	{{rdv.date | date :"HH:mm"}}
 			     </ion-item>
 			     <ion-item >
 			    	<h3 style="font-size: initial;">  <B>Cabinet :</B></h3>
-			    	{{rdv.adresse}}
+			    	<p style="white-space: pre-wrap !important;">{{rdv.adresse}}</p>
 			     </ion-item>
+			      <span id="rdvEdit" ng-hide="true" ion-datetime-picker ng-model="rdv.newDate">
+				        {{rdv.newDate| date: "yyyy-mm-dd H:mm:ss"}}
+				  </span>
 			</ion-list>
  		 </div>
 

@@ -1,4 +1,4 @@
-appContext.controller('ListConsultationController', function($scope, $q, $ionicPlatform, MyDoctorsFactory, ConsultationFactory) {
+appContext.controller('ListConsultationController', function($scope, $q, $rootScope,$ionicLoading,$ionicPlatform, ConnectionFactory,MyDoctorsFactory, PopupFactory,ConsultationFactory) {
     $scope.consultationArray = [];
 
     var db = null;
@@ -38,87 +38,88 @@ appContext.controller('ListConsultationController', function($scope, $q, $ionicP
 
 
         /*-------------------------------------*/
-        var pushIfNotExist = function(array, elt) {
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i] == elt) {
-                        return false
-                    };
-                };
 
-                return true;
-            }
-            /*-------------------------------------*/
 
-        
         $scope.doRefresh = function() {
+            ConnectionFactory.isConnected(function() { // s'il y a de connection : maj les données
+                /**
+                 * consultation
+                 */
 
-            /**
-             * consultation
-             */
+                ConsultationFactory.createConsultationTable(db).then(function(result) {
 
-            ConsultationFactory.createConsultationTable(db).then(function(result) {
-
-                ConsultationFactory.getConsultationList().success(function(data, status, headers, config ){
-
-
-                    ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
-                        if (!valid) {
-                            console.error("consultationArray error");
-
-                        } else {
-
-                            /**
-                             * my doctors
-                             */
-                            MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
-
-                                    MyDoctorsFactory.getDoctorList().then(function(DocArray) {
+                    ConsultationFactory.getConsultationList($rootScope.idUser).success(function(data, status, headers, config) {
 
 
-                                        MyDoctorsFactory.DoctorListAppelRecur(db, 0, DocArray, function(valid) {
-                                            if (!valid) {
-                                                console.error("DoctorListAppelRecur error");
-                                            } else {
-                                                displayCons();
-                                            }
+                        ConsultationFactory.consultationAppelRecur(db, 0, data, function(valid) {
+                            if (!valid) {
+                                console.error("consultationArray error");
 
-                                        })
+                            } else {
 
+                                /**
+                                 * my doctors
+                                 */
+                                MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
 
-                                    }, function() {
-                                        console.error("getConsultationList error");
-
-                                    });
+                                        MyDoctorsFactory.getDoctorList().then(function(DocArray) {
 
 
-                                }, function(reason) {
-                                    console.error("createConsultationTable error");
-                                })
-                                /*************************************************/
+                                            MyDoctorsFactory.DoctorListAppelRecur(db, 0, DocArray, function(valid) {
+                                                if (!valid) {
+                                                    console.error("DoctorListAppelRecur error");
+                                                } else {
+                                                    displayCons();
+                                                }
 
-                        }
-
-                    })
-
-                 }).error(function(data, status, headers, config ){
-
-                 $ionicLoading.show({ template: 'pas de réponse du serveur', duration:3000  });
-             });
+                                            })
 
 
-            }, function(reason) {
-                console.error("createConsultationTable error");
-            })
+                                        }, function() {
+                                            console.error("getConsultationList error");
 
-            /**********************************************************************************/
-            /*--------------------------------------------------------------------------------*/
+                                        });
 
-            .finally(function() {
+
+                                    }, function(reason) {
+                                        console.error("createConsultationTable error");
+                                    })
+                                    /*************************************************/
+
+                            }
+
+                        })
+
+                    }).error(function(data, status, headers, config) {
+
+                        $ionicLoading.show({
+                            template: 'pas de réponse du serveur',
+                            duration: 3000
+                        });
+                    });
+
+
+                }, function(reason) {
+                    console.error("createConsultationTable error");
+                })
+
+                /**********************************************************************************/
+                /*--------------------------------------------------------------------------------*/
+
+                .finally(function() {
+                    // Stop the ion-refresher from spinning
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+
+
+            }, function() {
+                PopupFactory.myPopup('Utiliser les reseaux cellulaires et wifi pour rafraichir la liste');
+                console.log("not connected");
                 // Stop the ion-refresher from spinning
                 $scope.$broadcast('scroll.refreshComplete');
             });
-
         }
+
 
 
 

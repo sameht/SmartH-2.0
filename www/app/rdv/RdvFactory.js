@@ -1,13 +1,10 @@
 appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
   var getData=function(){
-     var array =[{id : 110,idDoc:1, doctor: "Marty one",date :"Novembre 01 2011",heure:"11:30",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 112,idDoc:2, doctor: "Marty two",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
+     var array =[{id : 110,idDoc:1, doctor: "GAALOUL HECHMI",date :"Novembre 01 2016",heure:"11:30",adresse :"SOUSSE MEDINA, AV. LEOPOLD SEDAR SENGHOR",etat:"true"},
+          {id : 112,idDoc:2, doctor: " DEBBICHE NOUREDDINE",date :"Juin 02 2016",heure: "12:30",adresse :"1 BIS, RUE MOUSSA IBN NOUCAIR",etat:"true"},
           {id : 115,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 117,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 118,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
-          {id : 119,idDoc:6,doctor: "Marty six",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"false"},
-          {id : 12, idDoc:3,doctor: "Marty three",date :"Novembre 03 2013",heure: "13:30",adresse :"3000 MONASTIR Av.Habib BOURGUIBA",etat:"true"},
+          {id : 116,idDoc:1,doctor: "Marty one",date :"Novembre 02 2012",heure: "12:30",adresse :"2000 MONASTIR Av.Habib BOURGUIBA",etat:"true"}
+        
     ] 
     return array;
   }
@@ -18,8 +15,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 
     var deferred = $q.defer();
 		var request = {
-			url : "http://smarth.azurewebsites.net/api/WSRendezVous/Get?Id=1",
-			method :"Get",
+			url : "http://smarth.azurewebsites.net/smarth/rdv-list.php",
+			method :"POST",
 			cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -32,12 +29,12 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
                 },														
            /*les données utilisé dans la requete*/
       data : {
-        id :id
+        IdPatient :12
       }
 		}; 
 
 		return $http(request)
-/*    setTimeout(function() {
+    /*setTimeout(function() {
       deferred.resolve(getData());
     }, 1500);
 
@@ -134,7 +131,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
       var deferred= $q.defer();
       var CreateQuery = 'CREATE TABLE IF NOT EXISTS rdv (' +
             'id INTEGER PRIMARY KEY, ' +
-            'idDoc INTEGER,doctor text, date text,heure text, adresse text, etat text)';
+            'idDoc INTEGER,doctor text, date text, adresse text, etat text)';
       $cordovaSQLite.execute(db, CreateQuery).then(
           function(result) {
               deferred.resolve(result);
@@ -152,8 +149,8 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
     var setRdv = function(db,rdv) {
        var deferred= $q.defer();
 
-      var query=" INSERT INTO rdv (id, idDoc, doctor, date,heure,adresse,etat) VALUES (?,?,?,?,?,?,?) "
-      $cordovaSQLite.execute(db, query, [rdv.id, rdv.idDoc, rdv.doctor, rdv.date,rdv.heure,rdv.adresse,rdv.etat]).then(function(result) {
+      var query=" INSERT INTO rdv (id, idDoc, doctor, date,adresse,etat) VALUES (?,?,?,?,?,?) "
+      $cordovaSQLite.execute(db, query, [rdv.id, rdv.idDoc, rdv.doctor, rdv.date,rdv.adresse,rdv.etat]).then(function(result) {
          deferred.resolve(result)
 
       }, function(reason) {
@@ -188,7 +185,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
    */
   var getRdvLocalList=function(db){ 
      var deferred = $q.defer();
-     var query="SELECT * FROM rdv WHERE etat = 'true' ";
+     var query="SELECT * FROM rdv WHERE etat ='En cours' ";
      $cordovaSQLite.execute(db,query).then(function(result){
 
         
@@ -211,7 +208,6 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 	  		var  query="update rdv set idDoc='"+rdv.idDoc+"', "+
             "doctor='"+rdv.doctor+"', "+
   					"date='"+rdv.date+"', "+
-  					"heure='"+rdv.heure +"', "+
             "adresse='"+rdv.adresse+"', "+
   					"etat='"+rdv.etat+"'"+
   					"where id="+rdv.id+"";
@@ -281,7 +277,6 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
           rdvArray[0].idDoc  + "' AS 'idDoc','" + 
           rdvArray[0].doctor  + "' AS 'doctor','" + 
           rdvArray[0].date + "' AS 'date','" + 
-          rdvArray[0].heure + "' AS 'heure','"+
           rdvArray[0].adresse + "' AS 'adresse', '" + 
           rdvArray[0].etat+"' AS 'etat' ";
 
@@ -292,7 +287,6 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
             + rdvArray[i].idDoc + "', '"
             + rdvArray[i].doctor + "', '"
             + rdvArray[i].date + "','"
-            + rdvArray[i].heure + "', '"
             + rdvArray[i].adresse + "', '"
             +rdvArray[i].etat +"'";
       }
@@ -327,6 +321,23 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 
 }
 
+    /**
+     * delete all records from user table
+     */
+    var emptyRdvTable = function(db) {
+
+        var deferred = $q.defer();
+        var query = "DROP Table IF EXISTS Rdv ";
+        $cordovaSQLite.execute(db, query).then(function(result) {
+
+            deferred.resolve(result);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+
+    };
+
 	return{
 		getRdvList : getRdvList,
     deleteRdvServer : deleteRdvServer,
@@ -338,6 +349,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
 		createOrUpdateRdv : createOrUpdateRdv,
     deleteRdv : deleteRdv,
     insertBulkIntoRdvTable : insertBulkIntoRdvTable,
-    rdvAppelRecur : rdvAppelRecur
+    rdvAppelRecur : rdvAppelRecur,
+    emptyRdvTable : emptyRdvTable
 	}
 })

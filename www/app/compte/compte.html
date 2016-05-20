@@ -1,10 +1,10 @@
 <ion-view view-title="profile">
-
-        <div class="middle-container container s-margin-toop">
+<ion-content>
+        <div class="middle-container container " style="    background-color: #E8E8E8;">
             
        <!-- PROFILE (MIDDLE-CONTAINER) -->
            
-            <div class="profile-picture big-profile-picture clear">
+            <div class="profile-picture big-profile-picture clear s-margin-toop">
                 <img width="150px" alt="Anne Hathaway picture" src="http://upload.wikimedia.org/wikipedia/commons/e/e1/Anne_Hathaway_Face.jpg" >
             </div>
             <h2 class="user-name">{{user.name +" "+user.lastname}} </h2>
@@ -26,7 +26,7 @@
                         <md-tab-body class=" md-padding">
                             <in-list>
                               <ion-item class=" s-text-center">
-                                Date de naissance : {{user.BD}}
+                                Date de naissance : {{user.BD | date : "shortDate"}}
                               </ion-item>
 
                               <ion-item class=" s-text-center">
@@ -88,4 +88,5 @@
                   </md-content>
 </div>
                 </div>
+            </ion-content>
  </ion-view>

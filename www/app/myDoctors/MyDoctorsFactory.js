@@ -1,12 +1,12 @@
 appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope ,$q){
   var docInfo=function(id){
     array=[]
-    var doc1={id : 1, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"}
-    var doc2={id : 2, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001",distance:30}
-    var doc3={id : 3, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001",distance:15}
-    var doc4= {id : 4, doctor: "Marty four",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
-    var doc5= {id : 5, doctor: "Marty five",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
-    var doc6= {id : 6, doctor: "Marty six",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001",distance:17}
+    var doc1={id : 1, doctor: "GAALOUL HECHMI",specialite:"Ophtalmologie",sexe:"Homme",adresse :"SOUSSE MEDINA, AV. LEOPOLD SEDAR SENGHOR",tel:"73226453"}
+    var doc2={id : 2, doctor: "DEBBICHE NOUREDDINE",specialite:"Pediatrie",sexe:"Homme",adresse :"1 BIS, RUE MOUSSA IBN NOUCAIR",tel:" 71287503",distance:30}
+    var doc3={id : 3, doctor: "BEN DHIA CHEBIL",specialite:" Psychiatrie",sexe:"Homme",adresse :"SOUSSE MEDINA, AV. LEOPOLD SEDAR SENGHOR",tel:" 73226626",distance:15}
+    var doc4= {id : 4, doctor: "KHALSI MOHAMED EL AZIZ",specialite:"Dermatologie",sexe:"Homme",adresse :"ARIANA, RUE CHEIKH M.ZAGHOUANI",tel:"71 75 001",distance:17}
+    var doc5= {id : 5, doctor: "HAFSA IBTISSEM",specialite:"Pediatrie",sexe:"Femme",adresse :"LA MARSA,RUE DE CARTHAGE",tel:"71747832",distance:17}
+    var doc6= {id : 6, doctor: "MABROUK JAAFAR",specialite:"Pediatrie",sexe:"homme",adresse :"TEBOULBA, AV. HABIB BOURGUIBA ",tel:"73 75 001",distance:17}
     switch(id){
       case 1 : array.push(doc1); break;
       case 2 : array.push(doc2); break;
@@ -20,6 +20,19 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
     return array ;
   }
 
+  var getData=function(){
+    var array =[{id : 1, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"},
+              {id : 2, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001"},
+              {id : 3, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001"},
+              {id : 4, doctor: "Marty four",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001"},
+              {id : 5, doctor: "Marty five",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001"},
+              {id : 6, doctor: "Marty six",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001"}
+        ] 
+    return array ;
+  }
+
+
+
   /**
    *get goctor by id from server
    */
@@ -28,7 +41,7 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
     var deferred = $q.defer();
 
     var request = {
-    url : "http://www.buzcard.fr/identification.aspx?request=identification",
+    url : "http://smarth.azurewebsites.net/smarth/me-doc.php",
     method :"Post",
     cache : false,
     headers: {
@@ -42,31 +55,21 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
                 return str.join("&");
             },
 
-        transformResponse: function(data) {
-            var x2js = new X2JS();
-            var json = x2js.xml_str2json(data);
-            return json;
-        },                                
+                                     
        /*les données utilisé dans la requete*/
     data : {
-      //id : id
+      "IdPatient" : "12"
     }
   }; 
 
-  //return $http(request)
-  var array =[{id : 1, doctor: "Marty one",specialite:"généraliste",sexe:"homme",adresse :"1000 MONASTIR Av.Habib BOURGUIBA",tel:"71 75 001"},
-              {id : 2, doctor: "Marty two",specialite:"généraliste",sexe:"homme",adresse :"Bab Bhar, Gouvernorat de Tunis, Tunisie",tel:"71 75 001"},
-              {id : 3, doctor: "Marty three",specialite:"généraliste",sexe:"homme",adresse :"Téboulba, Monastir, Tunisie",tel:"71 75 001"},
-              {id : 4, doctor: "Marty four",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001"},
-              {id : 5, doctor: "Marty five",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001"},
-              {id : 6, doctor: "Marty six",specialite:"généraliste",sexe:"homme",adresse :"Moknine, Monastir, Tunisie",tel:"71 75 001"}
-  ] 
+ // return $http(request)
+
 
     setTimeout(function() {
-      deferred.resolve(array)
+      deferred.resolve(getData())
 
     }, 1500);
-  //return 
+  
       return deferred.promise;
 
   }
@@ -148,7 +151,7 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
         	deferred.resolve(result)
 
         }, function(reason) {
-      		console.log("error : "+reason)
+      		console.log(reason)
          	deferred.reject(reason)
         });
 
@@ -294,6 +297,24 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
 
 }
 
+    /**
+     * delete all records from user table
+     */
+    var emptyMyDoctorsTable = function(db) {
+
+        var deferred = $q.defer();
+        var query = "DROP Table IF EXISTS myDoctors ";
+        $cordovaSQLite.execute(db, query).then(function(result) {
+
+            deferred.resolve(result);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+
+    };
+
+
 	return {
     getDoctorList : getDoctorList,
 		getDoctorById : getDoctorById,
@@ -304,6 +325,7 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
 		updateDoctor : updateDoctor,
 		createOrUpdateDoctor : createOrUpdateDoctor,
     doctorAppelRecur : doctorAppelRecur,
-    DoctorListAppelRecur : DoctorListAppelRecur
+    DoctorListAppelRecur : DoctorListAppelRecur,
+    emptyMyDoctorsTable : emptyMyDoctorsTable
 	}
 })

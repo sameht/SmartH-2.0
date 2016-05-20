@@ -1,11 +1,10 @@
 appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
     var getData=function(){
-        var array =[{id : 15, idDoc:1, doctor: "Martyy one", specialite:"généraliste",date:"November 05, 2015",maladie:"Allergies alimentaires",medicament:"INTRINSA, IXENSE",prix:"80",description:" Une consultation médicale peut être générale, gynécologique,"},
-          {id : 70,idDoc:2, doctor: "Marty two", specialite:"généraliste",date:"10/10/2012",maladie:"maladie",medicament:"medi",prix:"50",description:"desc"},
-          {id : 90,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
-          {id : 95,idDoc:4, doctor: "Marty four", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
-          {id : 96,idDoc:5, doctor: "Marty five", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"},
-          {id : 91,idDoc:3, doctor: "Marty three", specialite:"généraliste",date:"10/10/2012",maladie:"mal",medicament:"medi",prix:"50",description:"desc"}
+        var array =[{id : 15, idDoc:1, doctor: "GAALOUL HECHMI", specialite:"Ophtalmologie",date:"November 05, 2015",maladie:" infection oculaire",medicament:"Almide",prix:"60",description:" -"},
+          {id : 70,idDoc:1, doctor: "GAALOUL HECHMI", specialite:"Ophtalmologie",date:"November 20, 2015",maladie:"DMLA",medicament:"-",prix:"40",description:"-"},
+          {id : 90,idDoc:2, doctor: " DEBBICHE NOUREDDINE", specialite:"Pediatrie",date:"Septembre 17, 2015",maladie:"Allergie",medicament:"Dafalgan",prix:"60",description:"-"},
+          {id : 95,idDoc:4, doctor: "KHALSI MOHAMED EL AZIZ", specialite:"Dermatologie",date:"Janvier 05, 2016",maladie:"Traitement des cicatrices",medicament:"Cicaflate",prix:"50",description:"-"},
+          {id : 96,idDoc:4, doctor: "KHALSI MOHAMED EL AZIZ", specialite:"Dermatologie",date:"Mars 25, 2016",maladie:"Acné",medicament:"Curacné",prix:"45",description:"traitement qui dure 8 mois avec suivi mensuel"}
         ]
 
     return array
@@ -17,12 +16,14 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 
 	 	var deferred = $q.defer()
 	 	var request={
-	 		url : "http://smarth.azurewebsites.net/api/WSConsultation/Get?Id=1",
-			method :"Get",
-			cache : false,
+      //url : "http://smarth.azurewebsites.net/api/WSConsultation/Get?Id=1",
+	 		url : "http://smarth.azurewebsites.net/smarth/consult-list.php",
+			//method :"Get",
+			method :"Post",
+      cache : false,
 			headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                     
+
                 },
 			transformRequest: function(obj) {
                     var str = [];
@@ -34,18 +35,20 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
           																
            /*les données utilisé dans la requete*/
 			data : {
-				id : id
+				//id : id
+        "IdPatient": "12",
+        "Visibilite": "Moi uniquement"
 			}
 		};
 				return $http(request)
-/*
-				setTimeout(function() {
+
+				/*setTimeout(function() {
 					
 					deferred.resolve(getData());
 				}, 1500);
-		return deferred.promise */
-	 };
-
+		return deferred.promise*/ 
+	 
+}
 	/**
 	 *Create consultation table
 	 */
@@ -72,7 +75,7 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 
       var query=" INSERT INTO consultation (id, idDoc, doctor, specialite, date,maladie,medicament,prix,description) VALUES (?,?,?,?,?,?,?,?,?) "
       //console.warn(query);
-      $cordovaSQLite.execute(db, query, [cons.Id, cons.IdMedecin, cons.NomMedecin, cons.Specialite, cons.Date,cons.Type,cons.Evaluation,cons.Montant,cons.TraitementSortie]).then(function(result) {
+      $cordovaSQLite.execute(db, query, [cons.id, cons.idDoc, cons.doctor, cons.specialite, cons.date,cons.maladie,cons.medicament,cons.prix,cons.description]).then(function(result) {
          deferred.resolve(result)
 
       }, function(reason) {
@@ -91,13 +94,13 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 
 	      var deferred = $q.defer();
 	      var query = 'SELECT * FROM consultation where id='+id;
-	      //console.warn(query);
+	      console.warn(query);
 	      $cordovaSQLite.execute(db, query).then(function(result) {
 	          //zone 2
 	          deferred.resolve(result);
 	        }, function(reason) {
 	        	//TODO FIXME 
-	          console.log("error " + reason);
+	          console.log(reason);
 	          deferred.reject(reason);
 	        });
 		     
@@ -125,19 +128,19 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 
 	/**
 	 * update consultation
-	 */
+	 */ 
 	var updateConsultation=function(db,cons){
 		  	//	console.log("to update"+rdv.doctor)
       var deferred = $q.defer();
-	  		var  query="update consultation set idDoc='"+cons.IdMedecin+"', "+
-  					"doctor='"+cons.NomMedecin+"', "+
-  					"specialite='"+cons.Specialite+"', "+
-  					"date='"+cons.Date +"', "+
-  					"maladie='"+cons.Type+"',"+
-  					"medicament='"+cons.Evaluation+"',"+
-  					"prix='"+cons.Montant+"',"+
-  					"description='"+cons.TraitementSortie+"'"+
-  					"where id="+cons.Id+"";
+	  		var  query="update consultation set idDoc='"+cons.idDoc+"', "+
+  					"doctor='"+cons.doctor+"', "+
+  					"specialite='"+cons.specialite+"', "+
+  					"date='"+cons.date +"', "+
+  					"maladie='"+cons.maladie+"',"+
+  					"medicament='"+cons.medicament+"',"+
+  					"prix='"+cons.prix+"',"+
+  					"description='"+cons.description+"'"+
+  					"where id="+cons.id+"";
             //console.warn(query);
 	  		$cordovaSQLite.execute(db, query).then(function(result){
 	  			//console.log("update consultation ")
@@ -154,7 +157,7 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
   	*/
   	var createOrUpdateConsultation=function(db,cons){
         var deferred=$q.defer();
-        getConsultationById(db,cons.Id).then(function(result){ //return 1 row
+        getConsultationById(db,cons.id).then(function(result){ //return 1 row
           if(result.rows.length==1){ 
            // console.log("found===>update "+result.rows.length)
             updateConsultation(db,cons).then(function(result){
@@ -226,7 +229,7 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
         var length = rdvList.length;
 
         if (counter < length) {
-
+          console.log(rdvList)
             createOrUpdateConsultation(db, rdvList[counter]).then(function(result) {
                 counter++;
                 consultationAppelRecur(db,counter, rdvList, callBack);
@@ -240,6 +243,24 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 
     }
 
+    /**
+     * delete all records from user table
+     */
+    var emptyConsultationTable = function(db) {
+
+        var deferred = $q.defer();
+        var query = "DROP Table IF EXISTS consultation ";
+        $cordovaSQLite.execute(db, query).then(function(result) {
+
+            deferred.resolve(result);
+        }, function(reason) {
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+
+    };
+
+
 	/**
 	 *return
 	 */
@@ -252,6 +273,7 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
 		updateConsultation : updateConsultation,
 		createOrUpdateConsultation : createOrUpdateConsultation,
 		insertBulkIntoConsultationTable : insertBulkIntoConsultationTable,
-		consultationAppelRecur : consultationAppelRecur
+		consultationAppelRecur : consultationAppelRecur,
+    emptyConsultationTable : emptyConsultationTable
 	}
 })

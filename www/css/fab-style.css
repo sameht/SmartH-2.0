@@ -15,3 +15,10 @@
    margin-left: auto;
    margin-right: auto;
 }
+.md-button.md-warn.md-fab {
+    color: rgb(255,255,255);
+    background-color: rgb(46, 120, 191);
+}
+.md-button.md-warn.md-fab:not([disabled]):hover {
+    background-color: rgb(46, 120, 191);
+}
