@@ -26,7 +26,7 @@ appContext.controller('CompteController', function($scope ,CompteFactory,$ionicP
                     lastname: result.rows.item(0).lastname,
                     city: result.rows.item(0).city,
                     sexe: result.rows.item(0).sexe,
-                    BD: result.rows.item(0).BD,
+                    BD: new Date(result.rows.item(0).BD),
                     address: result.rows.item(0).address,
                     couv: result.rows.item(0).couv
                 }

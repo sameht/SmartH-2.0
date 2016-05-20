@@ -38,7 +38,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
 
         /*-------------------------------------*/
-   
+
 
         LoginFactory.selectCredentials(db).then(function(result) {
             $rootScope.idUser = parseInt(result.rows.item(0).userId)
@@ -53,7 +53,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
             /**
              * rdv
-             */  
+             */
 
             RdvFactory.createRdvTable(db).then(function() {
 
@@ -71,7 +71,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                     }
 
                    // console.log(array)
-                    
+
                     RdvFactory.rdvAppelRecur(db, 0, array, function(valid) {
 
                         if (!valid) {
@@ -102,9 +102,9 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
             /**
              * consultation
              */
- 
+
             ConsultationFactory.createConsultationTable(db).then(function(result) {
-                
+
                 ConsultationFactory.getConsultationList($rootScope.idUser).success(function(data, status, headers, config) {
                   //  ConsultationFactory.getConsultationList($rootScope.idUser).then(function(data ){
                     var array = []
@@ -210,14 +210,14 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                         lastname: data[0].Prenom,
                         city: "Tunis, TN",
                         sexe: data[0].Sexe,
-                        BD: data[0].DateNaissance,
+                        BD: data[0].DateNaissance.date,
                         address: data[0].Adresse,
                         couv: data[0].CouvertureSociale,
                         cin: data[0].Cin,
                         tel: data[0].Tel,
                         profession: data[0].ProfessionPatient,
                         etatCivile: data[0].EtatCivile
-                    }) 
+                    })
                     console.log(array[0])
                     CompteFactory.createOrUpdateUser(db, array[0]).then(function(result) {
                         deferredUser.resolve();
