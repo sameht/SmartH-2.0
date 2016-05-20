@@ -36,7 +36,7 @@ appContext.factory('CompteFactory', function($q, $http, $cordovaSQLite) {
 
             /*les données utilisé dans la requete*/
             data: {
-               "IdPatient": "12"
+               IdPatient: id
             }
         };
 
