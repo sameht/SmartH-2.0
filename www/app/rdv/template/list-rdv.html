@@ -6,15 +6,15 @@
  		 </ion-refresher>
 		<ion-list>
 
-		    <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="rdv in rdvArray" 
-		    type="item-text-wrap" style="margin:10px;" href="#/menu/rdv/{{rdv.id}}">      
+		    <ion-item class="item-remove-animate item-avatar item-icon-right"  ng-repeat="rdv in rdvArray"
+		    type="item-text-wrap" style="margin:10px;" href="#/menu/rdv/{{rdv.id}}">
      		  <img src="img/DefaultDoctor.jpg" >
 		      <h2>Dr : {{rdv.doctor}}</h2>
 		      <p>local : {{rdv.adresse}}</p>
-		      <p>Date : 	{{rdv.date | date :"dd-MMM-yyyy"}}</p>
-		      <p>heure : 	{{rdv.date | date :"HH:mm"}}</p>
+		      <p>Date : 	{{rdv.date | customDate | onlyDate}}</p>
+		      <p>heure : 	{{rdv.date | customDate | onlyHours }}</p>
 		      <i class="icon ion-chevron-right icon-accessory"></i>
-		      
+
 		    </ion-item>
 		</ion-list>
 	</ion-content>

@@ -27,4 +27,43 @@ appContext.filter("customDate", function() {
  				return input;
  			}
      };
-});
+}).filter("onlyHours", function(){
+  //Defining the filter function
+   return function(input) {
+
+           var result = "";
+           input = input || "";
+
+           try {
+
+            var array1 = input.split("à"); //array1[0] : annéé //array1[1] : mois
+
+            result = array1[1]
+            return  result;
+
+    } catch (e) {
+// 				console.error(e);
+      return input;
+    }
+   };
+})
+.filter("onlyDate", function(){
+  //Defining the filter function
+   return function(input) {
+
+           var result = "";
+           input = input || "";
+
+           try {
+
+            var array1 = input.split("à"); //array1[0] : annéé //array1[1] : mois
+
+            result = array1[0]
+            return  result;
+
+    } catch (e) {
+// 				console.error(e);
+      return input;
+    }
+   };
+})
