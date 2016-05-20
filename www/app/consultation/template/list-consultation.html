@@ -6,12 +6,12 @@
  		 </ion-refresher>
 		<ion-list >
 
-		    <ion-item class="item-remove-animate item-avatar item-icon-right "  ng-repeat="consultation in consultationArray" href="#/menu/consultation/{{consultation.id}}" type="item-text-wrap" style="margin:10px;">      
+		    <ion-item class="item-remove-animate item-avatar item-icon-right "  ng-repeat="consultation in consultationArray" href="#/menu/consultation/{{consultation.id}}" type="item-text-wrap" style="margin:10px;">
 
      		  <img src="img/doctor.jpg" >
 		      <h2>Dr : {{consultation.doctor}}</h2>
 		      <p>Nature : {{consultation.maladie}}</p>
-		      <p>Date: {{consultation.date| date : "dd/mm/yyyy"}}</p>
+		      <p>Date: {{consultation.date | customDate }}</p>
 		      <i class="icon ion-chevron-right icon-accessory"></i>
 		    </ion-item>
 		</ion-list>
