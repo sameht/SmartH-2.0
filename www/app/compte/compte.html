@@ -1,24 +1,24 @@
 <ion-view view-title="profile">
 <ion-content>
         <div class="middle-container container " style="    background-color: #E8E8E8;">
-            
+
        <!-- PROFILE (MIDDLE-CONTAINER) -->
-           
+
             <div class="profile-picture big-profile-picture clear s-margin-toop">
                 <img width="150px" alt="Anne Hathaway picture" src="http://upload.wikimedia.org/wikipedia/commons/e/e1/Anne_Hathaway_Face.jpg" >
             </div>
-            <h2 class="user-name">{{user.name +" "+user.lastname}} </h2>
+            <h2 class="user-name"><span ng-if="user.name != ''" >{{user.name }}</span>&nbsp;<span ng-if="user.lastname != '' ">{{user.lastname}} </span></h2>
             <div class="profile-description">
                 <p class="scnd-font-color">{{user.city}}</p>
             </div>
-                
+
         </div>
 
                <div ng-cloak="" class="tabsdemoDynamicHeight" >
                 <md-content>
                 <md-tabs md-dynamic-height="" md-border-bottom="" >
                     <md-tab >
-                    
+
                         <md-tab-label >
                             <span class="glyphicon glyphicon-user"></span>
                         </md-tab-label>
@@ -26,23 +26,23 @@
                         <md-tab-body class=" md-padding">
                             <in-list>
                               <ion-item class=" s-text-center">
-                                Date de naissance : {{user.BD | date : "shortDate"}}
+                                Date de naissance : {{user.BD | date : "dd-MM-yyyy"}}
                               </ion-item>
 
                               <ion-item class=" s-text-center">
-                                Sexe : <label>{{user.sexe}}</label>        
+                                Sexe : <label>{{user.sexe}}</label>
                               </ion-item>
 
                               <ion-item class=" s-text-center">
-                                Adresse : <label>{{user.address}}</label>         
+                                Adresse : <label>{{user.address}}</label>
                               </ion-item>
 
                               <ion-item class=" s-text-center">
-                                Couverture sociale : <label>{{user.couv}}</label>         
+                                Couverture sociale : <label>{{user.couv}}</label>
                               </ion-item>
 
-                            </ion-list>                         
-                    
+                            </ion-list>
+
                         </md-tab-body>
                     </md-tab>
 
