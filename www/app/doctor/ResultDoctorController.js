@@ -83,7 +83,7 @@ appContext.controller('ResultDoctorController', function($scope, $ionicHistory, 
                     }));
 
                     if(doc!=undefined){
-                      var contentString="Doctor : "+doc.doctor+"<br/>Spécialité : "+doc.specialite ;
+                      var contentString="Doctor : "+doc.name+" "+doc.lastname+"<br/>Spécialité : "+doc.specialite ;
                     }else{
                       var contentString="Ma position"
                     }
