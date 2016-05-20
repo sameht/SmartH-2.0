@@ -199,7 +199,7 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
   	var updateDoctor = function (db,doc){
         var deferred = $q.defer();
 	  		var  query="update myDoctors set name='"+doc.name+"', "+
-            "lastname='"+doc.lastename+"', "+
+            "lastname='"+doc.lastname+"', "+
   					"specialite='"+doc.specialite+"', "+
   					"sexe='"+doc.sexe +"', "+
             		"adresse='"+doc.adresse+"', "+
