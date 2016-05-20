@@ -57,8 +57,10 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
      */
     var getDoctorList = function(name, lastname, speciality, gendre) {
         var request = {
-            url: "http://smarth.azurewebsites.net/api/WSDoctorList/Get",
-            method: "Get",
+            //url: "http://smarth.azurewebsites.net/api/WSDoctorList/Get",
+            url: "http://smarth.azurewebsites.net/smarth/doc-list.php",
+            //method: "Get",
+            method: "Post",
             cache: false,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -89,7 +91,7 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         var deferred = $q.defer();
         var CreateQuery = 'CREATE TABLE IF NOT EXISTS allDoctors (' +
             'id INTEGER PRIMARY KEY, ' +
-            'doctor text, specialite text,sexe text, adresse text, tel text,distance text)';
+            'name text,lastname text, specialite text,sexe text, adresse text, tel text,distance text)';
         $cordovaSQLite.execute(db, CreateQuery).then(
             function(result) {
                 deferred.resolve(result);
@@ -109,7 +111,8 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         var deferred = $q.defer();
         var insertQuery = "INSERT INTO allDoctors " +
             " SELECT '" + doctorArray[0].id + "' AS 'id', '" +
-            doctorArray[0].doctor + "' AS 'doctor','" +
+            doctorArray[0].name + "' AS 'name','" +
+            doctorArray[0].lastname + "' AS 'lastname','" +
             doctorArray[0].specialite + "' AS 'specialite','" +
             doctorArray[0].sexe + "' AS 'sexe','" +
             doctorArray[0].adresse + "' AS 'adresse', '" +
@@ -120,7 +123,8 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
 
             insertQuery = insertQuery + "  UNION SELECT '" +
                 doctorArray[i].id + "','" +
-                doctorArray[i].doctor + "', '" +
+                doctorArray[i].name + "', '" +
+                doctorArray[i].lastname + "', '" +
                 doctorArray[i].specialite + "','" +
                 doctorArray[i].sexe + "', '" +
                 doctorArray[i].adresse + "', '" +
@@ -165,7 +169,7 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
             var deferred = $q.defer();
             var CreateQuery = 'CREATE TABLE IF NOT EXISTS doctor (' +
                 'id INTEGER PRIMARY KEY, ' +
-                'doctor text, specialite text,sexe text, adresse text, tel text,distance text)';
+                'name text,lastname text, specialite text,sexe text, adresse text, tel text,distance text)';
             $cordovaSQLite.execute(db, CreateQuery).then(
                 function(result) {
                     deferred.resolve(result);
@@ -182,8 +186,8 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
     var setDoctor = function(db, doc) {
         var deferred = $q.defer();
 
-        var query = " INSERT INTO doctor (id, doctor, specialite,sexe,adresse,tel,distance) VALUES (?,?,?,?,?,?,?) "
-        $cordovaSQLite.execute(db, query, [doc.id, doc.doctor, doc.specialite, doc.sexe, doc.adresse, doc.tel, doc.distance]).then(function(result) {
+        var query = " INSERT INTO doctor (id, name, lastname, specialite,sexe,adresse,tel,distance) VALUES (?,?,?,?,?,?,?,?) "
+        $cordovaSQLite.execute(db, query, [doc.id, doc.name, doc.lastname,doc.specialite, doc.sexe, doc.adresse, doc.tel, doc.distance]).then(function(result) {
             deferred.resolve(result)
 
         }, function(reason) {
@@ -237,7 +241,8 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
      */
     var updateDoctor = function(db, doc) {
         var deferred = $q.defer();
-        var query = "update doctor set doctor='" + doc.doctor + "', " +
+        var query = "update doctor set name='" + doc.name + "', " +
+            "lastname='" + doc.lastname + "', " +
             "specialite='" + doc.specialite + "', " +
             "sexe='" + doc.sexe + "', " +
             "adresse='" + doc.adresse + "', " +
@@ -324,10 +329,11 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
      */
     var insertBulkIntoDoctorTable = function(db, doctorArray) {
 
-        var deferred = $q.defer();
+var deferred = $q.defer();
         var insertQuery = "INSERT INTO doctor " +
             " SELECT '" + doctorArray[0].id + "' AS 'id', '" +
-            doctorArray[0].doctor + "' AS 'doctor','" +
+            doctorArray[0].name + "' AS 'name','" +
+            doctorArray[0].lastname + "' AS 'lastname','" +
             doctorArray[0].specialite + "' AS 'specialite','" +
             doctorArray[0].sexe + "' AS 'sexe','" +
             doctorArray[0].adresse + "' AS 'adresse', '" +
@@ -338,7 +344,8 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
 
             insertQuery = insertQuery + "  UNION SELECT '" +
                 doctorArray[i].id + "','" +
-                doctorArray[i].doctor + "', '" +
+                doctorArray[i].name + "', '" +
+                doctorArray[i].lastname + "', '" +
                 doctorArray[i].specialite + "','" +
                 doctorArray[i].sexe + "', '" +
                 doctorArray[i].adresse + "', '" +
@@ -483,7 +490,8 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
                     }
                 };
                 /*comparaison */
-                if (region == Gouvernorat || ville == locality) {
+               
+                if (region.toLowerCase().indexOf(Gouvernorat.toLowerCase())> -1  || ville.toLowerCase().indexOf(locality.toLowerCase())> -1 ) {
                     console.log("il ya de resultat")
                     return callBack(doc);
 
@@ -534,9 +542,10 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         var array = getData();
         getAllDoctorsLocalList(db).then(function(data) {
                 for (var i = 0; i < data.rows.length; i++) {
-                    resultArray.push(data.rows[i])
+                    resultArray.push(data.rows.item(i))
                 };
                 console.log(resultArray)
+                
                     //array=data.rows
                 if(!isNaN(dist)){ // par distance
                     distanceAppelRecur(db, 0, resultArray, dist, currentPosition, function(valid) {
@@ -593,6 +602,114 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         return deferred.promise;
     };
 
+      /**
+       * Filtrer par région ou ville
+       */
+    var FiltrerNom = function(doc,nom, prenom, specialite, sexe, callBack) {
+          //filter avec doctor, specialite,sexe,
+        if( doc.doctor != undefined && doc.doctor.toLowerCase().indexOf(nom.toLowerCase())> -1 ){
+  
+            return callBack(doc); 
+        }else if(doc.doctor != undefined && doc.doctor.toLowerCase().indexOf(prenom.toLowerCase())> -1){
+            return callBack(doc);
+        }else if(doc.specialite != undefined && doc.specialite==specialite){
+            return callBack(doc);
+        }else if(doc.sexe != undefined && doc.sexe.toLowerCase()==sexe.toLowerCase()){
+            return callBack(doc);
+        }
+        else{
+            return callBack(null);
+        }
+    }
+
+
+
+    /**
+     * Appel récursive de calcule de distance
+     */
+    var nameAppelRecur = function(db, counter, docList, nom, prenom, specialite, sexe, callBack) {
+
+            var length = docList.length;
+            //console.log(length)
+
+            if (counter < length) {
+                FiltrerNom(docList[counter],nom, prenom, specialite, sexe, function(valid) {
+                    console.log(valid)
+                    if (valid != null) {
+                        //console.log( docList[counter])
+                        setDoctor(db, docList[counter]).then(function(result) {
+                            counter++;
+                            nameAppelRecur(db, counter, docList, nom, prenom, specialite, sexe, callBack);
+                        }, function(reason) {
+
+                            return callBack(false)
+                        });
+                    } else {
+
+                        counter++;
+                         nameAppelRecur(db, counter, docList, nom, prenom, specialite, sexe, callBack);
+                        console.log("resultat null")
+                    }
+                })
+
+
+            } else {
+                return callBack(true)
+            }
+        }
+     /**
+      * get doctor list By distance
+      */
+    var getDoctorListByName = function(nom, prenom, specialite, sexe,callBack) {
+ 
+        var resultArray = [];
+        var array = getData();
+        getAllDoctorsLocalList(db).then(function(data) {
+                for (var i = 0; i < data.rows.length; i++) {
+                    resultArray.push(data.rows.item(i))
+                };
+                console.log(resultArray)
+                 
+                    nameAppelRecur(db, 0, resultArray, nom, prenom, specialite, sexe, function(valid) {
+
+                      if (!valid) {
+                          console.error("valid " + valid)
+
+                      } else {
+
+                            return callBack()
+
+                      }
+
+                  });
+                
+            },function() {
+
+            })
+
+    };
+
+    var findDoctorDB = function(db, doctor, callBack){
+
+        console.warn(doctor)
+        var deferred=$q.defer();
+        var  query ="SELECT * FROM allDoctors WHERE  ";
+
+         query  = query + Object.keys(doctor)[0]+ "  LIKE '%"+doctor[ Object.keys(doctor)[0]]+"%'  ";
+
+        for (var i = 1; i <Object.keys(doctor).length; i++) {
+            query = query + " AND "+Object.keys(doctor)[i] + " LIKE '% "+doctor[ Object.keys(doctor)[i]]+" %'"
+        };
+  
+        console.log(query)
+        $cordovaSQLite.execute(db, query).then(function(results) {
+             return callBack(results)
+        }, function(reason) {
+            console.error(reason)
+            deferred.reject(reason);
+        });
+        return deferred.promise;
+    }
     return {
         getDoctorList: getDoctorList,
         getDoctorListByDistance: getDoctorListByDistance,
@@ -612,7 +729,9 @@ appContext.factory('DoctorLocatorFactory', function($http, $ionicPlatform, $q, $
         insertBulkIntoDoctorTable: insertBulkIntoDoctorTable,
         emptyAllDoctorTable : emptyAllDoctorTable,
             //  getCurrentPosition : getCurrentPosition
-            ifTableExist : ifTableExist
+            ifTableExist : ifTableExist,
+        getDoctorListByName : getDoctorListByName,
+        findDoctorDB : findDoctorDB
 
     }
 })

@@ -148,21 +148,30 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                 console.error("createConsultationTable error");
             })
 
+
             /**
              * my doctors
              */
 
             MyDoctorsFactory.createMyDoctorsTable(db).then(function(result) {
-               // MyDoctorsFactory.getDoctorList($rootScope.idUser).success(function(data, status, headers, config ){
+               MyDoctorsFactory.getDoctorList($rootScope.idUser).success(function(data, status, headers, config ){
 
-                MyDoctorsFactory.getDoctorList($rootScope.idUser).then(function(data) {
-                    /*var array=[]
+               // MyDoctorsFactory.getDoctorList($rootScope.idUser).then(function(data) {
+                    var array=[]
                     for(var i=0;i< data.length ;i++){
-                        array.push({ id : data[i].IdMedecin})
-                    }*/
-                   
+                        array.push({ id : data[i].Id,
+                            name : data[i].Nom,
+                            lastname : data[i].Prenom,
+                            specialite : data[i].IdSpecialite,
+                            sexe : data[i].Sexe,
+                            adresse:data[i].Adresse,
+                            tel : data[i].Tel,
 
-                    MyDoctorsFactory.DoctorListAppelRecur(db, 0, data, function(valid) {
+                        })
+                    }
+                   console.log("-------------------")
+                    console.log(array)
+                    MyDoctorsFactory.DoctorListAppelRecur(db, 0, array, function(valid) {
                         if (!valid) {
                             console.error("DoctorListAppelRecur error");
                             deferredDoctor.reject()
@@ -172,8 +181,8 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
                     })
 
-                   // }).error(function(data, status, headers, config ){
-                }, function() {
+                 }).error(function(data, status, headers, config ){
+               // }, function() {
                     console.error("getConsultationList error");
 
                 });
@@ -191,26 +200,25 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
             CompteFactory.createUserTable(db).then(function(result) {
 
                 CompteFactory.getUser($rootScope.idUser).success(function(data, status, headers, config) {
-                    //array=CompteFactory.getUser()
-                    /*console.log("==> durée de résultat getUser :")
-                    console.log((new Date().getTime()) - t)*/
+                    console.log(data)
+
                     var array = []
 
                     array.push({
-                        id: data.Id,
-                        name: data.Nom,
-                        lastname: data.Prenom,
+                        id: data[0].Id,
+                        name: data[0].Nom,
+                        lastname: data[0].Prenom,
                         city: "Tunis, TN",
-                        sexe: data.Sexe,
-                        BD: data.DateNaissance,
-                        address: data.Adresse,
-                        couv: data.CouvertureSociale,
-                        cin: data.Cin,
-                        tel: data.Tel,
-                        profession: data.ProfessionPatient,
-                        etatCivile: data.EtatCivile
-                    })
-
+                        sexe: data[0].Sexe,
+                        BD: data[0].DateNaissance,
+                        address: data[0].Adresse,
+                        couv: data[0].CouvertureSociale,
+                        cin: data[0].Cin,
+                        tel: data[0].Tel,
+                        profession: data[0].ProfessionPatient,
+                        etatCivile: data[0].EtatCivile
+                    }) 
+                    console.log(array[0])
                     CompteFactory.createOrUpdateUser(db, array[0]).then(function(result) {
                         deferredUser.resolve();
 

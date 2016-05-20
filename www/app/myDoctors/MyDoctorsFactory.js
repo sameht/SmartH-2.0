@@ -62,16 +62,16 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
     }
   }; 
 
- // return $http(request)
+  return $http(request)
 
 
-    setTimeout(function() {
+   /* setTimeout(function() {
       deferred.resolve(getData())
 
     }, 1500);
   
       return deferred.promise;
-
+*/
   }
 	/**
 	 *get goctor by id from server
@@ -127,7 +127,7 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
 	    var deferred= $q.defer();
 	    var CreateQuery = 'CREATE TABLE IF NOT EXISTS myDoctors (' +
 	          'id INTEGER PRIMARY KEY, ' +
-	          'doctor text, specialite text,sexe text, adresse text, tel text)';
+	          'name text,lastname text , specialite text,sexe text, adresse text, tel text)';
 	    $cordovaSQLite.execute(db, CreateQuery).then(
 	        function(result) {
 	            deferred.resolve(result);
@@ -146,8 +146,8 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
     var setDoctor = function(db,doc) {
         var deferred= $q.defer();
 
-        var query=" INSERT INTO myDoctors (id, doctor, specialite,sexe,adresse,tel) VALUES (?,?,?,?,?,?) "
-        $cordovaSQLite.execute(db, query, [doc.id,doc.doctor, doc.specialite,doc.sexe,doc.adresse,doc.tel,]).then(function(result) {
+        var query=" INSERT INTO myDoctors (id, name, lastname, specialite,sexe,adresse,tel) VALUES (?,?,?,?,?,?,?) "
+        $cordovaSQLite.execute(db, query, [doc.id,doc.name,doc.lastname , doc.specialite,doc.sexe,doc.adresse,doc.tel,]).then(function(result) {
         	deferred.resolve(result)
 
         }, function(reason) {
@@ -198,13 +198,14 @@ appContext.factory('MyDoctorsFactory', function($http, $cordovaSQLite,$rootScope
 	*/
   	var updateDoctor = function (db,doc){
         var deferred = $q.defer();
-	  		var  query="update myDoctors set doctor='"+doc.doctor+"', "+
+	  		var  query="update myDoctors set name='"+doc.name+"', "+
+            "lastname='"+doc.lastename+"', "+
   					"specialite='"+doc.specialite+"', "+
   					"sexe='"+doc.sexe +"', "+
             		"adresse='"+doc.adresse+"', "+
             		"tel='"+doc.tel+"' "+
   					"where id="+doc.id+"";
-           // console.warn(query);
+            console.warn(query);
 	  		$cordovaSQLite.execute(db, query).then(function(result){
           deferred.resolve(result);
 	  		},function(reason){

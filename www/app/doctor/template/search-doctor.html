@@ -62,7 +62,7 @@
 			           
 			           <div class="subject">
 			              <label class="dropdown-label textfield__label" for="subject">Spécialité</label>
-			              <select class="dropdown-select" placeholder="Spécialité" name="subject" id="subject_input" ng-model="doctor.specialty" required>
+			              <select class="dropdown-select" placeholder="Spécialité" name="subject" id="subject_input" ng-model="doctor.specialite" required>
 			                <option disabled  selected>Spécialité</option>
 			                <option>généraliste</option>
 			                <option>Gynécologue</option>
@@ -84,10 +84,10 @@
 
 						<div >
 						 
-						        <input type="radio" name="sexe" id="homme"  ng-model="doctor.gendre" class="css-checkbox2" ng-value="'homme'"/>
+						        <input type="radio" name="sexe" id="homme"  ng-model="doctor.sexe" class="css-checkbox2" ng-value="'Homme'"/>
 						        <label for="homme" class="css-label2">Homme</label>
 						   
-						        <input type="radio" name="sexe" id="femme" ng-model="doctor.gendre"class="css-checkbox2" checked="checked" ng-value="'femme'"/>
+						        <input type="radio" name="sexe" id="femme" ng-model="doctor.sexe"class="css-checkbox2" checked="checked" ng-value="'femme'"/>
 						        <label for="femme" class="css-label2" style="margin-left: 20px;">Femme</label>
 						      
 						</div>

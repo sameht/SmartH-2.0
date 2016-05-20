@@ -32,31 +32,35 @@ appContext.controller('StartupController', function($state, $rootScope, DoctorLo
             /******************************/
 
         LoginFactory.selectCredentials(db).then(function(result) {
+            DoctorLocatorFactory.emptyAllDoctorTable(db).then(function(){
 
-                        $ionicLoading.hide();
-                        $ionicHistory.nextViewOptions({
-                            disableBack: true,
-                            disableAnimate: true,
-                            historyRoot: true
-                        });
+                $ionicLoading.hide();
+                $ionicHistory.nextViewOptions({
+                    disableBack: true,
+                    disableAnimate: true,
+                    historyRoot: true
+                });
 
-                        if (typeof(result) == 'number') {
-                            $rootScope.isAuthenticated = false
-                            $state.go('visiteurMenu.visiteurHome')
-                        } else {
+                if (typeof(result) == 'number') {
+                    $rootScope.isAuthenticated = false
+                    $state.go('visiteurMenu.visiteurHome')
+                } else {
 
-                            if (result.rows.length > 0) {
-                                $rootScope.isAuthenticated = true
-                                $state.go('synchronisation')
-                            } else {
-                                $rootScope.isAuthenticated = false
-                                $state.go('visiteurMenu.visiteurHome')
-                            }
-                        }
+                    if (result.rows.length > 0) {
+                        $rootScope.isAuthenticated = true
+                        $state.go('synchronisation')
+                    } else {
+                        $rootScope.isAuthenticated = false
+                        $state.go('visiteurMenu.visiteurHome')
+                    }
+                }
+            },function(){
+                console.log("emptyAllDoctorTable")
+            });
 
-                    }, function(reason) {
+        }, function(reason) {
 
-                    });
+        });
 
 
         /**************************************************************************/

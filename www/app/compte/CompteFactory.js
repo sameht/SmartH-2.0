@@ -18,8 +18,10 @@ appContext.factory('CompteFactory', function($q, $http, $cordovaSQLite) {
          */
     var getUser = function(id) {
         var request = {
-            url: "http://smarth.azurewebsites.net/api/WSUtilisateur/Get?Id=1",
-            method: "Get",
+            //url: "http://smarth.azurewebsites.net/api/WSUtilisateur/Get?Id=1",
+            url : "http://smarth.azurewebsites.net/smarth/user-profile.php",
+            //method: "Get",
+            method: "Post",
             cache: false,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -34,7 +36,7 @@ appContext.factory('CompteFactory', function($q, $http, $cordovaSQLite) {
 
             /*les données utilisé dans la requete*/
             data: {
-                id: id
+               "IdPatient": "12"
             }
         };
 
@@ -90,7 +92,7 @@ appContext.factory('CompteFactory', function($q, $http, $cordovaSQLite) {
             deferred.resolve(result);
         }, function(reason) {
             //TODO FIXME 
-            console.log("error select" + reason);
+            console.log( reason);
             deferred.reject(reason);
         });
 
