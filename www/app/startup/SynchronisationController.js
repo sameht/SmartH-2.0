@@ -62,7 +62,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                     var array=[]
                     for(var i=0;i<data.length;i++){
 
-                         array.push({id : data[i].id,
+                         array.push({id : data[i].Id,
                             idDoc:data[i].IdMedecin,
                             doctor: data[i].Nom +" "+ data[i].Prenom,
                             date : data[i].Date.date,
@@ -70,7 +70,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                             etat:data[i].Etat})
                     }
 
-                   // console.log(array)
+                    //console.log(array)
 
                     RdvFactory.rdvAppelRecur(db, 0, array, function(valid) {
 
@@ -162,7 +162,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                         array.push({ id : data[i].Id,
                             name : data[i].Nom,
                             lastname : data[i].Prenom,
-                            specialite : data[i].IdSpecialite,
+                            specialite : data[i].Specialite,
                             sexe : data[i].Sexe,
                             adresse:data[i].Adresse,
                             tel : data[i].Tel,
