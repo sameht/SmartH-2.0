@@ -1,10 +1,9 @@
 appContext.factory('LoginFactory', function($http, $cordovaSQLite, $q){
 	
 	var login = function (user){
-	//	user.email = "edouard.nilsson@gmail.com";
-  //  user.password = "buzbuz"
-   user.email = "demo";
-		user.password = "demo";
+	
+   //user.email = "demo";
+		//user.password = "demo";
 		var request = {
 			url : "http://smarth.azurewebsites.net/api/WSAuthentification/Get?Login="+user.email+"&Password="+user.password,
       method :"Get",

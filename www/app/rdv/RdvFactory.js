@@ -29,7 +29,7 @@ appContext.factory('RdvFactory', function($http, $cordovaSQLite, $q){
                 },														
            /*les données utilisé dans la requete*/
       data : {
-        IdPatient :12
+        IdPatient :id
       }
 		}; 
 

@@ -36,8 +36,8 @@ appContext.factory('ConsultationFactory', function($q,$http,$cordovaSQLite){
            /*les données utilisé dans la requete*/
 			data : {
 				//id : id
-        "IdPatient": "12",
-        "Visibilite": "Moi uniquement"
+        IdPatient: id
+        
 			}
 		};
 				return $http(request)

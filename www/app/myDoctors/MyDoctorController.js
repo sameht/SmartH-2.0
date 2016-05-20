@@ -20,7 +20,8 @@ appContext.controller('MyDoctorController', function($scope, $stateParams,MyDoct
             if (result.rows.length == 1) {
                 $scope.doctor = {
                     id: result.rows.item(0).id,
-                    doctor: result.rows.item(0).doctor,
+                    name: result.rows.item(0).name,
+                    lastname: result.rows.item(0).lastname,
                     specialite: result.rows.item(0).specialite,
                     sexe: result.rows.item(0).sexe,
                     adresse: result.rows.item(0).adresse,

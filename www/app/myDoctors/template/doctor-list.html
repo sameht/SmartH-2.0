@@ -6,7 +6,7 @@
 			    <ion-item class="item-remove-animate item-avatar item-icon-right " ng-repeat="doctor in doctorArray" href="#/menu/myDoctor/{{doctor.id}}"type="item-text-wrap"  style="margin:10px;">      
 
 	     		  <img src="img/doctor.jpg" >
-			      <h2>Nom : {{doctor.doctor}}</h2>
+			      <h2>Nom : {{doctor.name+ " "+doctor.lastname}}</h2>
 			      <p>Adresse: {{doctor.adresse}}</p>
 			      <p>Spécialité: {{doctor.specialite}}</p>
 			      <i class="icon ion-chevron-right icon-accessory"></i>
