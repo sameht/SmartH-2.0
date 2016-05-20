@@ -26,7 +26,7 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
                     id: result.rows.item(0).id,
                     idDoc: result.rows.item(0).idDoc,
                     doctor: result.rows.item(0).doctor,
-                   // date: new Date( result.rows.item(0).date),
+                    date: result.rows.item(0).date,
                     // heure: result.rows.item(0).heure,
                     adresse: result.rows.item(0).adresse
                 }
@@ -47,7 +47,7 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
     }
 
     $scope.annulerRdv =function(){
-        
+
          RdvFactory.deleteRdvServer($scope.rdv.id, function(data){
             $ionicLoading.show({ template: 'Demande envoyée', duration:3000  });
         },function(error){
@@ -64,5 +64,5 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
     $scope.selectedDirection = 'up';
     */
 
-   
+
 })
