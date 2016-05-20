@@ -39,11 +39,11 @@
   			<ion-list >
 			    <ion-item >
 			    	<h3 style="font-size: initial;">  <B>Date :</B></h3>
-			    	{{rdv.date | date :"dd-MMM-yyyy"}}
+			    	{{rdv.date | customDate | onlyDate}}
 			     </ion-item>
 			    <ion-item >
 			    	<h3 style="font-size: initial;">  <B>Heure :</B></h3>
-			    	{{rdv.date | date :"HH:mm"}}
+			    	{{rdv.date | customDate | onlyHours}}
 			     </ion-item>
 			     <ion-item >
 			    	<h3 style="font-size: initial;">  <B>Cabinet :</B></h3>
