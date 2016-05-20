@@ -26,7 +26,7 @@ appContext.controller('RdvController', function($scope,$ionicLoading,$mdDialog, 
                     id: result.rows.item(0).id,
                     idDoc: result.rows.item(0).idDoc,
                     doctor: result.rows.item(0).doctor,
-                    date: new Date( result.rows.item(0).date),
+                   // date: new Date( result.rows.item(0).date),
                     // heure: result.rows.item(0).heure,
                     adresse: result.rows.item(0).adresse
                 }

@@ -28,7 +28,7 @@ appContext.controller('ListRdvController', function($scope, $rootScope,MyDoctors
                 var array = [];
                 for (var i = 0; i < result.rows.length; i++) {
                     array[i] = result.rows.item(i);
-                    array[i].date=new Date(array[i].date)
+                //    array[i].date=new Date(array[i].date)
                 }; // return array of objects 
                 $scope.rdvArray = array;
             }, function(reason) {
