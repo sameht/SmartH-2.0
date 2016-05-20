@@ -43,11 +43,12 @@ appContext.controller('LoginController', function($scope, $rootScope,SettingFact
         } else if (!user.password || user.password == "undefined") {
             ionicToast.show('Veuillez introduire un mot de passe', 'top', false, 2500);
         } else {
-
+          $ionicLoading.show();
             ConnectionFactory.isConnected(function() { // s'il y a de connection : maj les données
                 LoginFactory.doLogin(user).success(function(data, status, headers, config) {
 
                     if (data == 0) {
+                      $ionicLoading.hide();
                         ionicToast.show('mot de passe ou email incorrecte', 'top', false, 2500);
                     } else {
 
@@ -89,7 +90,7 @@ appContext.controller('LoginController', function($scope, $rootScope,SettingFact
 
 
 
-
+                                
                                 $state.go('synchronisation');
                             }, function(reason) {
                                 console.log(reason)
