@@ -322,9 +322,9 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                                     id: data[i].Id,
                                     name: data[i].Nom,
                                     lastname: data[i].Prenom,
-                                    specialite: data[i].IdSpecialite,
+                                    specialite: data[i].SpecialiteNom,
                                     sexe: data[i].Sexe,
-                                    adresse: data[i].Adresse, // Id de cabinet
+                                    adresse: data[i].AdresseCabinet, // Id de cabinet
                                     tel: data[i].Tel,
                                     BD: data[i].DateNaissance
                                 })
