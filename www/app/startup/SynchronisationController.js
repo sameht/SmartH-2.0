@@ -64,9 +64,9 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
 
                          array.push({id : data[i].id,
                             idDoc:data[i].IdMedecin,
-                            doctor: "",
+                            doctor: data[i].Nom +" "+ data[i].Prenom,
                             date : data[i].Date.date,
-                            //adresse :,
+                            adresse :data[i].CabinetAdresse,
                             etat:data[i].Etat})
                     }
 
