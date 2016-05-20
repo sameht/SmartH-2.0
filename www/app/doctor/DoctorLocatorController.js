@@ -36,11 +36,7 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
     });
 
     $scope.searchByLocation = function(doctor) {
-        var doc1 = {
-            distance: "",
-            region: "",
-            ville: ""
-        }
+       
 
         /******------------------------------------******/
         if (doctor == undefined) {
@@ -51,9 +47,6 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
         } else {
 
 
-            for (var item in doctor) {
-                doc1[item] = doctor[item]
-            }
 
             // Setup the loader
             $ionicLoading.show({
@@ -81,7 +74,7 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                                 $rootScope.latLng = latLng;
                                 //console.log("latLng : "+latLng)
                                 DoctorLocatorFactory.createDoctorTable(db).then(function(result) {
-                                    DoctorLocatorFactory.getDoctorListByDistance(parseInt(doc1.distance), doc1.region, doc1.ville, latLng, function() {
+                                    DoctorLocatorFactory.getDoctorListByDistance(parseInt(doctor.distance), doctor.region, doctor.ville, latLng, function() {
                                         $ionicLoading.hide();
                                         console.log($rootScope.isAuthenticated)
                                         if ($rootScope.isAuthenticated == false) { // c'est un visiteur
@@ -324,7 +317,7 @@ appContext.controller('DoctorLocatorController', function($scope, $rootScope, $i
                                     lastname: data[i].Prenom,
                                     specialite: data[i].SpecialiteNom,
                                     sexe: data[i].Sexe,
-                                    adresse: data[i].AdresseCabinet, // Id de cabinet
+                                    adresse: data[i].AdresseCabinet, 
                                     tel: data[i].Tel,
                                     BD: data[i].DateNaissance
                                 })

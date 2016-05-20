@@ -490,15 +490,36 @@ var deferred = $q.defer();
                     }
                 };
                 /*comparaison */
-               
-                if (region.toLowerCase().indexOf(Gouvernorat.toLowerCase())> -1  || ville.toLowerCase().indexOf(locality.toLowerCase())> -1 ) {
-                    console.log("il ya de resultat")
-                    return callBack(doc);
+               if(region!=undefined && ville!= undefined){
+                    if (region.toLowerCase().indexOf(Gouvernorat.toLowerCase())> -1  && ville.toLowerCase().indexOf(locality.toLowerCase())> -1 ) {
+                        console.log("il ya de resultat")
+                        return callBack(doc);
 
-                } else {
-                    console.log("pas resultat")
-                    return callBack(null)
-                }
+                    } else {
+                        console.log("pas resultat")
+                        return callBack(null)
+                    }
+               }else if(region!=undefined){
+                       if (region.toLowerCase().indexOf(Gouvernorat.toLowerCase())> -1  ) {
+                        console.log("il ya de resultat")
+                        return callBack(doc);
+
+                    } else {
+                        console.log("pas resultat")
+                        return callBack(null)
+                    }
+
+               }else if (ville!= undefined){ 
+                     if (ville.toLowerCase().indexOf(locality.toLowerCase())> -1  ) {
+                        console.log("il ya de resultat")
+                        return callBack(doc);
+
+                    } else {
+                        console.log("pas resultat")
+                        return callBack(null)
+                    }
+               }
+             
 
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
