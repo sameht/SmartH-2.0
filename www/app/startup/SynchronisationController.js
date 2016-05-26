@@ -208,7 +208,7 @@ appContext.controller('SynchronisationController', function($state, LoginFactory
                         id: data[0].Id,
                         name: data[0].Nom,
                         lastname: data[0].Prenom,
-                        city: "Tunis, TN",
+                        city: "Tunisie, TN",
                         sexe: data[0].Sexe,
                         BD: data[0].DateNaissance.date,
                         address: data[0].Adresse,

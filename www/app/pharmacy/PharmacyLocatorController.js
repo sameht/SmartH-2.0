@@ -14,10 +14,14 @@ appContext.controller('PharmacyLocatorController', function($scope, $rootScope, 
             console.warn("created !")
         }
 
+    });
 
         $scope.searchByLocation = function(localisation) {
-            
-            if(localisation==undefined){
+            $ionicLoading.show({
+                            template: 'En cours de développement',
+                            duration: 3000
+                        });
+            /*if(localisation==undefined){
                 $ionicLoading.show({
                     template: 'Vous devez introduire la distance',
                     duration: 2500
@@ -96,7 +100,7 @@ appContext.controller('PharmacyLocatorController', function($scope, $rootScope, 
                 });
 
             }
-            
+            */
 
         };
 
@@ -105,8 +109,12 @@ appContext.controller('PharmacyLocatorController', function($scope, $rootScope, 
 
         
         $scope.search = function(doc) {
+            $ionicLoading.show({
+                            template: 'En cours de développement',
+                            duration: 3000
+                        });
             // Setup the loader
-            var doc2={name:"", lastname:"", specialty:"", gendre:""}
+          /*  var doc2={name:"", lastname:"", specialty:"", gendre:""}
             if(doc==undefined){
 
                $ionicLoading.show({
@@ -163,13 +171,9 @@ appContext.controller('PharmacyLocatorController', function($scope, $rootScope, 
                 $ionicLoading.hide();
                 PopupFactory.myPopup('Utiliser les reseaux cellulaires et wifi pour determiner la recherche');
                 console.log("not connected");
-            });
+            });*/
 
 
         }
-    //else    
-    }
-        //ionicplateform ready
-    });
 
 });

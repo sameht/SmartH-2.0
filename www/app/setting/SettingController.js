@@ -57,7 +57,7 @@ appContext.controller('SettingController', function($scope,$ionicPlatform,Notifi
 			if($scope.editRDV.checked==true){
 				localStorage.setItem("NotifyEditRDV", "true");
 				if (window.cordova){ //device
-					NotificationFactory.delayedNotification(1,'Un rendez-vous est modifié');
+					NotificationFactory.delayedNotification(3,'Un rendez-vous est modifié');
 				} else {
 					console.log('Notification : activé');
 				}	 
@@ -85,7 +85,7 @@ appContext.controller('SettingController', function($scope,$ionicPlatform,Notifi
 
 			if (window.cordova){ //créer une notification local avec id =1
 				if(NotificationFactory.PresentNotification(2)){
-		  		 	NotificationFactory.cancelSingleNotification(2)
+		  		// 	NotificationFactory.cancelSingleNotification(2)
 		  		 }
 		  	} else {
 		  		
@@ -121,10 +121,10 @@ appContext.controller('SettingController', function($scope,$ionicPlatform,Notifi
 			localStorage.setItem("ComingRDVvalue", "B2" );
 			if (window.cordova){
 				if(NotificationFactory.PresentNotification(2)){
-					NotificationFactory.updateSingleNotification(2,2*secParJour,'This is updated text 2!');
+				//	NotificationFactory.updateSingleNotification(2,2*secParJour,'This is updated text 2!');
 					console.log('update 20');
 				}else{
-					NotificationFactory.delayedNotification(2,'add delayedNotification 20 sec');
+					//NotificationFactory.delayedNotification(2,'add delayedNotification 20 sec');
 					console.log('add 20');
 				}
 			} else {
@@ -138,10 +138,10 @@ appContext.controller('SettingController', function($scope,$ionicPlatform,Notifi
 			localStorage.setItem("ComingRDVvalue", "B3" );
 			if (window.cordova){
 				if(NotificationFactory.PresentNotification(2)){
-					NotificationFactory.updateSingleNotification(2,3*secParJour,'This is updated text 3!');
+					//NotificationFactory.updateSingleNotification(2,3*secParJour,'This is updated text 3!');
 					console.log('update 30');
 				}else{
-					NotificationFactory.delayedNotification(2,'add delayedNotification 30 sec');
+					//NotificationFactory.delayedNotification(2,'add delayedNotification 30 sec');
 					console.log('add 30');
 				}
 			} else {
